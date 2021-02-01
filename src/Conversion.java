@@ -12,9 +12,9 @@ public class Conversion {
 	
 	public int[] digitToBinary(char d){
 		int i = 0;
-		if(d == '!')
+		if(d == '?')
 			i = 62;
-		else if(d == '?')
+		else if(d == '!')
 			i = 63;
 		else
 			i = dv.getDigitValue(d);
@@ -47,6 +47,32 @@ public class Conversion {
 					c[i][j] = 0;
 				else
 					c[i][j] = 1;
+			}
+		}
+		return c;
+	}
+	
+	public int[][] functionXOR(int[][] a, int[][] b){
+		int[][] c = new int[8][6];
+		for (int i = 0; i < c.length; i++) {
+			for (int j = 0; j < c[i].length; j++) {
+				if((a[i][j] == 0 && b[i][j] == 0) || (a[i][j] == 1 && b[i][j] == 1))
+					c[i][j] = 0;
+				else
+					c[i][j] = 1;
+			}
+		}
+		return c;
+	}
+	
+	public int[][] functionNOT(int[][] a){
+		int[][] c = new int[8][6];
+		for (int i = 0; i < c.length; i++) {
+			for (int j = 0; j < c[i].length; j++) {
+				if(a[i][j] == 0)
+					c[i][j] = 1;
+				else
+					c[i][j] = 0;
 			}
 		}
 		return c;

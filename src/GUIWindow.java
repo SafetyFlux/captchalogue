@@ -8,7 +8,7 @@ public class GUIWindow {
 	public static void main(String[] args) throws FileNotFoundException {
 		JFrame theGUI = new JFrame();
 		theGUI.setTitle("Captchalogue Translation");
-		theGUI.setSize(762, 852);
+		theGUI.setSize(822, 852);
 		theGUI.setResizable(false);
 		theGUI.setAlwaysOnTop(false);
 		theGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
