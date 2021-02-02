@@ -26,6 +26,8 @@ public class DigitValues {
 		//for (int i = 0; i < digits.length; i++)
 			//System.out.println(digits[i]);
 		
+		digScan.close();
+		
 	}
 	
 	public char getDigit(int d){

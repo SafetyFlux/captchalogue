@@ -53,8 +53,13 @@ public class CaptchaPanel extends JPanel{
 	private boolean updateAlcCode2 = false;
 	private boolean alchemize = false;
 	private boolean resetCode = false;
+	private boolean resetHighlight = false;
 	private boolean recolor = false;
 	private Font f = new Font("Courier", Font.BOLD, 32);
+	private Color colAND = Color.cyan;
+	private Color colOR = Color.cyan;
+	private Color colXOR = Color.cyan;
+	private Color highlight = new Color(0, 200, 200);
 
 	public CaptchaPanel() throws FileNotFoundException{
 		this.setBackground(Color.white);
@@ -179,6 +184,9 @@ public class CaptchaPanel extends JPanel{
 			updateAlcCode2 = false;
 		}
 		if(alchemize){
+			buttonAND = new Rect(40, 50, 60, 40, colAND);
+			buttonOR = new Rect(100, 50, 60, 40, colOR);
+			buttonXOR = new Rect(160, 50, 60, 40, colXOR);
 			punchHole();
 			repaint();
 			alchemize = false;
@@ -189,7 +197,18 @@ public class CaptchaPanel extends JPanel{
 			alcCode2 = "00000000";
 			punchHole();
 			repaint();
+			resetHighlight = true;
 			resetCode = false;
+		}
+		if(resetHighlight){
+			colAND = Color.cyan;
+			colOR = Color.cyan;
+			colXOR = Color.cyan;
+			buttonAND = new Rect(40, 50, 60, 40, colAND);
+			buttonOR = new Rect(100, 50, 60, 40, colOR);
+			buttonXOR = new Rect(160, 50, 60, 40, colXOR);
+			repaint();
+			resetHighlight = false;
 		}
 		if(recolor){
 			repaint();
@@ -201,29 +220,38 @@ public class CaptchaPanel extends JPanel{
 		public void mouseClicked(MouseEvent e){
 			int mouseX = e.getX();
 			int mouseY = e.getY();
-			//System.out.println("x: " + e.getX() + " y: " + e.getY());
 
 			if(buttonAND.containsPoint(mouseX, mouseY)){
 				fillBin();
 				binary = cv.functionAND(alcBin1, alcBin2);
+				colAND = highlight;
+				colOR = Color.cyan;
+				colXOR = Color.cyan;
 				updateHole = true;
 				alchemize = true;
 			}
 			if(buttonOR.containsPoint(mouseX, mouseY)){
 				fillBin();
 				binary = cv.functionOR(alcBin1, alcBin2);
+				colAND = Color.cyan;
+				colOR = highlight;
+				colXOR = Color.cyan;
 				updateHole = true;
 				alchemize = true;
 			}
 			if(buttonXOR.containsPoint(mouseX, mouseY)){
 				fillBin();
 				binary = cv.functionXOR(alcBin1, alcBin2);
+				colAND = Color.cyan;
+				colOR = Color.cyan;
+				colXOR = highlight;
 				updateHole = true;
 				alchemize = true;
 			}
 			if(buttonNOT.containsPoint(mouseX, mouseY)){
 				fillBin();
 				binary = cv.functionNOT(binary);
+				resetHighlight = true;
 				updateHole = true;
 				alchemize = true;
 			}
@@ -240,20 +268,23 @@ public class CaptchaPanel extends JPanel{
 				if(codeUpdate.length() != 8)
 					codeUpdate = "00000000";
 				updateCode = true;
+				resetHighlight = true;
 			}
 			if(fill1.containsPoint(mouseX, mouseY)){
 				String update = (String) JOptionPane.showInputDialog("Enter Code", "00000000");
-				codeUpdate = update.trim();
-				if(codeUpdate.length() != 8)
-					codeUpdate = "00000000";
+				codeUpdate1 = update.trim();
+				if(codeUpdate1.length() != 8)
+					codeUpdate1 = "00000000";
 				updateAlcCode1 = true;
+				resetHighlight = true;
 			}
 			if(fill2.containsPoint(mouseX, mouseY)){
 				String update = (String) JOptionPane.showInputDialog("Enter Code", "00000000");
-				codeUpdate = update.trim();
-				if(codeUpdate.length() != 8)
-					codeUpdate = "00000000";
+				codeUpdate2 = update.trim();
+				if(codeUpdate2.length() != 8)
+					codeUpdate2 = "00000000";
 				updateAlcCode2 = true;
+				resetHighlight = true;
 			}
 			if(colorButton.containsPoint(mouseX, mouseY)){
 				String[] colors = {"Red", "Green", "Blue"};
@@ -272,18 +303,21 @@ public class CaptchaPanel extends JPanel{
 				for (int i = 0; i < 8; i++)
 					codeUpdate += gen.getChar();
 				updateCode = true;
+				resetHighlight = true;
 			}
 			if(rand1.containsPoint(mouseX, mouseY)){
-				codeUpdate = "";
+				codeUpdate1 = "";
 				for (int i = 0; i < 8; i++)
-					codeUpdate += gen.getChar();
+					codeUpdate1 += gen.getChar();
 				updateAlcCode1 = true;
+				resetHighlight = true;
 			}
 			if(rand2.containsPoint(mouseX, mouseY)){
-				codeUpdate = "";
+				codeUpdate2 = "";
 				for (int i = 0; i < 8; i++)
-					codeUpdate += gen.getChar();
+					codeUpdate2 += gen.getChar();
 				updateAlcCode2 = true;
+				resetHighlight = true;
 			}
 			if(save.containsPoint(mouseX, mouseY)){
 				String filename = (String) JOptionPane.showInputDialog("Enter Filename", code);
@@ -344,12 +378,14 @@ public class CaptchaPanel extends JPanel{
 						updateAlcCode2 = true;
 					}
 				}
+				resetHighlight = true;
 			}
 
 			for (int i = 0; i < entries.length; i++) {
 				Rect q = entries[i];
 				if(q.containsPoint(mouseX, mouseY)){
 					entryNo = i;
+					resetHighlight = true;
 					entryUpdate = true;
 					break;
 				}
@@ -359,6 +395,7 @@ public class CaptchaPanel extends JPanel{
 				Rect q = alcEnt1[i];
 				if(q.containsPoint(mouseX, mouseY)){
 					entryNo = i;
+					resetHighlight = true;
 					alcEnt1Update = true;
 					break;
 				}
@@ -368,6 +405,7 @@ public class CaptchaPanel extends JPanel{
 				Rect q = alcEnt2[i];
 				if(q.containsPoint(mouseX, mouseY)){
 					entryNo = i;
+					resetHighlight = true;
 					alcEnt2Update = true;
 					break;
 				}
@@ -384,6 +422,7 @@ public class CaptchaPanel extends JPanel{
 						r.setFilled(true);
 						binary[i / 6][i % 6] = 1;
 					}
+					resetHighlight = true;
 					updateHole = true;
 				}
 			}
@@ -484,10 +523,10 @@ public class CaptchaPanel extends JPanel{
 
 	private void loadRect(){
 		// Load other rectangles
-		buttonAND = new Rect(40, 50, 60, 40, Color.cyan);
-		buttonOR = new Rect(100, 50, 60, 40, Color.cyan);
-		buttonXOR = new Rect(160, 50, 60, 40, Color.cyan);
-		buttonNOT = new Rect(485, 762, 60, 40, Color.cyan);
+		buttonAND = new Rect(40, 50, 60, 40, colAND);
+		buttonOR = new Rect(100, 50, 60, 40, colOR);
+		buttonXOR = new Rect(160, 50, 60, 40, colXOR);
+		buttonNOT = new Rect(485, 762, 60, 40, new Color(175, 165, 255));
 		reset = new Rect(40, 762, 120, 40, Color.red);
 		fill = new Rect(742, 700, 40, 40, Color.green);
 		fill1 = new Rect(70, 616, 40, 40, Color.green);

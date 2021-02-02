@@ -21,6 +21,8 @@ public class Randomize {
 			count++;
 		}
 		
+		digScan.close();
+		
 	}
 	
 	public char getChar(){
