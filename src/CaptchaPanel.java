@@ -59,7 +59,7 @@ public class CaptchaPanel extends JPanel{
 	private Color colAND = Color.cyan;
 	private Color colOR = Color.cyan;
 	private Color colXOR = Color.cyan;
-	private Color highlight = new Color(0, 200, 200);
+	private Color highlight = new Color(50, 150, 150);
 
 	public CaptchaPanel() throws FileNotFoundException{
 		this.setBackground(Color.white);
