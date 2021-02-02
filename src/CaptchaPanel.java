@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class CaptchaPanel extends JPanel{
@@ -40,6 +41,8 @@ public class CaptchaPanel extends JPanel{
 	private String alcCode1 = "";
 	private String alcCode2 = "";
 	private String codeUpdate = "";
+	private String codeUpdate1 = "";
+	private String codeUpdate2 = "";
 	private int entryNo = -1;
 	private boolean entryUpdate = false;
 	private boolean alcEnt1Update = false;
@@ -164,15 +167,15 @@ public class CaptchaPanel extends JPanel{
 			updateCode = false;
 		}
 		if(updateAlcCode1){
-			alcCode1 = codeUpdate;
+			alcCode1 = codeUpdate1;
 			repaint();
-			codeUpdate = "";
+			codeUpdate1 = "";
 			updateAlcCode1 = false;
 		}
 		if(updateAlcCode2){
-			alcCode2 = codeUpdate;
+			alcCode2 = codeUpdate2;
 			repaint();
-			codeUpdate = "";
+			codeUpdate2 = "";
 			updateAlcCode2 = false;
 		}
 		if(alchemize){
@@ -284,7 +287,10 @@ public class CaptchaPanel extends JPanel{
 			}
 			if(save.containsPoint(mouseX, mouseY)){
 				String filename = (String) JOptionPane.showInputDialog("Enter Filename", code);
+				File directory = new File("saves");
 				try {
+					if(!directory.exists())
+						directory.mkdir();
 					PrintWriter writer = new PrintWriter(new File("saves/" + filename + ".txt"));
 					writer.print(code);
 					writer.close();
@@ -293,25 +299,50 @@ public class CaptchaPanel extends JPanel{
 				}
 			}
 			if(load.containsPoint(mouseX, mouseY)){
-				String[] options = {"Main Code", "Code 1", "Code 2"};
-				int sel = JOptionPane.showOptionDialog(null, "Load for which code?", "Select One", JOptionPane.DEFAULT_OPTION,
-													   JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+				fc.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
+				String[] options = {"One Code (Main)", "Two Codes (Alchemy)"};
+				String input = (String) JOptionPane.showInputDialog(null, "Select a Method", "Load Code", JOptionPane.QUESTION_MESSAGE,
+						null, options, options[0]);
 				fc.setCurrentDirectory(new File("saves"));
+				if(input.equals("One Code (Main)"))
+					fc.setMultiSelectionEnabled(false);
+				else if(input.equals("Two Codes (Alchemy)"))
+					fc.setMultiSelectionEnabled(true);
 				int returnVal = fc.showOpenDialog(CaptchaPanel.this);
 				if(returnVal == JFileChooser.APPROVE_OPTION){
-					try {
-						Scanner reader = new Scanner(fc.getSelectedFile());
-						codeUpdate = reader.nextLine();
-						reader.close();
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
-					}
-					if(sel == 0)
+					if(input.equals("One Code (Main)")){
+						try {
+							Scanner reader = new Scanner(fc.getSelectedFile());
+							codeUpdate = reader.nextLine();
+							reader.close();
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
 						updateCode = true;
-					else if(sel == 1)
+					}
+					else if(input.equals("Two Codes (Alchemy)")){
+						File[] files = fc.getSelectedFiles();
+						try {
+							if(files.length == 1){
+								Scanner reader = new Scanner(files[0]);
+								codeUpdate1 = reader.nextLine();
+								codeUpdate2 = codeUpdate1;
+								reader.close();
+							}
+							else{
+								Scanner reader = new Scanner(files[0]);
+								codeUpdate1 = reader.nextLine();
+								reader.close();
+								reader = new Scanner(files[1]);
+								codeUpdate2 = reader.nextLine();
+								reader.close();
+							}
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
 						updateAlcCode1 = true;
-					else if(sel == 2)
 						updateAlcCode2 = true;
+					}
 				}
 			}
 
@@ -394,9 +425,9 @@ public class CaptchaPanel extends JPanel{
 					d = '0';
 				for (int i = 0; i < alcCode1.length(); i++) {
 					if(i == entryNo)
-						codeUpdate += d;
+						codeUpdate1 += d;
 					else
-						codeUpdate += alcCode1.charAt(i);
+						codeUpdate1 += alcCode1.charAt(i);
 				}
 				alcEnt1Update = false;
 				updateAlcCode1 = true;
@@ -408,9 +439,9 @@ public class CaptchaPanel extends JPanel{
 					d = '0';
 				for (int i = 0; i < alcCode2.length(); i++) {
 					if(i == entryNo)
-						codeUpdate += d;
+						codeUpdate2 += d;
 					else
-						codeUpdate += alcCode2.charAt(i);
+						codeUpdate2 += alcCode2.charAt(i);
 				}
 				alcEnt2Update = false;
 				updateAlcCode2 = true;
