@@ -7,7 +7,7 @@ public class GUIWindow {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		JFrame theGUI = new JFrame();
-		theGUI.setTitle("Captchalogue Simulation");
+		theGUI.setTitle("Captchalogue Card Simulator");
 		theGUI.setSize(658, 682);
 		theGUI.setResizable(false);
 		theGUI.setAlwaysOnTop(false);
