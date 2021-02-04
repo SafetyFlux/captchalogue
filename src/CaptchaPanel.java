@@ -29,7 +29,6 @@ public class CaptchaPanel extends JPanel{
 	private int[][] alcBin1 = new int[8][6];
 	private int[][] alcBin2 = new int[8][6];
 	private Rect holes[] = new Rect[48];
-	private Rect borderHoles[] = new Rect[48];
 	private Rect entries[] = new Rect[8];
 	private Rect alcEnt1[] = new Rect[8];
 	private Rect alcEnt2[] = new Rect[8];
@@ -163,8 +162,6 @@ public class CaptchaPanel extends JPanel{
 		}
 		for (int i = 0; i < holes.length; i++)
 			holes[i].draw(g);
-		for (int i = 0; i < borderHoles.length; i++)
-			borderHoles[i].draw(g);
 		repaint();
 		if(updateHole){
 			code = codeUpdate;
@@ -609,55 +606,6 @@ public class CaptchaPanel extends JPanel{
 		holes[45] = new Rect(438, 384, 30, 12, Color.black);
 		holes[46] = new Rect(438, 411, 30, 12, Color.black);
 		holes[47] = new Rect(438, 439, 30, 12, Color.black);
-		// Load hole border rectangles
-		borderHoles[0] = new Rect(263, 138, 30, 12, Color.black);
-		borderHoles[1] = new Rect(263, 166, 30, 12, Color.black);
-		borderHoles[2] = new Rect(263, 193, 30, 12, Color.black);
-		borderHoles[3] = new Rect(263, 221, 30, 12, Color.black);
-		borderHoles[4] = new Rect(263, 248, 30, 12, Color.black);
-		borderHoles[5] = new Rect(263, 276, 30, 12, Color.black);
-		borderHoles[6] = new Rect(263, 303, 30, 12, Color.black);
-		borderHoles[7] = new Rect(263, 331, 30, 12, Color.black);
-		borderHoles[8] = new Rect(263, 356, 30, 12, Color.black);
-		borderHoles[9] = new Rect(263, 384, 30, 12, Color.black);
-		borderHoles[10] = new Rect(263, 411, 30, 12, Color.black);
-		borderHoles[11] = new Rect(263, 439, 30, 12, Color.black);
-		borderHoles[12] = new Rect(321, 138, 30, 12, Color.black);
-		borderHoles[13] = new Rect(321, 166, 30, 12, Color.black);
-		borderHoles[14] = new Rect(321, 193, 30, 12, Color.black);
-		borderHoles[15] = new Rect(321, 221, 30, 12, Color.black);
-		borderHoles[16] = new Rect(321, 248, 30, 12, Color.black);
-		borderHoles[17] = new Rect(321, 276, 30, 12, Color.black);
-		borderHoles[18] = new Rect(321, 303, 30, 12, Color.black);
-		borderHoles[19] = new Rect(321, 331, 30, 12, Color.black);
-		borderHoles[20] = new Rect(321, 356, 30, 12, Color.black);
-		borderHoles[21] = new Rect(321, 384, 30, 12, Color.black);
-		borderHoles[22] = new Rect(321, 411, 30, 12, Color.black);
-		borderHoles[23] = new Rect(321, 439, 30, 12, Color.black);
-		borderHoles[24] = new Rect(379, 138, 30, 12, Color.black);
-		borderHoles[25] = new Rect(379, 166, 30, 12, Color.black);
-		borderHoles[26] = new Rect(379, 193, 30, 12, Color.black);
-		borderHoles[27] = new Rect(379, 221, 30, 12, Color.black);
-		borderHoles[28] = new Rect(379, 248, 30, 12, Color.black);
-		borderHoles[29] = new Rect(379, 276, 30, 12, Color.black);
-		borderHoles[30] = new Rect(379, 303, 30, 12, Color.black);
-		borderHoles[31] = new Rect(379, 331, 30, 12, Color.black);
-		borderHoles[32] = new Rect(379, 356, 30, 12, Color.black);
-		borderHoles[33] = new Rect(379, 384, 30, 12, Color.black);
-		borderHoles[34] = new Rect(379, 411, 30, 12, Color.black);
-		borderHoles[35] = new Rect(379, 439, 30, 12, Color.black);
-		borderHoles[36] = new Rect(438, 138, 30, 12, Color.black);
-		borderHoles[37] = new Rect(438, 166, 30, 12, Color.black);
-		borderHoles[38] = new Rect(438, 193, 30, 12, Color.black);
-		borderHoles[39] = new Rect(438, 221, 30, 12, Color.black);
-		borderHoles[40] = new Rect(438, 248, 30, 12, Color.black);
-		borderHoles[41] = new Rect(438, 276, 30, 12, Color.black);
-		borderHoles[42] = new Rect(438, 303, 30, 12, Color.black);
-		borderHoles[43] = new Rect(438, 331, 30, 12, Color.black);
-		borderHoles[44] = new Rect(438, 356, 30, 12, Color.black);
-		borderHoles[45] = new Rect(438, 384, 30, 12, Color.black);
-		borderHoles[46] = new Rect(438, 411, 30, 12, Color.black);
-		borderHoles[47] = new Rect(438, 439, 30, 12, Color.black);
 	}
 	
 	private void changeSettings(String opt){
