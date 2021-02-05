@@ -19,7 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class CaptchaPanel extends JPanel{
 
-	private ImageIcon captchaCard, card1, card2, john;			// Images for the card assets and temporary "???" asset
+	private ImageIcon captchaCard, card1, card2, symbol, john;	// ImageIcons for the assets
 	private Conversion cv = new Conversion();					// Class for conversion and operations
 	private Randomize gen = new Randomize();					// Class for randomizing codes
 	final JFileChooser fc = new JFileChooser();					// File chooser for loading codes
@@ -29,6 +29,7 @@ public class CaptchaPanel extends JPanel{
 	private int[][] alcBin2 = new int[8][6];
 	// Rect arrays for holes
 	private Rect holes[] = new Rect[48];
+	private Rect backHoles[] = new Rect[48];
 	private Rect alcHoles1[] = new Rect[48];
 	private Rect alcHoles2[] = new Rect[48];
 	// Rect arrays for code digits
@@ -98,6 +99,7 @@ public class CaptchaPanel extends JPanel{
 		captchaCard = new ImageIcon("images/CaptchaCardBlue (John).png");
 		card1 = new ImageIcon("images/SmallCardBlue (John).png");
 		card2 = new ImageIcon("images/SmallCardBlue (John).png");
+		symbol = new ImageIcon("images/SymbolBlue (John).png");
 		john = new ImageIcon("images/ConfusedJohn.png");
 		// Add GUI listeners
 		addMouseListener(new HoleListener());
@@ -110,6 +112,7 @@ public class CaptchaPanel extends JPanel{
 		// Set up the font and font color
 		g.setFont(f);
 		g.setColor(Color.black);
+		int symbolY = (captchaCard.getIconHeight() / 2) - (symbol.getIconHeight() / 2) + (symbol.getIconHeight() / 6);
 		if(showAlcCards){
 		// Add code digits
 			for (int i = 0; i < digits.length; i++){
@@ -153,9 +156,12 @@ public class CaptchaPanel extends JPanel{
 			captchaCard.paintIcon(this, g, 373, 40);
 			card1.paintIcon(this, g, 100, 40);
 			card2.paintIcon(this, g, 100, 335);
+			symbol.paintIcon(this, g, 443, symbolY);
 		}
-		else
+		else{
 			captchaCard.paintIcon(this, g, 208, 40);
+			symbol.paintIcon(this, g, 278, symbolY);
+		}
 		// Draw operation buttons
 		buttonAND.draw(g);
 		buttonAND.setFilled(true);
@@ -245,8 +251,11 @@ public class CaptchaPanel extends JPanel{
 			alcEnt2[i].draw(g);
 		}
 		// Draw holes
-		for (int i = 0; i < holes.length; i++)
+		for (int i = 0; i < holes.length; i++){
+			backHoles[i].draw(g);
+			backHoles[i].setFilled(true);
 			holes[i].draw(g);
+		}
 		if(showAlcCards){
 			for (int i = 0; i < alcHoles1.length; i++){
 				alcHoles1[i].draw(g);
@@ -818,6 +827,55 @@ public class CaptchaPanel extends JPanel{
 		holes[45] = new Rect(438, 384, 30, 12, Color.black);
 		holes[46] = new Rect(438, 411, 30, 12, Color.black);
 		holes[47] = new Rect(438, 439, 30, 12, Color.black);
+		// Load hole backgrounds
+		backHoles[0] = new Rect(263, 138, 30, 12, Color.white);
+		backHoles[1] = new Rect(263, 166, 30, 12, Color.white);
+		backHoles[2] = new Rect(263, 193, 30, 12, Color.white);
+		backHoles[3] = new Rect(263, 221, 30, 12, Color.white);
+		backHoles[4] = new Rect(263, 248, 30, 12, Color.white);
+		backHoles[5] = new Rect(263, 276, 30, 12, Color.white);
+		backHoles[6] = new Rect(263, 303, 30, 12, Color.white);
+		backHoles[7] = new Rect(263, 331, 30, 12, Color.white);
+		backHoles[8] = new Rect(263, 356, 30, 12, Color.white);
+		backHoles[9] = new Rect(263, 384, 30, 12, Color.white);
+		backHoles[10] = new Rect(263, 411, 30, 12, Color.white);
+		backHoles[11] = new Rect(263, 439, 30, 12, Color.white);
+		backHoles[12] = new Rect(321, 138, 30, 12, Color.white);
+		backHoles[13] = new Rect(321, 166, 30, 12, Color.white);
+		backHoles[14] = new Rect(321, 193, 30, 12, Color.white);
+		backHoles[15] = new Rect(321, 221, 30, 12, Color.white);
+		backHoles[16] = new Rect(321, 248, 30, 12, Color.white);
+		backHoles[17] = new Rect(321, 276, 30, 12, Color.white);
+		backHoles[18] = new Rect(321, 303, 30, 12, Color.white);
+		backHoles[19] = new Rect(321, 331, 30, 12, Color.white);
+		backHoles[20] = new Rect(321, 356, 30, 12, Color.white);
+		backHoles[21] = new Rect(321, 384, 30, 12, Color.white);
+		backHoles[22] = new Rect(321, 411, 30, 12, Color.white);
+		backHoles[23] = new Rect(321, 439, 30, 12, Color.white);
+		backHoles[24] = new Rect(379, 138, 30, 12, Color.white);
+		backHoles[25] = new Rect(379, 166, 30, 12, Color.white);
+		backHoles[26] = new Rect(379, 193, 30, 12, Color.white);
+		backHoles[27] = new Rect(379, 221, 30, 12, Color.white);
+		backHoles[28] = new Rect(379, 248, 30, 12, Color.white);
+		backHoles[29] = new Rect(379, 276, 30, 12, Color.white);
+		backHoles[30] = new Rect(379, 303, 30, 12, Color.white);
+		backHoles[31] = new Rect(379, 331, 30, 12, Color.white);
+		backHoles[32] = new Rect(379, 356, 30, 12, Color.white);
+		backHoles[33] = new Rect(379, 384, 30, 12, Color.white);
+		backHoles[34] = new Rect(379, 411, 30, 12, Color.white);
+		backHoles[35] = new Rect(379, 439, 30, 12, Color.white);
+		backHoles[36] = new Rect(438, 138, 30, 12, Color.white);
+		backHoles[37] = new Rect(438, 166, 30, 12, Color.white);
+		backHoles[38] = new Rect(438, 193, 30, 12, Color.white);
+		backHoles[39] = new Rect(438, 221, 30, 12, Color.white);
+		backHoles[40] = new Rect(438, 248, 30, 12, Color.white);
+		backHoles[41] = new Rect(438, 276, 30, 12, Color.white);
+		backHoles[42] = new Rect(438, 303, 30, 12, Color.white);
+		backHoles[43] = new Rect(438, 331, 30, 12, Color.white);
+		backHoles[44] = new Rect(438, 356, 30, 12, Color.white);
+		backHoles[45] = new Rect(438, 384, 30, 12, Color.white);
+		backHoles[46] = new Rect(438, 411, 30, 12, Color.white);
+		backHoles[47] = new Rect(438, 439, 30, 12, Color.white);
 	}
 	
 	private void changeSettings(String opt){
@@ -834,6 +892,7 @@ public class CaptchaPanel extends JPanel{
 			captchaCard = new ImageIcon("images/CaptchaCard" + input + ".png");
 			card1 = new ImageIcon("images/SmallCard" + input + ".png");
 			card2 = new ImageIcon("images/SmallCard" + input + ".png");
+			symbol = new ImageIcon("images/Symbol" + input + ".png");
 			recolor = true;
 		}
 		// For the Toggle Alchemy Cards option
@@ -941,6 +1000,55 @@ public class CaptchaPanel extends JPanel{
 			holes[45] = new Rect(603, 384, 30, 12, Color.black);
 			holes[46] = new Rect(603, 411, 30, 12, Color.black);
 			holes[47] = new Rect(603, 439, 30, 12, Color.black);
+			// Load hole backgrounds
+			backHoles[0] = new Rect(428, 138, 30, 12, Color.white);
+			backHoles[1] = new Rect(428, 166, 30, 12, Color.white);
+			backHoles[2] = new Rect(428, 193, 30, 12, Color.white);
+			backHoles[3] = new Rect(428, 221, 30, 12, Color.white);
+			backHoles[4] = new Rect(428, 248, 30, 12, Color.white);
+			backHoles[5] = new Rect(428, 276, 30, 12, Color.white);
+			backHoles[6] = new Rect(428, 303, 30, 12, Color.white);
+			backHoles[7] = new Rect(428, 331, 30, 12, Color.white);
+			backHoles[8] = new Rect(428, 356, 30, 12, Color.white);
+			backHoles[9] = new Rect(428, 384, 30, 12, Color.white);
+			backHoles[10] = new Rect(428, 411, 30, 12, Color.white);
+			backHoles[11] = new Rect(428, 439, 30, 12, Color.white);
+			backHoles[12] = new Rect(484, 138, 30, 12, Color.white);
+			backHoles[13] = new Rect(484, 166, 30, 12, Color.white);
+			backHoles[14] = new Rect(484, 193, 30, 12, Color.white);
+			backHoles[15] = new Rect(484, 221, 30, 12, Color.white);
+			backHoles[16] = new Rect(484, 248, 30, 12, Color.white);
+			backHoles[17] = new Rect(484, 276, 30, 12, Color.white);
+			backHoles[18] = new Rect(484, 303, 30, 12, Color.white);
+			backHoles[19] = new Rect(484, 331, 30, 12, Color.white);
+			backHoles[20] = new Rect(484, 356, 30, 12, Color.white);
+			backHoles[21] = new Rect(484, 384, 30, 12, Color.white);
+			backHoles[22] = new Rect(484, 411, 30, 12, Color.white);
+			backHoles[23] = new Rect(484, 439, 30, 12, Color.white);
+			backHoles[24] = new Rect(544, 138, 30, 12, Color.white);
+			backHoles[25] = new Rect(544, 166, 30, 12, Color.white);
+			backHoles[26] = new Rect(544, 193, 30, 12, Color.white);
+			backHoles[27] = new Rect(544, 221, 30, 12, Color.white);
+			backHoles[28] = new Rect(544, 248, 30, 12, Color.white);
+			backHoles[29] = new Rect(544, 276, 30, 12, Color.white);
+			backHoles[30] = new Rect(544, 303, 30, 12, Color.white);
+			backHoles[31] = new Rect(544, 331, 30, 12, Color.white);
+			backHoles[32] = new Rect(544, 356, 30, 12, Color.white);
+			backHoles[33] = new Rect(544, 384, 30, 12, Color.white);
+			backHoles[34] = new Rect(544, 411, 30, 12, Color.white);
+			backHoles[35] = new Rect(544, 439, 30, 12, Color.white);
+			backHoles[36] = new Rect(603, 138, 30, 12, Color.white);
+			backHoles[37] = new Rect(603, 166, 30, 12, Color.white);
+			backHoles[38] = new Rect(603, 193, 30, 12, Color.white);
+			backHoles[39] = new Rect(603, 221, 30, 12, Color.white);
+			backHoles[40] = new Rect(603, 248, 30, 12, Color.white);
+			backHoles[41] = new Rect(603, 276, 30, 12, Color.white);
+			backHoles[42] = new Rect(603, 303, 30, 12, Color.white);
+			backHoles[43] = new Rect(603, 331, 30, 12, Color.white);
+			backHoles[44] = new Rect(603, 356, 30, 12, Color.white);
+			backHoles[45] = new Rect(603, 384, 30, 12, Color.white);
+			backHoles[46] = new Rect(603, 411, 30, 12, Color.white);
+			backHoles[47] = new Rect(603, 439, 30, 12, Color.white);
 			// Load 1st alchemy card hole rectangles
 			alcHoles1[0] = new Rect(125, 86, 13, 5, Color.black);
 			alcHoles1[1] = new Rect(125, 98, 13, 5, Color.black);
