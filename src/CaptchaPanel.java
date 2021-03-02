@@ -25,7 +25,7 @@ public class CaptchaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private ImageIcon captchaCard, card1, card2, symbol;				// ImageIcons for the assets
-	private ImageIcon errIcon, pumpkin, record, mspa;					// ImageIcons for dialog box icons
+	private ImageIcon errIcon, pumpkin, record, mspa, gun;				// ImageIcons for dialog box icons
 	private Conversion cv = new Conversion();							// Class for conversion and operations
 	private Randomize rand = new Randomize();							// Class for randomizing codes
 	private Random gen = new Random();									// Random for... generating random numbers
@@ -132,6 +132,7 @@ public class CaptchaPanel extends JPanel {
 		pumpkin = new ImageIcon("images/WhatPumpkin.png");
 		record = new ImageIcon("images/Record.png");
 		mspa = new ImageIcon("images/MSPAFace.png");
+		gun = new ImageIcon("images/MSPAReader.png");
 		// Add GUI listeners
 		addMouseListener(new HoleListener());
 		addKeyListener(new EntryListener());
@@ -856,7 +857,7 @@ public class CaptchaPanel extends JPanel {
 	// Reset all codes to 00000000
 	protected void resetCode(){
 		int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "Confirm Reset",
-													JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, record);
+													JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, gun);
 		if(confirm == JOptionPane.YES_OPTION){
 			code = "00000000";
 			alcCode1 = "00000000";
@@ -874,7 +875,8 @@ public class CaptchaPanel extends JPanel {
 	// Save the main code
 	protected void save(){
 		// A dialog box asks for the what the file will be titled
-		String filename = (String) JOptionPane.showInputDialog("Enter Filename", code);
+		String filename = (String) JOptionPane.showInputDialog(null, "Enter Filename", "Save", JOptionPane.INFORMATION_MESSAGE,
+															   record, null, code);
 		if(filename != null){
 			File directory = new File("saves");
 			try {
