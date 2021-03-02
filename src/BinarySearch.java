@@ -20,11 +20,13 @@ public class BinarySearch {
 		return -1;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public int objectSearch(Object[] a, Object searchValue){
 		int left = 0;
 		int right = a.length - 1;
 		while(left <= right){
 			int midpoint = (left + right) / 2;
+			@SuppressWarnings("rawtypes")
 			int result = ((Comparable)a[midpoint]).compareTo(searchValue);
 			if(result == 0)
 				return midpoint;

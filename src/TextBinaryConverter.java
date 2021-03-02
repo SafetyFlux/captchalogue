@@ -1,7 +1,7 @@
 /*
  	Author: Dallin Gardner
- 	Date Created: 10/1/19
- 	Date Modified: 10/7/19
+ 	Date Created: 10/01/19
+ 	Date Modified: 02/12/21
  	Notes: A text-based binary to integer converter to
  		   test if the concept is possible in Java.
  */
@@ -114,6 +114,7 @@ public class TextBinaryConverter {
 			}
 			if(selection == 3){		// Statement to quit the program
 				System.out.println("Quitting...");
+				reader.close();
 				run = false;
 			}
 

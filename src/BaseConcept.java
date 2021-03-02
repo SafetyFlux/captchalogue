@@ -1,8 +1,8 @@
 /*
  	Author: Dallin Gardner
  	Alchemy Wiz-kid: Dylan Brady
- 	Date Created: 3/2/20
- 	Date Modified: 3/3/20
+ 	Date Created: 03/02/20
+ 	Date Modified: 02/12/21
  	Notes: A program outlining the concept of captchalogue
  		   conversion in Homestuck.
  */
@@ -50,9 +50,9 @@ public class BaseConcept {
 				digInput = reader.next().charAt(0);
 				if(digInput == '$')
 					selection = 0;
-				else if(digInput == '!')		// This and next else if must be included to translate
+				else if(digInput == '?')		// This and next else if must be included to translate
 					System.out.println(digInput + " ==> 62");
-				else if(digInput == '?')
+				else if(digInput == '!')
 					System.out.println(digInput + " ==> 63");
 				else
 					System.out.println(digInput + " ==> " + dv.getDigitValue(digInput));
@@ -72,14 +72,14 @@ public class BaseConcept {
 
 			// Begins selection 3 menu (digit to binary)
 			while(selection == 3){
-				System.out.print("Enter a digit ($ to quit): ");
+				System.out.print("\nEnter a digit ($ to quit): ");
 				digInput = reader.next().charAt(0);
 				if(digInput == '$')
 					selection = 0;
-				else if(digInput == '!'){		// This and next else if must be included to translate
+				else if(digInput == '?'){		// This and next else if must be included to translate
 					iVal = 62;
 				}
-				else if(digInput == '?'){
+				else if(digInput == '!'){
 					iVal = 63;
 				}
 				else{
@@ -131,10 +131,10 @@ public class BaseConcept {
 				digInput = reader.next().charAt(0);
 				if(digInput == '$')
 					selection = 0;
-				else if(digInput == '!'){		// This and next else if must be included to translate
+				else if(digInput == '?'){		// This and next else if must be included to translate
 					iVal = 62;
 				}
-				else if(digInput == '?'){
+				else if(digInput == '!'){
 					iVal = 63;
 				}
 				else{
@@ -162,9 +162,9 @@ public class BaseConcept {
 					for (int i = 0; i < digits.length; i++)
 						digits[i] = strInput.charAt(i);
 					for (int i = 0; i <  holes.length; i+=6) {
-						if(digits[i / 6] == '!')
+						if(digits[i / 6] == '?')
 							iVal = 62;
-						else if(digits[i / 6] == '?')
+						else if(digits[i / 6] == '!')
 							iVal = 63;
 						else
 							iVal = dv.getDigitValue(digits[i / 6]);
@@ -192,6 +192,7 @@ public class BaseConcept {
 
 			if(selection == 7){		// Statement to quit the program
 				System.out.println("Quitting...");
+				reader.close();
 				run = false;
 			}
 
