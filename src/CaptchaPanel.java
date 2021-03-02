@@ -69,7 +69,7 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.0";
+	private String version = "1.0.1";
 	// Integer that tracks which code digit is being changed
 	private int entryNo = -1;
 	// String that tracks the current theme
@@ -856,7 +856,7 @@ public class CaptchaPanel extends JPanel {
 	
 	// Reset all codes to 00000000
 	protected void resetCode(){
-		int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "Confirm Reset",
+		int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "Reset Codes",
 													JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, gun);
 		if(confirm == JOptionPane.YES_OPTION){
 			code = "00000000";
