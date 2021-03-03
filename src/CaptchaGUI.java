@@ -39,6 +39,7 @@ public class CaptchaGUI extends JFrame {
 	private JMenuItem themesTroll[] = new JMenuItem[12];
 	private JMenuItem alchemyMI = new JMenuItem("Toggle Alchemy");
 	private JMenuItem gridMI = new JMenuItem("Toggle Grids");
+	private JMenuItem operationMI = new JMenuItem("Toggle Other Operations");
 	private JMenuItem aboutMI = new JMenuItem("About");
 	private JMenuItem secretMI = new JMenuItem("???");
 	
@@ -54,6 +55,7 @@ public class CaptchaGUI extends JFrame {
 		optMenu.add(themes);
 		optMenu.add(alchemyMI);
 		optMenu.add(gridMI);
+		optMenu.add(operationMI);
 		themes.add(symbolMI);
 		themes.add(humans);
 		Scanner reader = new Scanner(new File("res/ThemesHuman.txt"));
@@ -101,6 +103,7 @@ public class CaptchaGUI extends JFrame {
 		}
 		alchemyMI.addActionListener(new AlchemyListener());
 		gridMI.addActionListener(new GridListener());
+		operationMI.addActionListener(new OperationListener());
 		aboutMI.addActionListener(new AboutListener());
 		secretMI.addActionListener(new SecretListener());
 		
@@ -139,6 +142,12 @@ public class CaptchaGUI extends JFrame {
 	private class GridListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			panel.changeSettings("Toggle Grids");
+		}
+	}
+	
+	private class OperationListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			panel.changeSettings("Toggle Other Operations");
 		}
 	}
 	

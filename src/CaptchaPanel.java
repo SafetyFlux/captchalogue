@@ -48,11 +48,11 @@ public class CaptchaPanel extends JPanel {
 	private String alcDig1[] = new String[8];
 	private String alcDig2[] = new String[8];
 	// All button rectangles
-	private Rect buttonAND, buttonOR, buttonXOR, buttonNOT, fill, fill1, fill2,
-				 randomize, rand1, rand2;
+	private Rect buttonAND, buttonOR, buttonXOR, buttonNAND, buttonNOR, buttonXNOR, buttonNOT, buttonNOT1, buttonNOT2,
+				 fill, fill1, fill2, randomize, rand1, rand2;
 	// All button border rectangles (black outline)
-	private Rect borderAND, borderOR, borderXOR, borderNOT, borderFill, borderFill1, borderFill2,
-				 borderRandomize, borderRand1, borderRand2;
+	private Rect borderAND, borderOR, borderXOR, borderNAND, borderNOR, borderXNOR, borderNOT, borderNOT1, borderNOT2,
+				 borderFill, borderFill1, borderFill2, borderRandomize, borderRand1, borderRand2;
 	// All grid rectangle arrays
 	private Rect mainGrid[] = new Rect[8];
 	private Rect alcGrid1[] = new Rect[8];
@@ -69,7 +69,7 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.0.1";
+	private String version = "1.1";
 	// Integer that tracks which code digit is being changed
 	private int entryNo = -1;
 	// String that tracks the current theme
@@ -89,9 +89,13 @@ public class CaptchaPanel extends JPanel {
 	private boolean showAlcCards = false;
 	private boolean showGrids = false;
 	private boolean showSymbol = true;
+	private boolean showOtherOps = false;
 	private boolean highlightAND = false;
 	private boolean highlightOR = false;
 	private boolean highlightXOR = false;
+	private boolean highlightNAND = false;
+	private boolean highlightNOR = false;
+	private boolean highlightXNOR = false;
 	// All fonts used; f is the main one
 	private Font f = new Font("Courier", Font.BOLD, 26);
 	private Font fs = new Font("Courier", Font.BOLD, 16);
@@ -100,6 +104,9 @@ public class CaptchaPanel extends JPanel {
 	private Color colAND = Color.cyan;
 	private Color colOR = Color.cyan;
 	private Color colXOR = Color.cyan;
+	private Color colNAND = Color.cyan;
+	private Color colNOR = Color.cyan;
+	private Color colXNOR = Color.cyan;
 	private Color highlight = new Color(50, 150, 150);
 
 	public CaptchaPanel() throws FileNotFoundException, Exception {
@@ -112,17 +119,22 @@ public class CaptchaPanel extends JPanel {
 		showSymbol = options.getBoolean("symbol");
 		showAlcCards = options.getBoolean("alchemy");
 		showGrids = options.getBoolean("grids");
+		showOtherOps = options.getBoolean("operations");
 		code = options.getString("main_code");
 		alcCode1 = options.getString("alchemy_code_1");
 		alcCode2 = options.getString("alchemy_code_2");
 		highlightAND = options.getBoolean("function_and");
 		highlightOR = options.getBoolean("function_or");
 		highlightXOR = options.getBoolean("function_xor");
+		highlightNAND = options.getBoolean("function_nand");
+		highlightNOR = options.getBoolean("function_nor");
+		highlightXNOR = options.getBoolean("function_xnor");
 		reader.close();
 		// Call necessary methods
 		loadRect();
 		punchHole();
 		changeCards();
+		fixButtons();
 		// Select default captcha card assets
 		captchaCard = new ImageIcon("images/CaptchaCard" + theme + ".png");
 		card1 = new ImageIcon("images/SmallCard" + theme + ".png");
@@ -186,6 +198,18 @@ public class CaptchaPanel extends JPanel {
 			colXOR = highlight;
 		else
 			colXOR = Color.cyan;
+		if(highlightNAND)
+			colNAND = highlight;
+		else
+			colNAND = Color.cyan;
+		if(highlightNOR)
+			colNOR = highlight;
+		else
+			colNOR = Color.cyan;
+		if(highlightXNOR)
+			colXNOR = highlight;
+		else
+			colXNOR = Color.cyan;
 		// Add captcha card asset
 		if(showAlcCards){
 			captchaCard.paintIcon(this, g, 421, 40);
@@ -207,9 +231,26 @@ public class CaptchaPanel extends JPanel {
 			buttonOR.draw(g);
 			buttonOR.setFilled(true);
 			borderOR.draw(g);
-			buttonXOR.draw(g);
-			buttonXOR.setFilled(true);
-			borderXOR.draw(g);
+			if(showOtherOps) {
+				buttonXOR.draw(g);
+				buttonXOR.setFilled(true);
+				borderXOR.draw(g);
+				buttonNAND.draw(g);
+				buttonNAND.setFilled(true);
+				borderNAND.draw(g);
+				buttonNOR.draw(g);
+				buttonNOR.setFilled(true);
+				borderNOR.draw(g);
+				buttonXNOR.draw(g);
+				buttonXNOR.setFilled(true);
+				borderXNOR.draw(g);
+				buttonNOT1.draw(g);
+				buttonNOT1.setFilled(true);
+				borderNOT1.draw(g);
+				buttonNOT2.draw(g);
+				buttonNOT2.setFilled(true);
+				borderNOT2.draw(g);
+			}
 			fill1.draw(g);
 			fill1.setFilled(true);
 			borderFill1.draw(g);
@@ -223,9 +264,11 @@ public class CaptchaPanel extends JPanel {
 			rand2.setFilled(true);
 			borderRand2.draw(g);
 		}
-		buttonNOT.draw(g);
-		buttonNOT.setFilled(true);
-		borderNOT.draw(g);
+		if(showOtherOps) {
+			buttonNOT.draw(g);
+			buttonNOT.setFilled(true);
+			borderNOT.draw(g);
+		}
 		// Draw other buttons
 		fill.draw(g);
 		fill.setFilled(true);
@@ -235,13 +278,24 @@ public class CaptchaPanel extends JPanel {
 		borderRandomize.draw(g);
 		if(showAlcCards){
 			// Draw operation strings
-			g.drawString("&&", 359, 299);
-			g.drawString("||", 359, 330);
-			g.drawString("^^", 360, 368);
-			g.drawString("~~", 791, 64);
+			if(showOtherOps) {
+				g.drawString("&&", 359, 251);
+				g.drawString("||", 359, 282);
+				g.drawString("^^", 360, 320);
+				g.drawString("~&", 360, 347);
+				g.drawString("~|", 361, 378);
+				g.drawString("~^", 361, 413);
+				g.drawString("~~", 791, 121);
+				g.drawString("~~", 291, 64);
+				g.drawString("~~", 291, 359);
+			}
+			else {
+				g.drawString("&&", 359, 315);
+				g.drawString("||", 359, 346);
+			}
 			// Draw other strings
 			g.drawString("<", 807, 584);
-			g.drawString("R", 807, 121);
+			g.drawString("RAND", 751, 64);
 			g.setFont(fs);
 			g.drawString("<", 286, 292);
 			g.drawString("<", 286, 587);
@@ -250,10 +304,11 @@ public class CaptchaPanel extends JPanel {
 		}
 		else{
 			// Draw operation strings
-			g.drawString("~~", 403, 64);
+			if(showOtherOps)
+				g.drawString("~~", 403, 121);
 			// Draw other strings
 			g.drawString("<", 419, 584);
-			g.drawString("R", 419, 121);
+			g.drawString("RAND", 363, 64);
 			g.setFont(f);
 		}
 		// Draw code digit rectangles
@@ -357,14 +412,25 @@ public class CaptchaPanel extends JPanel {
 		// Update the holes (and set button highlight) when an operation is performed
 		if(alchemize){
 			punchHole();
+			punchAlcHole1();
+			punchAlcHole2();
 			recolor = true;
 			alchemize = false;
 		}
 		// Repaint and save new options
 		if(recolor){
-			buttonAND = new Rect(351, 275, 48, 32, colAND);
-			buttonOR = new Rect(351, 307, 48, 32, colOR);
-			buttonXOR = new Rect(351, 339, 48, 32, colXOR);
+			if(showOtherOps) {
+				buttonAND = new Rect(351, 227, 48, 32, colAND);
+				buttonOR = new Rect(351, 259, 48, 32, colOR);
+				buttonXOR = new Rect(351, 291, 48, 32, colXOR);
+				buttonNAND = new Rect(351, 323, 48, 32, colNAND);
+				buttonNOR = new Rect(351, 355, 48, 32, colNOR);
+				buttonXNOR = new Rect(351, 387, 48, 32, colXNOR);
+			}
+			else {
+				buttonAND = new Rect(351, 291, 48, 32, colAND);
+				buttonOR = new Rect(351, 323, 48, 32, colOR);
+			}
 			repaint();
 			try {
 				saveSettings("res/options.json");
@@ -386,9 +452,12 @@ public class CaptchaPanel extends JPanel {
 				if(buttonAND.containsPoint(mouseX, mouseY)){
 					fillBin();
 					binary = cv.functionAND(alcBin1, alcBin2);
-					highlightAND = true;
+					highlightAND = !highlightAND;
 					highlightOR = false;
 					highlightXOR = false;
+					highlightNAND = false;
+					highlightNOR = false;
+					highlightXNOR = false;
 					updateHole = true;
 					alchemize = true;
 				}
@@ -397,20 +466,91 @@ public class CaptchaPanel extends JPanel {
 					fillBin();
 					binary = cv.functionOR(alcBin1, alcBin2);
 					highlightAND = false;
-					highlightOR = true;
+					highlightOR = !highlightOR;
 					highlightXOR = false;
+					highlightNAND = false;
+					highlightNOR = false;
+					highlightXNOR = false;
 					updateHole = true;
 					alchemize = true;
 				}
-				// If the "^^" button is clicked, the XOR operation is performed
-				if(buttonXOR.containsPoint(mouseX, mouseY)){
-					fillBin();
-					binary = cv.functionXOR(alcBin1, alcBin2);
-					highlightAND = false;
-					highlightOR = false;
-					highlightXOR = true;
-					updateHole = true;
-					alchemize = true;
+				if(showOtherOps) {
+					// If the "^^" button is clicked, the XOR operation is performed
+					if(buttonXOR.containsPoint(mouseX, mouseY)){
+						fillBin();
+						binary = cv.functionXOR(alcBin1, alcBin2);
+						highlightAND = false;
+						highlightOR = false;
+						highlightXOR = !highlightXOR;
+						highlightNAND = false;
+						highlightNOR = false;
+						highlightXNOR = false;
+						updateHole = true;
+						alchemize = true;
+					}
+					// If the "~&" button is clicked, the NAND operation is performed
+					if(buttonNAND.containsPoint(mouseX, mouseY)){
+						fillBin();
+						binary = cv.functionNAND(alcBin1, alcBin2);
+						highlightAND = false;
+						highlightOR = false;
+						highlightXOR = false;
+						highlightNAND = !highlightNAND;
+						highlightNOR = false;
+						highlightXNOR = false;
+						updateHole = true;
+						alchemize = true;
+					}
+					// If the "~|" button is clicked, the NOR operation is performed
+					if(buttonNOR.containsPoint(mouseX, mouseY)){
+						fillBin();
+						binary = cv.functionNOR(alcBin1, alcBin2);
+						highlightAND = false;
+						highlightOR = false;
+						highlightXOR = false;
+						highlightNAND = false;
+						highlightNOR = !highlightNOR;
+						highlightXNOR = false;
+						updateHole = true;
+						alchemize = true;
+					}
+					// If the "~^" button is clicked, the XNOR operation is performed
+					if(buttonXNOR.containsPoint(mouseX, mouseY)){
+						fillBin();
+						binary = cv.functionXNOR(alcBin1, alcBin2);
+						highlightAND = false;
+						highlightOR = false;
+						highlightXOR = false;
+						highlightNAND = false;
+						highlightNOR = false;
+						highlightXNOR = !highlightXNOR;
+						updateHole = true;
+						alchemize = true;
+					}
+					// If the "~~" button is clicked, the NOT operation is performed (on the main code)
+					if(buttonNOT.containsPoint(mouseX, mouseY)){
+						fillBin();
+						binary = cv.functionNOT(binary);
+						resetHighlight();
+						updateHole = true;
+						alchemize = true;
+					}
+					// If the "~~" button is clicked, the NOT operation is performed (on the main code)
+					if(buttonNOT1.containsPoint(mouseX, mouseY)){
+						fillBin();
+						alcBin1 = cv.functionNOT(alcBin1);
+						resetHighlight();
+						updateAlcHole1 = true;
+						alchemize = true;
+					}
+					// If the "~~" button is clicked, the NOT operation is performed (on the main code)
+					if(buttonNOT2.containsPoint(mouseX, mouseY)){
+						fillBin();
+						alcBin2 = cv.functionNOT(alcBin2);
+						resetHighlight();
+						updateAlcHole2 = true;
+						alchemize = true;
+					}
 				}
 				if(fill1.containsPoint(mouseX, mouseY)){
 					String update = (String) JOptionPane.showInputDialog("Enter Code", "00000000");
@@ -446,14 +586,6 @@ public class CaptchaPanel extends JPanel {
 					updateAlcCode2 = true;
 					resetHighlight();
 				}
-			}
-			// If the "~~" button is clicked, the NOT operation is performed (on the main code)
-			if(buttonNOT.containsPoint(mouseX, mouseY)){
-				fillBin();
-				binary = cv.functionNOT(binary);
-				resetHighlight();
-				updateHole = true;
-				alchemize = true;
 			}
 			// If any of the "<" or "^" buttons are clicked, the corresponding field is filled in with the user input.
 			if(fill.containsPoint(mouseX, mouseY)){
@@ -526,6 +658,7 @@ public class CaptchaPanel extends JPanel {
 				}
 				if(showAlcCards){
 					if(s.containsPoint(mouseX, mouseY)) {
+						// Toggle the hole when it's clicked
 						if(s.isFilled()){
 							s.setFilled(false);
 							alcBin1[i / 6][i % 6] = 0;
@@ -534,10 +667,41 @@ public class CaptchaPanel extends JPanel {
 							s.setFilled(true);
 							alcBin1[i / 6][i % 6] = 1;
 						}
-						resetHighlight();
+						// Continue to alchemize when holes are toggled
+						if(highlightAND) {
+							binary = cv.functionAND(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightOR) {
+							binary = cv.functionOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightXOR) {
+							binary = cv.functionXOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightNAND) {
+							binary = cv.functionNAND(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightNOR) {
+							binary = cv.functionNOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightXNOR) {
+							binary = cv.functionXNOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
 						updateAlcHole1 = true;
 					}
 					if(t.containsPoint(mouseX, mouseY)) {
+						// Toggle the hole when it's clicked
 						if(t.isFilled()){
 							t.setFilled(false);
 							alcBin2[i / 6][i % 6] = 0;
@@ -546,7 +710,37 @@ public class CaptchaPanel extends JPanel {
 							t.setFilled(true);
 							alcBin2[i / 6][i % 6] = 1;
 						}
-						resetHighlight();
+						// Continue to alchemize when holes are toggled
+						if(highlightAND) {
+							binary = cv.functionAND(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightOR) {
+							binary = cv.functionOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightXOR) {
+							binary = cv.functionXOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightNAND) {
+							binary = cv.functionNAND(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightNOR) {
+							binary = cv.functionNOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
+						if(highlightXNOR) {
+							binary = cv.functionXNOR(alcBin1, alcBin2);
+							updateHole = true;
+							alchemize = true;
+						}
 						updateAlcHole2 = true;
 					}
 				}
@@ -708,13 +902,13 @@ public class CaptchaPanel extends JPanel {
 
 	private void loadRect(){
 		// Load button rectangles
-		buttonNOT = new Rect(394, 40, 48, 32, new Color(175, 165, 255));
+		buttonNOT = new Rect(394, 97, 48, 32, new Color(175, 165, 255));
 		fill = new Rect(410, 560, 32, 32, Color.green);
-		randomize = new Rect(410, 97, 32, 32, Color.yellow);
+		randomize = new Rect(346, 40, 96, 32, Color.yellow);
 		// Load button borders (black outline)
-		borderNOT = new Rect(394, 40, 48, 32, Color.black);
+		borderNOT = new Rect(394, 97, 48, 32, Color.black);
 		borderFill = new Rect(410, 560, 32, 32, Color.black);
-		borderRandomize = new Rect(410, 97, 32, 32, Color.black);
+		borderRandomize = new Rect(346, 40, 96, 32, Color.black);
 		// Load entry rectangles
 		for (int i = 0; i < entries.length; i++)
 			entries[i] = new Rect((32 + (47 * i)), 560, 32, 32, Color.black);
@@ -775,25 +969,47 @@ public class CaptchaPanel extends JPanel {
 	private void changeCards(){
 		if(showAlcCards){
 			// Load button rectangles
-			buttonAND = new Rect(351, 275, 48, 32, colAND);
-			buttonOR = new Rect(351, 307, 48, 32, colOR);
-			buttonXOR = new Rect(351, 339, 48, 32, colXOR);
-			buttonNOT = new Rect(782, 40, 48, 32, new Color(175, 165, 255));
+			if(showOtherOps) {
+				buttonAND = new Rect(351, 227, 48, 32, colAND);
+				buttonOR = new Rect(351, 259, 48, 32, colOR);
+			}
+			else {
+				buttonAND = new Rect(351, 291, 48, 32, colAND);
+				buttonOR = new Rect(351, 323, 48, 32, colOR);
+			}
+			buttonXOR = new Rect(351, 291, 48, 32, colXOR);
+			buttonNAND = new Rect(351, 323, 48, 32, colNAND);
+			buttonNOR = new Rect(351, 355, 48, 32, colNOR);
+			buttonXNOR = new Rect(351, 387, 48, 32, colXNOR);
+			buttonNOT = new Rect(782, 97, 48, 32, new Color(175, 165, 255));
+			buttonNOT1 = new Rect(282, 40, 48, 32, new Color(175, 165, 255));
+			buttonNOT2 = new Rect(282, 335, 48, 32, new Color(175, 165, 255));
 			fill = new Rect(798, 560, 32, 32, Color.green);
 			fill1 = new Rect(280, 277, 20, 20, Color.green);
 			fill2 = new Rect(280, 572, 20, 20, Color.green);
-			randomize = new Rect(798, 97, 32, 32, Color.yellow);
+			randomize = new Rect(734, 40, 96, 32, Color.yellow);
 			rand1 = new Rect(310, 277, 20, 20, Color.yellow);
 			rand2 = new Rect(310, 572, 20, 20, Color.yellow);
 			// Load button borders (black outline)
-			borderAND = new Rect(351, 275, 48, 32, Color.black);
-			borderOR = new Rect(351, 307, 48, 32, Color.black);
-			borderXOR = new Rect(351, 339, 48, 32, Color.black);
-			borderNOT = new Rect(782, 40, 48, 32, Color.black);
+			if(showOtherOps) {
+				borderAND = new Rect(351, 227, 48, 32, Color.black);
+				borderOR = new Rect(351, 259, 48, 32, Color.black);
+			}
+			else {
+				borderAND = new Rect(351, 291, 48, 32, Color.black);
+				borderOR = new Rect(351, 323, 48, 32, Color.black);
+			}
+			borderXOR = new Rect(351, 291, 48, 32, Color.black);
+			borderNAND = new Rect(351, 323, 48, 32, Color.black);
+			borderNOR = new Rect(351, 355, 48, 32, Color.black);
+			borderXNOR = new Rect(351, 387, 48, 32, Color.black);
+			borderNOT = new Rect(782, 97, 48, 32, Color.black);
+			borderNOT1 = new Rect(282, 40, 48, 32, Color.black);
+			borderNOT2 = new Rect(282, 335, 48, 32, Color.black);
 			borderFill = new Rect(798, 560, 32, 32, Color.black);
 			borderFill1 = new Rect(280, 277, 20, 20, Color.black);
 			borderFill2 = new Rect(280, 572, 20, 20, Color.black);
-			borderRandomize = new Rect(798, 97, 32, 32, Color.black);
+			borderRandomize = new Rect(734, 40, 96, 32, Color.black);
 			borderRand1 = new Rect(310, 277, 20, 20, Color.black);
 			borderRand2 = new Rect(310, 572, 20, 20, Color.black);
 			// Load entry rectangles
@@ -852,6 +1068,32 @@ public class CaptchaPanel extends JPanel {
 		}
 		punchHole();
 		recolor = true;
+	}
+	
+	// Fix the operation buttons when some are toggled
+	private void fixButtons() {
+		if(showAlcCards) {
+			if(showOtherOps) {
+				buttonAND = new Rect(351, 227, 48, 32, colAND);
+				buttonOR = new Rect(351, 259, 48, 32, colOR);
+				borderAND = new Rect(351, 227, 48, 32, Color.black);
+				borderOR = new Rect(351, 259, 48, 32, Color.black);
+			}
+			else {
+				buttonAND = new Rect(351, 291, 48, 32, colAND);
+				buttonOR = new Rect(351, 323, 48, 32, colOR);
+				borderAND = new Rect(351, 291, 48, 32, Color.black);
+				borderOR = new Rect(351, 323, 48, 32, Color.black);
+			}
+			buttonXOR = new Rect(351, 291, 48, 32, colXOR);
+			buttonNAND = new Rect(351, 323, 48, 32, colNAND);
+			buttonNOR = new Rect(351, 355, 48, 32, colNOR);
+			buttonXNOR = new Rect(351, 387, 48, 32, colXNOR);
+			borderXOR = new Rect(351, 291, 48, 32, Color.black);
+			borderNAND = new Rect(351, 323, 48, 32, Color.black);
+			borderNOR = new Rect(351, 355, 48, 32, Color.black);
+			borderXNOR = new Rect(351, 387, 48, 32, Color.black);
+		}
 	}
 	
 	// Reset all codes to 00000000
@@ -975,6 +1217,12 @@ public class CaptchaPanel extends JPanel {
 			showGrids = !showGrids;
 			recolor = true;
 		}
+		// For the Toggle Other Operations button
+		else if(opt.equals("Toggle Other Operations")) {
+			showOtherOps = !showOtherOps;
+			fixButtons();
+			recolor = true;
+		}
 		// For the Toggle Symbol option
 		else if(opt.equals("Toggle Symbol")){
 			showSymbol = !showSymbol;
@@ -994,12 +1242,16 @@ public class CaptchaPanel extends JPanel {
 		options.put("symbol", showSymbol);
 		options.put("alchemy", showAlcCards);
 		options.put("grids", showGrids);
+		options.put("operations", showOtherOps);
 		options.put("main_code", code);
 		options.put("alchemy_code_1", alcCode1);
 		options.put("alchemy_code_2", alcCode2);
 		options.put("function_and", highlightAND);
 		options.put("function_or", highlightOR);
 		options.put("function_xor", highlightXOR);
+		options.put("function_nand", highlightNAND);
+		options.put("function_nor", highlightNOR);
+		options.put("function_xnor", highlightXNOR);
 		Files.write(Paths.get(filename), options.toString().getBytes());
 	}
 	
@@ -1052,6 +1304,9 @@ public class CaptchaPanel extends JPanel {
 		highlightAND = false;
 		highlightOR = false;
 		highlightXOR = false;
+		highlightNAND = false;
+		highlightNOR = false;
+		highlightXNOR = false;
 		recolor = true;
 	}
 	
