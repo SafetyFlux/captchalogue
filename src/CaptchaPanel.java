@@ -25,7 +25,8 @@ public class CaptchaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private ImageIcon captchaCard, card1, card2, symbol;				// ImageIcons for the assets
-	private ImageIcon errIcon, pumpkin, record, mspa, gun;				// ImageIcons for dialog box icons
+	private ImageIcon errIcon, pumpkin, record, mspa, gun,				// ImageIcons for dialog box icons
+					  arrow, apple;
 	private Conversion cv = new Conversion();							// Class for conversion and operations
 	private Randomize rand = new Randomize();							// Class for randomizing codes
 	private Random gen = new Random();									// Random for... generating random numbers
@@ -69,11 +70,12 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.1";
+	private String version = "1.2";
 	// Integer that tracks which code digit is being changed
 	private int entryNo = -1;
-	// String that tracks the current theme
+	// Strings that tracks the current theme
 	private String theme = "";
+	private String type = "";
 	// Booleans for each condition in the PaintComponent
 	private boolean entryUpdate = false;
 	private boolean alcEnt1Update = false;
@@ -116,6 +118,7 @@ public class CaptchaPanel extends JPanel {
 		Scanner reader = new Scanner(new File("res/options.json"));
 		JSONObject options = new JSONObject(reader.nextLine());
 		theme = options.getString("theme");
+		type = options.getString("type");
 		showSymbol = options.getBoolean("symbol");
 		showAlcCards = options.getBoolean("alchemy");
 		showGrids = options.getBoolean("grids");
@@ -136,18 +139,21 @@ public class CaptchaPanel extends JPanel {
 		changeCards();
 		fixButtons();
 		// Select default captcha card assets
-		captchaCard = new ImageIcon("images/CaptchaCard" + theme + ".png");
-		card1 = new ImageIcon("images/SmallCard" + theme + ".png");
-		card2 = new ImageIcon("images/SmallCard" + theme + ".png");
-		symbol = new ImageIcon("images/Symbol" + theme + ".png");
+		captchaCard = new ImageIcon("images/" + type + "/CaptchaCard" + theme + ".png");
+		card1 = new ImageIcon("images/" + type + "/SmallCard" + theme + ".png");
+		card2 = new ImageIcon("images/" + type + "/SmallCard" + theme + ".png");
+		symbol = new ImageIcon("images/" + type + "/Symbol" + theme + ".png");
 		// Select dialog box assets
-		pumpkin = new ImageIcon("images/WhatPumpkin.png");
-		record = new ImageIcon("images/Record.png");
-		mspa = new ImageIcon("images/MSPAFace.png");
-		gun = new ImageIcon("images/MSPAReader.png");
+		pumpkin = new ImageIcon("images/icons/WhatPumpkin.png");
+		record = new ImageIcon("images/icons/Record.png");
+		mspa = new ImageIcon("images/icons/MSPAFace.png");
+		gun = new ImageIcon("images/icons/MSPAReader.png");
+		arrow = new ImageIcon("images/icons/RightArrow.png");
+		apple = new ImageIcon("images/icons/Apple.png");
 		// Add GUI listeners
 		addMouseListener(new HoleListener());
 		addKeyListener(new EntryListener());
+		addKeyListener(new ShortcutListener());
 		setFocusable(true);
 		
 	}
@@ -354,8 +360,9 @@ public class CaptchaPanel extends JPanel {
 		// Draw holes
 		for (int i = 0; i < holes.length; i++){
 			backHoles[i].draw(g);
-			backHoles[i].setFilled(true);
+			//backHoles[i].setFilled(true);
 			holes[i].draw(g);
+			holes[i].setFilled(true);
 		}
 		if(showAlcCards){
 			for (int i = 0; i < alcHoles1.length; i++){
@@ -553,7 +560,8 @@ public class CaptchaPanel extends JPanel {
 					}
 				}
 				if(fill1.containsPoint(mouseX, mouseY)){
-					String update = (String) JOptionPane.showInputDialog("Enter Code", "00000000");
+					String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
+								 										 arrow, null, "00000000");
 					if(update != null){
 						codeUpdate1 = update.trim();
 						if(codeUpdate1.length() != 8)
@@ -563,7 +571,8 @@ public class CaptchaPanel extends JPanel {
 					}
 				}
 				if(fill2.containsPoint(mouseX, mouseY)){
-					String update = (String) JOptionPane.showInputDialog("Enter Code", "00000000");
+					String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
+																		 arrow, null, "00000000");
 					if(update != null){
 						codeUpdate2 = update.trim();
 						if(codeUpdate2.length() != 8)
@@ -589,7 +598,8 @@ public class CaptchaPanel extends JPanel {
 			}
 			// If any of the "<" or "^" buttons are clicked, the corresponding field is filled in with the user input.
 			if(fill.containsPoint(mouseX, mouseY)){
-				String update = (String) JOptionPane.showInputDialog("Enter Code", "00000000");
+				String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
+						   											 arrow, null, "00000000");
 				if(update != null){
 					codeUpdate = update.trim();
 					// The code is set to 00000000 if the input isn't 8 digits long
@@ -641,16 +651,19 @@ public class CaptchaPanel extends JPanel {
 
 			// If a hole is clicked, it will toggle on or off
 			for (int i = 0; i < holes.length; i++) {
-				Rect r = holes[i];
+				Rect r = backHoles[i];
+				Rect h = holes[i];
 				Rect s = alcHoles1[i];
 				Rect t = alcHoles2[i];
 				if(r.containsPoint(mouseX, mouseY)) {
-					if(r.isFilled()){
-						r.setFilled(false);
+					if(r.getColor() == Color.white){
+						r.setColor(Color.black);
+						h.setColor(Color.white);
 						binary[i / 6][i % 6] = 0;
 					}
 					else{
-						r.setFilled(true);
+						r.setColor(Color.white);
+						h.setColor(Color.black);
 						binary[i / 6][i % 6] = 1;
 					}
 					resetHighlight();
@@ -779,6 +792,7 @@ public class CaptchaPanel extends JPanel {
 
 		// After a digit is clicked, the KeyListener looks for the next key typed
 		public void keyTyped(KeyEvent e){
+			
 			char d = '0';
 			// For the main code
 			if(entryUpdate){
@@ -828,8 +842,44 @@ public class CaptchaPanel extends JPanel {
 			}
 			else
 				e.consume();
+			
 		}
 
+	}
+	
+	private class ShortcutListener extends KeyAdapter {
+		
+		public void keyPressed(KeyEvent e) {
+			
+			if(e.isControlDown()) {
+				if(e.getKeyCode() == KeyEvent.VK_N)
+					resetCode();
+				else if(e.getKeyCode() == KeyEvent.VK_S)
+					save();
+				else if(e.getKeyCode() == KeyEvent.VK_L)
+					load();
+				else if(e.getKeyCode() == KeyEvent.VK_A)
+					changeSettings("Toggle Alchemy");
+				else if(e.getKeyCode() == KeyEvent.VK_G)
+					changeSettings("Toggle Grids");
+				else if(e.getKeyCode() == KeyEvent.VK_O)
+					changeSettings("Toggle Other Operations");
+				else if(e.getKeyCode() == KeyEvent.VK_Y)
+					changeSettings("Toggle Symbol");
+				else if(e.getKeyCode() == KeyEvent.VK_T)
+					changeSettings("About");
+				else if(e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_SLASH)
+					secretCode();
+				else
+					e.consume();
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				System.exit(0);
+			else
+				e.consume();
+			
+		}
+		
 	}
 
 	private void punchHole(){
@@ -842,10 +892,19 @@ public class CaptchaPanel extends JPanel {
 		for (int i = 0; i < binary.length; i++) {
 			for (int j = 0; j < binary[i].length; j++) {
 				int h = (6 * i) + j;
-				if(binary[i][j] == 0)
-					holes[h].setFilled(false);
-				else
-					holes[h].setFilled(true);
+				//if(binary[i][j] == 0)
+					//holes[h].setFilled(false);
+				//else
+					//holes[h].setFilled(true);
+				if(binary[i][j] == 0) {
+					holes[h].setColor(Color.white);
+					backHoles[h].setColor(Color.black);
+				}
+				else {
+					holes[h].setColor(Color.black);
+					backHoles[h].setColor(Color.white);
+				}
+				
 			}
 		}
 	}
@@ -959,8 +1018,8 @@ public class CaptchaPanel extends JPanel {
 			else if(i % 12 == 11)
 				y = 439;
 			
-			holes[i] = new Rect(x, y, 30, 12, Color.black);
-			backHoles[i] = new Rect(x, y, 30, 12, Color.white);
+			holes[i] = new Rect(x, y, 29, 11, Color.white);
+			backHoles[i] = new Rect(x - 1, y - 1, 30, 12, Color.black);
 		}
 		
 	}
@@ -1196,13 +1255,14 @@ public class CaptchaPanel extends JPanel {
 	}
 	
 	// Change the theme
-	protected void changeTheme(String th){
+	protected void changeTheme(String th, String ty){
 		// Since image files are named after the themes, the ImageIcons can be changed with one line of code each
-		captchaCard = new ImageIcon("images/CaptchaCard" + th + ".png");
-		card1 = new ImageIcon("images/SmallCard" + th + ".png");
-		card2 = new ImageIcon("images/SmallCard" + th + ".png");
-		symbol = new ImageIcon("images/Symbol" + th + ".png");
+		captchaCard = new ImageIcon("images/" + ty + "/CaptchaCard" + th + ".png");
+		card1 = new ImageIcon("images/" + ty + "/SmallCard" + th + ".png");
+		card2 = new ImageIcon("images/" + ty + "/SmallCard" + th + ".png");
+		symbol = new ImageIcon("images/" + ty + "/Symbol" + th + ".png");
 		theme = th;
+		type = ty;
 		recolor = true;
 	}
 	
@@ -1228,17 +1288,25 @@ public class CaptchaPanel extends JPanel {
 			showSymbol = !showSymbol;
 			recolor = true;
 		}
-		// For the About option
+		// For the About menu
 		else if(opt.equals("About"))
 			JOptionPane.showMessageDialog(null, "Programmer: " + author + "\nAdvisor: " + advisor +
 										  "\nEmail: " + email + "\nGitHub Page: " + link + "\nVersion: " +
 										  version, "About", JOptionPane.INFORMATION_MESSAGE, mspa);
+		// For the Shortcuts menu
+		else if(opt.equals("Shortcuts"))
+			JOptionPane.showMessageDialog(null, "Ctrl + N  -  New" + "\nCtrl + S  -  Save" + "\nCtrl + L  -  Load" + 
+										  "\nCtrl + A  -  Toggle Alchemy" + "\nCtrl + G  -  Toggle Grids" + 
+										  "\nCtrl + O  -  Toggle Other Operations" + "\nCtrl + Y  -  Toggle Symbol" +
+										  "\nCtrl + T  -  About Page" + "\nCtrl + Shift + /  -  Trigger ??? Effect" +
+										  "\nEscape  -  Exit Program", "Shortcuts", JOptionPane.INFORMATION_MESSAGE, apple);
 	}
 	
 	// Save options to json file
 	protected void saveSettings(String filename) throws Exception{
 		JSONObject options = new JSONObject();
 		options.put("theme", theme);
+		options.put("type", type);
 		options.put("symbol", showSymbol);
 		options.put("alchemy", showAlcCards);
 		options.put("grids", showGrids);
@@ -1267,10 +1335,10 @@ public class CaptchaPanel extends JPanel {
 					"Coming soon...", JOptionPane.INFORMATION_MESSAGE, pumpkin);
 		// Code to Caliborn's juju - changes to a special theme
 		else if(code.equals("uROBuROS"))
-			changeTheme("Special (Caliborn)");
+			changeTheme("Special (Caliborn)", "special");
 		// Code to Calliope's juju - changes to a special theme
 		else if(code.equals("UrobUros"))
-			changeTheme("Special (Calliope)");
+			changeTheme("Special (Calliope)", "special");
 		// Code to John's jetpack - ...
 		else if(code.equals("PCHOOOOO"))
 			JOptionPane.showMessageDialog(null, "Something is supposed to happen, but it hasn't been coded yet.",
@@ -1287,13 +1355,13 @@ public class CaptchaPanel extends JPanel {
 		else {
 			int err = gen.nextInt(4);
 			if(err == 0)
-				errIcon = new ImageIcon("images/ConfusedJohn.png");
+				errIcon = new ImageIcon("images/icons/ConfusedJohn.png");
 			else if(err == 1)
-				errIcon = new ImageIcon("images/Facepalm.png");
+				errIcon = new ImageIcon("images/icons/Facepalm.png");
 			else if(err == 2)
-				errIcon = new ImageIcon("images/HeadBonk.png");
+				errIcon = new ImageIcon("images/icons/HeadBonk.png");
 			else if(err == 3)
-				errIcon = new ImageIcon("images/LilCal.png");
+				errIcon = new ImageIcon("images/icons/LilCal.png");
 			JOptionPane.showMessageDialog(null, "Nothing happened. Well, nothing aside from this text box.",
 					"Try Again", JOptionPane.INFORMATION_MESSAGE, errIcon);
 		}

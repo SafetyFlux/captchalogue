@@ -48,6 +48,14 @@ public class Rect implements Shape{
 	   return filled;
    }
    
+   public void setColor(Color c) {
+	   color = c;
+   }
+   
+   public Color getColor() {
+	   return color;
+   }
+   
 }
 
 

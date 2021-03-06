@@ -35,12 +35,17 @@ public class CaptchaGUI extends JFrame {
 	private JMenuItem symbolMI = new JMenuItem("Toggle Symbol");
 	private JMenu humans = new JMenu("Humans");
 	private JMenu trolls = new JMenu("Trolls");
+	private JMenu aspects = new JMenu("Aspects");
+	private JMenu sways = new JMenu("Lunar Sways");
 	private JMenuItem themesHuman[] = new JMenuItem[8];
 	private JMenuItem themesTroll[] = new JMenuItem[12];
+	private JMenuItem themesAspect[] = new JMenuItem[12];
+	private JMenuItem themesSway[] = new JMenuItem[2];
 	private JMenuItem alchemyMI = new JMenuItem("Toggle Alchemy");
 	private JMenuItem gridMI = new JMenuItem("Toggle Grids");
 	private JMenuItem operationMI = new JMenuItem("Toggle Other Operations");
 	private JMenuItem aboutMI = new JMenuItem("About");
+	private JMenuItem shortcutMI = new JMenuItem("Shortcuts");
 	private JMenuItem secretMI = new JMenuItem("???");
 	
 	public CaptchaGUI() throws FileNotFoundException{
@@ -73,8 +78,25 @@ public class CaptchaGUI extends JFrame {
 			trolls.add(themesTroll[i]);
 		}
 		reader.close();
+		themes.add(aspects);
+		reader = new Scanner(new File("res/ThemesAspect.txt"));
+		for (int i = 0; i < themesAspect.length; i++){
+			String th = reader.nextLine();
+			themesAspect[i] = new JMenuItem(th);
+			aspects.add(themesAspect[i]);
+		}
+		reader.close();
+		themes.add(sways);
+		reader = new Scanner(new File("res/ThemesSway.txt"));
+		for (int i = 0; i < themesSway.length; i++){
+			String th = reader.nextLine();
+			themesSway[i] = new JMenuItem(th);
+			sways.add(themesSway[i]);
+		}
+		reader.close();
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.add(aboutMI);
+		helpMenu.add(shortcutMI);
 		helpMenu.add(secretMI);
 		bar.add(fileMenu);
 		bar.add(optMenu);
@@ -89,7 +111,7 @@ public class CaptchaGUI extends JFrame {
 			final int j = i;
 			themesHuman[j].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					panel.changeTheme(themesHuman[j].getText());
+					panel.changeTheme(themesHuman[j].getText(), "humans");
 				}
 			});
 		}
@@ -97,7 +119,23 @@ public class CaptchaGUI extends JFrame {
 			final int j = i;
 			themesTroll[j].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					panel.changeTheme(themesTroll[j].getText());
+					panel.changeTheme(themesTroll[j].getText(), "trolls");
+				}
+			});
+		}
+		for (int i = 0; i < themesAspect.length; i++){
+			final int j = i;
+			themesAspect[j].addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					panel.changeTheme(themesAspect[j].getText(), "aspects");
+				}
+			});
+		}
+		for (int i = 0; i < themesSway.length; i++){
+			final int j = i;
+			themesSway[j].addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					panel.changeTheme(themesSway[j].getText(), "sways");
 				}
 			});
 		}
@@ -105,6 +143,7 @@ public class CaptchaGUI extends JFrame {
 		gridMI.addActionListener(new GridListener());
 		operationMI.addActionListener(new OperationListener());
 		aboutMI.addActionListener(new AboutListener());
+		shortcutMI.addActionListener(new ShortcutListener());
 		secretMI.addActionListener(new SecretListener());
 		
 	}
@@ -157,6 +196,12 @@ public class CaptchaGUI extends JFrame {
 		}
 	}
 	
+	private class ShortcutListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			panel.changeSettings("Shortcuts");
+		}
+	}
+	
 	private class SecretListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			panel.secretCode();
@@ -168,7 +213,7 @@ public class CaptchaGUI extends JFrame {
 		boolean run = true;
 		CaptchaGUI theGUI = new CaptchaGUI();
 		try {
-			Image icon = ImageIO.read(new File("images/CardIcon.png"));
+			Image icon = ImageIO.read(new File("images/icons/CardIcon.png"));
 			theGUI.setIconImage(icon);
 		} catch (IOException e) {
 		}
@@ -179,7 +224,6 @@ public class CaptchaGUI extends JFrame {
 			theGUI.setSize(493, 692);
 		theGUI.setResizable(false);
 		theGUI.setAlwaysOnTop(false);
-		
 		theGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theGUI.setVisible(true);
 		
