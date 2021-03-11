@@ -38,5 +38,18 @@ public class DigitValues {
 		int charAt = bs.charSearch(digits, d);
 		return charAt;
 	}
+	
+	public boolean checkDigit(char d) {
+		boolean good = false;
+		for(int i = 0; i < digits.length; i++) {
+			if(d == digits[i]) {
+				good = true;
+				break;
+			}
+			else
+				good = false;
+		}
+		return good;
+	}
 
 }

@@ -26,8 +26,9 @@ public class CaptchaPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private ImageIcon captchaCard, card1, card2, symbol;				// ImageIcons for the assets
 	private ImageIcon errIcon, pumpkin, record, mspa, gun,				// ImageIcons for dialog box icons
-					  arrow, apple;
+	arrow, apple, weasel;
 	private Conversion cv = new Conversion();							// Class for conversion and operations
+	private DigitValues dv = new DigitValues();							// Class for valid digit values
 	private Randomize rand = new Randomize();							// Class for randomizing codes
 	private Random gen = new Random();									// Random for... generating random numbers
 	final JFileChooser fc = new JFileChooser();							// File chooser for loading codes
@@ -50,10 +51,10 @@ public class CaptchaPanel extends JPanel {
 	private String alcDig2[] = new String[8];
 	// All button rectangles
 	private Rect buttonAND, buttonOR, buttonXOR, buttonNAND, buttonNOR, buttonXNOR, buttonNOT, buttonNOT1, buttonNOT2,
-				 fill, fill1, fill2, randomize, rand1, rand2;
+	fill, fill1, fill2, randomize, rand1, rand2;
 	// All button border rectangles (black outline)
 	private Rect borderAND, borderOR, borderXOR, borderNAND, borderNOR, borderXNOR, borderNOT, borderNOT1, borderNOT2,
-				 borderFill, borderFill1, borderFill2, borderRandomize, borderRand1, borderRand2;
+	borderFill, borderFill1, borderFill2, borderRandomize, borderRand1, borderRand2;
 	// All grid rectangle arrays
 	private Rect mainGrid[] = new Rect[8];
 	private Rect alcGrid1[] = new Rect[8];
@@ -70,7 +71,7 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.2";
+	private String version = "1.2.1";
 	// Integer that tracks which code digit is being changed
 	private int entryNo = -1;
 	// Strings that tracks the current theme
@@ -112,7 +113,7 @@ public class CaptchaPanel extends JPanel {
 	private Color highlight = new Color(50, 150, 150);
 
 	public CaptchaPanel() throws FileNotFoundException, Exception {
-		
+
 		this.setBackground(Color.white);
 		// Load options from json file
 		Scanner reader = new Scanner(new File("res/options.json"));
@@ -150,12 +151,13 @@ public class CaptchaPanel extends JPanel {
 		gun = new ImageIcon("images/icons/MSPAReader.png");
 		arrow = new ImageIcon("images/icons/RightArrow.png");
 		apple = new ImageIcon("images/icons/Apple.png");
+		weasel = new ImageIcon("images/icons/Weasel.png");
 		// Add GUI listeners
 		addMouseListener(new HoleListener());
 		addKeyListener(new EntryListener());
 		addKeyListener(new ShortcutListener());
 		setFocusable(true);
-		
+
 	}
 
 	public void paintComponent(Graphics g){
@@ -165,7 +167,7 @@ public class CaptchaPanel extends JPanel {
 		g.setColor(Color.black);
 		int symbolY = (captchaCard.getIconHeight() / 2) - (symbol.getIconHeight() / 2) + (symbol.getIconHeight() / 6);
 		if(showAlcCards){
-		// Add code digits
+			// Add code digits
 			for (int i = 0; i < digits.length; i++){
 				digits[i] = "";
 				digits[i] += code.charAt(i);
@@ -560,25 +562,57 @@ public class CaptchaPanel extends JPanel {
 					}
 				}
 				if(fill1.containsPoint(mouseX, mouseY)){
-					String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
-								 										 arrow, null, "00000000");
-					if(update != null){
-						codeUpdate1 = update.trim();
-						if(codeUpdate1.length() != 8)
-							codeUpdate1 = "00000000";
-						updateAlcCode1 = true;
-						resetHighlight();
+					boolean maintain = true;
+					while(maintain) {
+						String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
+								arrow, null, "00000000");
+						if(update != null){
+							codeUpdate1 = update.trim();
+							// The code is set to 00000000 if the input isn't 8 digits long
+							if(codeUpdate1.length() != 8) {
+								codeUpdate1 = "00000000";
+								errorMessage("badLength");
+								maintain = true;
+							}
+							else {
+								if(!cv.checkCode(codeUpdate1)) {
+									errorMessage("badDigit");
+									maintain = true;
+								}
+								else {
+									updateAlcCode1 = true;
+									resetHighlight();
+									maintain = false;
+								}
+							}
+						}
 					}
 				}
 				if(fill2.containsPoint(mouseX, mouseY)){
-					String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
-																		 arrow, null, "00000000");
-					if(update != null){
-						codeUpdate2 = update.trim();
-						if(codeUpdate2.length() != 8)
-							codeUpdate2 = "00000000";
-						updateAlcCode2 = true;
-						resetHighlight();
+					boolean maintain = true;
+					while(maintain) {
+						String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
+								arrow, null, "00000000");
+						if(update != null){
+							codeUpdate2 = update.trim();
+							// The code is set to 00000000 if the input isn't 8 digits long
+							if(codeUpdate2.length() != 8) {
+								codeUpdate2 = "00000000";
+								errorMessage("badLength");
+								maintain = true;
+							}
+							else {
+								if(!cv.checkCode(codeUpdate2)) {
+									errorMessage("badDigit");
+									maintain = true;
+								}
+								else {
+									updateAlcCode2 = true;
+									resetHighlight();
+									maintain = false;
+								}
+							}
+						}
 					}
 				}
 				if(rand1.containsPoint(mouseX, mouseY)){
@@ -598,15 +632,30 @@ public class CaptchaPanel extends JPanel {
 			}
 			// If any of the "<" or "^" buttons are clicked, the corresponding field is filled in with the user input.
 			if(fill.containsPoint(mouseX, mouseY)){
-				String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
-						   											 arrow, null, "00000000");
-				if(update != null){
-					codeUpdate = update.trim();
-					// The code is set to 00000000 if the input isn't 8 digits long
-					if(codeUpdate.length() != 8)
-						codeUpdate = "00000000";
-					updateCode = true;
-					resetHighlight();
+				boolean maintain = true;
+				while(maintain) {
+					String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
+							arrow, null, "00000000");
+					if(update != null){
+						codeUpdate = update.trim();
+						// The code is set to 00000000 if the input isn't 8 digits long
+						if(codeUpdate.length() != 8) {
+							codeUpdate = "00000000";
+							errorMessage("badLength");
+							maintain = true;
+						}
+						else {
+							if(!cv.checkCode(codeUpdate)) {
+								errorMessage("badDigit");
+								maintain = true;
+							}
+							else {
+								updateCode = true;
+								resetHighlight();
+								maintain = false;
+							}
+						}
+					}
 				}
 			}
 			// If any of the "RANDOMIZE" or "R" buttons are clicked, the corresponding code is randomized
@@ -792,7 +841,7 @@ public class CaptchaPanel extends JPanel {
 
 		// After a digit is clicked, the KeyListener looks for the next key typed
 		public void keyTyped(KeyEvent e){
-			
+
 			char d = '0';
 			// For the main code
 			if(entryUpdate){
@@ -802,14 +851,18 @@ public class CaptchaPanel extends JPanel {
 				else
 					d = '0';
 				// The program runs through the code again, only changing the selected digit
-				for (int i = 0; i < code.length(); i++) {
-					if(i == entryNo)
-						codeUpdate += d;
-					else
-						codeUpdate += code.charAt(i);
+				if(dv.checkDigit(d)) {
+					for (int i = 0; i < code.length(); i++) {
+						if(i == entryNo)
+							codeUpdate += d;
+						else
+							codeUpdate += code.charAt(i);
+					}
+					updateCode = true;
 				}
+				else
+					errorMessage("badDigit");
 				entryUpdate = false;
-				updateCode = true;
 			}
 			// For the alchemy codes
 			else if(alcEnt1Update){
@@ -817,40 +870,48 @@ public class CaptchaPanel extends JPanel {
 					d = e.getKeyChar();
 				else
 					d = '0';
-				for (int i = 0; i < alcCode1.length(); i++) {
-					if(i == entryNo)
-						codeUpdate1 += d;
-					else
-						codeUpdate1 += alcCode1.charAt(i);
+				if(dv.checkDigit(d)) {
+					for (int i = 0; i < alcCode1.length(); i++) {
+						if(i == entryNo)
+							codeUpdate1 += d;
+						else
+							codeUpdate1 += alcCode1.charAt(i);
+					}
+					updateAlcCode1 = true;
 				}
+				else
+					errorMessage("badDigit");
 				alcEnt1Update = false;
-				updateAlcCode1 = true;
 			}
 			else if(alcEnt2Update){
 				if(!e.isActionKey() && e.getKeyCode() != KeyEvent.VK_SHIFT)
 					d = e.getKeyChar();
 				else
 					d = '0';
-				for (int i = 0; i < alcCode2.length(); i++) {
-					if(i == entryNo)
-						codeUpdate2 += d;
-					else
-						codeUpdate2 += alcCode2.charAt(i);
+				if(dv.checkDigit(d)) {
+					for (int i = 0; i < alcCode2.length(); i++) {
+						if(i == entryNo)
+							codeUpdate2 += d;
+						else
+							codeUpdate2 += alcCode2.charAt(i);
+					}
+					updateAlcCode2 = true;
 				}
+				else
+					errorMessage("badDigit");
 				alcEnt2Update = false;
-				updateAlcCode2 = true;
 			}
 			else
 				e.consume();
-			
+
 		}
 
 	}
-	
+
 	private class ShortcutListener extends KeyAdapter {
-		
+
 		public void keyPressed(KeyEvent e) {
-			
+
 			if(e.isControlDown()) {
 				if(e.getKeyCode() == KeyEvent.VK_N)
 					resetCode();
@@ -877,9 +938,9 @@ public class CaptchaPanel extends JPanel {
 				System.exit(0);
 			else
 				e.consume();
-			
+
 		}
-		
+
 	}
 
 	private void punchHole(){
@@ -893,9 +954,9 @@ public class CaptchaPanel extends JPanel {
 			for (int j = 0; j < binary[i].length; j++) {
 				int h = (6 * i) + j;
 				//if(binary[i][j] == 0)
-					//holes[h].setFilled(false);
+				//holes[h].setFilled(false);
 				//else
-					//holes[h].setFilled(true);
+				//holes[h].setFilled(true);
 				if(binary[i][j] == 0) {
 					holes[h].setColor(Color.white);
 					backHoles[h].setColor(Color.black);
@@ -904,11 +965,11 @@ public class CaptchaPanel extends JPanel {
 					holes[h].setColor(Color.black);
 					backHoles[h].setColor(Color.white);
 				}
-				
+
 			}
 		}
 	}
-	
+
 	private void punchAlcHole1(){
 		// The holes are updated when the code is changed
 		for (int i = 0; i < alcBin1.length; i++) {
@@ -926,7 +987,7 @@ public class CaptchaPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	private void punchAlcHole2(){
 		// The holes are updated when the code is changed
 		for (int i = 0; i < alcBin2.length; i++) {
@@ -992,7 +1053,7 @@ public class CaptchaPanel extends JPanel {
 				x = 210;
 			else if(i / 12 == 3)
 				x = 269;
-			
+
 			if(i % 12 == 0)
 				y = 138;
 			else if(i % 12 == 1)
@@ -1017,13 +1078,13 @@ public class CaptchaPanel extends JPanel {
 				y = 411;
 			else if(i % 12 == 11)
 				y = 439;
-			
+
 			holes[i] = new Rect(x, y, 29, 11, Color.white);
 			backHoles[i] = new Rect(x - 1, y - 1, 30, 12, Color.black);
 		}
-		
+
 	}
-	
+
 	// Change rectangle positions when alchemy cards are toggled
 	private void changeCards(){
 		if(showAlcCards){
@@ -1117,7 +1178,7 @@ public class CaptchaPanel extends JPanel {
 				else
 					y += 12;
 			}
-			
+
 		}
 		else
 			loadRect();
@@ -1128,7 +1189,7 @@ public class CaptchaPanel extends JPanel {
 		punchHole();
 		recolor = true;
 	}
-	
+
 	// Fix the operation buttons when some are toggled
 	private void fixButtons() {
 		if(showAlcCards) {
@@ -1154,11 +1215,11 @@ public class CaptchaPanel extends JPanel {
 			borderXNOR = new Rect(351, 387, 48, 32, Color.black);
 		}
 	}
-	
+
 	// Reset all codes to 00000000
 	protected void resetCode(){
 		int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "Reset Codes",
-													JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, gun);
+				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, gun);
 		if(confirm == JOptionPane.YES_OPTION){
 			code = "00000000";
 			alcCode1 = "00000000";
@@ -1172,12 +1233,12 @@ public class CaptchaPanel extends JPanel {
 			recolor = true;
 		}
 	}
-	
+
 	// Save the main code
 	protected void save(){
 		// A dialog box asks for the what the file will be titled
 		String filename = (String) JOptionPane.showInputDialog(null, "Enter Filename", "Save", JOptionPane.INFORMATION_MESSAGE,
-															   record, null, code);
+				record, null, code);
 		if(filename != null){
 			File directory = new File("saves");
 			try {
@@ -1193,7 +1254,7 @@ public class CaptchaPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	// Load one or two codes
 	protected void load(){
 		// The file prompt only show files ending in .txt
@@ -1209,10 +1270,10 @@ public class CaptchaPanel extends JPanel {
 			fc.setMultiSelectionEnabled(true);
 			fc.setDialogTitle("Choose Two Codes");
 		}
-		int returnVal = fc.showOpenDialog(CaptchaPanel.this);
-		if(returnVal == JFileChooser.APPROVE_OPTION){
-			// Single-code method applies to the main field
-			if(!showAlcCards){
+		// Single-code method applies to the main field
+		if(!showAlcCards){
+			int returnVal = fc.showOpenDialog(CaptchaPanel.this);
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
 					Scanner reader = new Scanner(fc.getSelectedFile());
 					codeUpdate = reader.nextLine();
@@ -1222,38 +1283,54 @@ public class CaptchaPanel extends JPanel {
 				}
 				updateCode = true;
 			}
-			// Double-code method applies to the alchemy fields
-			else{
-				File[] files = fc.getSelectedFiles();
-				try {
-					// If one file is selected, the single code is applied to both alchemy fields
-					if(files.length == 1){
-						Scanner reader = new Scanner(files[0]);
-						codeUpdate1 = reader.nextLine();
-						codeUpdate2 = codeUpdate1;
-						reader.close();
+		}
+
+		// Double-code method applies to the alchemy fields
+		else{
+			boolean maintain = true;
+			while(maintain) {
+				int returnVal = fc.showOpenDialog(CaptchaPanel.this);
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					File[] files = fc.getSelectedFiles();
+					try {
+						// If one file is selected, the single code is applied to both alchemy fields
+						if(files.length != 2)
+							errorMessage("badLoad");
+						// If more than two files are selected, all but the first two are ignored
+						else {
+							Scanner reader = new Scanner(files[0]);
+							codeUpdate1 = reader.nextLine();
+							reader.close();
+							reader = new Scanner(files[1]);
+							codeUpdate2 = reader.nextLine();
+							reader.close();
+							// Both codes are updated
+							updateAlcCode1 = true;
+							updateAlcCode2 = true;
+							maintain = false;
+						}
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
 					}
-					// If more than two files are selected, all but the first two are ignored
-					else{
-						Scanner reader = new Scanner(files[0]);
-						codeUpdate1 = reader.nextLine();
-						reader.close();
-						reader = new Scanner(files[1]);
-						codeUpdate2 = reader.nextLine();
-						reader.close();
-					}
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
 				}
-				// Both codes are updated
-				updateAlcCode1 = true;
-				updateAlcCode2 = true;
+				else
+					maintain = false;
 			}
 		}
-		
+
 		resetHighlight();
 	}
-	
+
+	// Show an error message
+	private void errorMessage(String err) {
+		if(err.equals("badLength"))
+			JOptionPane.showMessageDialog(null, "Error: Code must be 8 digits long.", "Error", JOptionPane.INFORMATION_MESSAGE, weasel);
+		else if(err.equals("badDigit"))
+			JOptionPane.showMessageDialog(null, "Error: Code contains an invalid digit.", "Error", JOptionPane.INFORMATION_MESSAGE, weasel);
+		else if(err.equals("badLoad"))
+			JOptionPane.showMessageDialog(null, "Error: Please select 2 files.", "Error", JOptionPane.INFORMATION_MESSAGE, weasel);
+	}
+
 	// Change the theme
 	protected void changeTheme(String th, String ty){
 		// Since image files are named after the themes, the ImageIcons can be changed with one line of code each
@@ -1265,7 +1342,7 @@ public class CaptchaPanel extends JPanel {
 		type = ty;
 		recolor = true;
 	}
-	
+
 	protected void changeSettings(String opt){
 		// For the Toggle Alchemy Cards option
 		if(opt.equals("Toggle Alchemy")){
@@ -1291,17 +1368,17 @@ public class CaptchaPanel extends JPanel {
 		// For the About menu
 		else if(opt.equals("About"))
 			JOptionPane.showMessageDialog(null, "Programmer: " + author + "\nAdvisor: " + advisor +
-										  "\nEmail: " + email + "\nGitHub Page: " + link + "\nVersion: " +
-										  version, "About", JOptionPane.INFORMATION_MESSAGE, mspa);
+					"\nEmail: " + email + "\nGitHub Page: " + link + "\nVersion: " +
+					version, "About", JOptionPane.INFORMATION_MESSAGE, mspa);
 		// For the Shortcuts menu
 		else if(opt.equals("Shortcuts"))
 			JOptionPane.showMessageDialog(null, "Ctrl + N  -  New" + "\nCtrl + S  -  Save" + "\nCtrl + L  -  Load" + 
-										  "\nCtrl + A  -  Toggle Alchemy" + "\nCtrl + G  -  Toggle Grids" + 
-										  "\nCtrl + O  -  Toggle Other Operations" + "\nCtrl + Y  -  Toggle Symbol" +
-										  "\nCtrl + T  -  About Page" + "\nCtrl + Shift + /  -  Trigger ??? Effect" +
-										  "\nEscape  -  Exit Program", "Shortcuts", JOptionPane.INFORMATION_MESSAGE, apple);
+					"\nCtrl + A  -  Toggle Alchemy" + "\nCtrl + G  -  Toggle Grids" + 
+					"\nCtrl + O  -  Toggle Other Operations" + "\nCtrl + Y  -  Toggle Symbol" +
+					"\nCtrl + T  -  About Page" + "\nCtrl + Shift + /  -  Trigger ??? Effect" +
+					"\nEscape  -  Exit Program", "Shortcuts", JOptionPane.INFORMATION_MESSAGE, apple);
 	}
-	
+
 	// Save options to json file
 	protected void saveSettings(String filename) throws Exception{
 		JSONObject options = new JSONObject();
@@ -1322,7 +1399,7 @@ public class CaptchaPanel extends JPanel {
 		options.put("function_xnor", highlightXNOR);
 		Files.write(Paths.get(filename), options.toString().getBytes());
 	}
-	
+
 	// Easter egg handling (??? button)
 	protected void secretCode(){
 		// Developer code for Safety - ...
@@ -1366,7 +1443,7 @@ public class CaptchaPanel extends JPanel {
 					"Try Again", JOptionPane.INFORMATION_MESSAGE, errIcon);
 		}
 	}
-	
+
 	// Reset operation button colors (remove any highlights)
 	private void resetHighlight(){
 		highlightAND = false;
@@ -1377,7 +1454,7 @@ public class CaptchaPanel extends JPanel {
 		highlightXNOR = false;
 		recolor = true;
 	}
-	
+
 	// Get the GUI width to change in the GUIWindow program
 	public boolean getCards(){
 		return showAlcCards;

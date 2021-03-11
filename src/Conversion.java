@@ -116,5 +116,18 @@ public class Conversion {
 		}
 		return c;
 	}
+	
+	public boolean checkCode(String code) {
+		boolean good = false;
+		for(int i = 0; i < code.length(); i++) {
+			if(!dv.checkDigit(code.charAt(i))) {
+				good = false;
+				break;
+			}
+			else
+				good = true;
+		}
+		return good;
+	}
 
 }
