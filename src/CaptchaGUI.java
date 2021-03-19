@@ -1,4 +1,5 @@
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +30,10 @@ public class CaptchaGUI extends JFrame {
 	
 	private JMenuBar bar = new JMenuBar();
 	private JMenuItem newMI = new JMenuItem("New");
-	private JMenuItem saveMI = new JMenuItem("Save");
+	private JMenu save = new JMenu("Save");
+	private JMenuItem saveMI0 = new JMenuItem("Main Code");
+	private JMenuItem saveMI1 = new JMenuItem("Alchemy Code (Top)");
+	private JMenuItem saveMI2 = new JMenuItem("Alchemy Code (Bottom)");
 	private JMenuItem loadMI = new JMenuItem("Load");
 	private JMenu themes = new JMenu("Themes");
 	private JMenuItem symbolMI = new JMenuItem("Toggle Symbol");
@@ -47,16 +51,37 @@ public class CaptchaGUI extends JFrame {
 	private JMenuItem aboutMI = new JMenuItem("About");
 	private JMenuItem shortcutMI = new JMenuItem("Shortcuts");
 	private JMenuItem secretMI = new JMenuItem("???");
+	private Font f = new Font("Courier", Font.BOLD, 14);
 	
 	public CaptchaGUI() throws FileNotFoundException{
 		
 		Container pane = getContentPane();
 		pane.add(panel);
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.setFont(f);
+		newMI.setFont(f);
+		save.setFont(f);
+		loadMI.setFont(f);
+		saveMI0.setFont(f);
+		saveMI1.setFont(f);
+		saveMI2.setFont(f);
 		fileMenu.add(newMI);
-		fileMenu.add(saveMI);
+		fileMenu.add(save);
 		fileMenu.add(loadMI);
+		save.add(saveMI0);
+		save.add(saveMI1);
+		save.add(saveMI2);
 		JMenu optMenu = new JMenu("Options");
+		optMenu.setFont(f);
+		themes.setFont(f);
+		alchemyMI.setFont(f);
+		gridMI.setFont(f);
+		operationMI.setFont(f);
+		symbolMI.setFont(f);
+		humans.setFont(f);
+		trolls.setFont(f);
+		aspects.setFont(f);
+		sways.setFont(f);
 		optMenu.add(themes);
 		optMenu.add(alchemyMI);
 		optMenu.add(gridMI);
@@ -67,6 +92,7 @@ public class CaptchaGUI extends JFrame {
 		for (int i = 0; i < themesHuman.length; i++){
 			String th = reader.nextLine();
 			themesHuman[i] = new JMenuItem(th);
+			themesHuman[i].setFont(f);
 			humans.add(themesHuman[i]);
 		}
 		reader.close();
@@ -75,6 +101,7 @@ public class CaptchaGUI extends JFrame {
 		for (int i = 0; i < themesTroll.length; i++){
 			String th = reader.nextLine();
 			themesTroll[i] = new JMenuItem(th);
+			themesTroll[i].setFont(f);
 			trolls.add(themesTroll[i]);
 		}
 		reader.close();
@@ -83,6 +110,7 @@ public class CaptchaGUI extends JFrame {
 		for (int i = 0; i < themesAspect.length; i++){
 			String th = reader.nextLine();
 			themesAspect[i] = new JMenuItem(th);
+			themesAspect[i].setFont(f);
 			aspects.add(themesAspect[i]);
 		}
 		reader.close();
@@ -91,10 +119,15 @@ public class CaptchaGUI extends JFrame {
 		for (int i = 0; i < themesSway.length; i++){
 			String th = reader.nextLine();
 			themesSway[i] = new JMenuItem(th);
+			themesSway[i].setFont(f);
 			sways.add(themesSway[i]);
 		}
 		reader.close();
 		JMenu helpMenu = new JMenu("Help");
+		helpMenu.setFont(f);
+		aboutMI.setFont(f);
+		shortcutMI.setFont(f);
+		secretMI.setFont(f);
 		helpMenu.add(aboutMI);
 		helpMenu.add(shortcutMI);
 		helpMenu.add(secretMI);
@@ -104,7 +137,9 @@ public class CaptchaGUI extends JFrame {
 		setJMenuBar(bar);
 		
 		newMI.addActionListener(new NewListener());
-		saveMI.addActionListener(new SaveListener());
+		saveMI0.addActionListener(new SaveListener0());
+		saveMI1.addActionListener(new SaveListener1());
+		saveMI2.addActionListener(new SaveListener2());
 		loadMI.addActionListener(new LoadListener());
 		symbolMI.addActionListener(new SymbolListener());
 		for (int i = 0; i < themesHuman.length; i++){
@@ -150,13 +185,25 @@ public class CaptchaGUI extends JFrame {
 	
 	private class NewListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			panel.resetCode();
+			panel.resetCode(true);
 		}
 	}
 	
-	private class SaveListener implements ActionListener{
+	private class SaveListener0 implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			panel.save();
+			panel.save(0);
+		}
+	}
+	
+	private class SaveListener1 implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			panel.save(1);
+		}
+	}
+	
+	private class SaveListener2 implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			panel.save(2);
 		}
 	}
 	

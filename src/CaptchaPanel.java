@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -12,11 +14,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.JSONObject;
@@ -71,9 +73,20 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.2.1";
+	private String version = "1.3";
+	// Shortcut information
+	private String[] shortcuts = new String[] {
+			"Ctrl + N  -  New", "Ctrl + Shift + N  -  New (No Prompt)", "Ctrl + S  -  Save Main Code", 
+			"Ctrl + Z  -  Save Top Code", "Ctrl + X  -  Save Bottom Code", "Ctrl + L  -  Load", 
+			"Ctrl + R  -  Randomize All Codes", "Ctrl + A  -  Toggle Alchemy", "Ctrl + G  -  Toggle Grids", 
+			"Ctrl + O  -  Toggle Other Operations", "Ctrl + Y  -  Toggle Symbol", "Ctrl + T  -  About Page", 
+			"Ctrl + Shift + /  -  Trigger ??? Effect", "Escape  -  Exit Program"
+	};
 	// Integer that tracks which code digit is being changed
 	private int entryNo = -1;
+	// Variables for Jade's wardrobifier
+	private javax.swing.Timer wardrobifier = new javax.swing.Timer(15000, new WardrobeListener());
+	private int jadeSym = 0;
 	// Strings that tracks the current theme
 	private String theme = "";
 	private String type = "";
@@ -115,11 +128,15 @@ public class CaptchaPanel extends JPanel {
 	public CaptchaPanel() throws FileNotFoundException, Exception {
 
 		this.setBackground(Color.white);
+		// Set dialog box font and font size
+		UIManager.put("OptionPane.messageFont", new Font("Courier", Font.BOLD, 14));
+		UIManager.put("OptionPane.buttonFont", new Font("Courier", Font.BOLD, 18));
 		// Load options from json file
 		Scanner reader = new Scanner(new File("res/options.json"));
 		JSONObject options = new JSONObject(reader.nextLine());
 		theme = options.getString("theme");
 		type = options.getString("type");
+		jadeSym = options.getInt("jade");
 		showSymbol = options.getBoolean("symbol");
 		showAlcCards = options.getBoolean("alchemy");
 		showGrids = options.getBoolean("grids");
@@ -139,11 +156,15 @@ public class CaptchaPanel extends JPanel {
 		punchHole();
 		changeCards();
 		fixButtons();
+		wardrobifier.start();
 		// Select default captcha card assets
 		captchaCard = new ImageIcon("images/" + type + "/CaptchaCard" + theme + ".png");
 		card1 = new ImageIcon("images/" + type + "/SmallCard" + theme + ".png");
 		card2 = new ImageIcon("images/" + type + "/SmallCard" + theme + ".png");
-		symbol = new ImageIcon("images/" + type + "/Symbol" + theme + ".png");
+		if(theme.equals("Green (Jade)"))
+			symbol = new ImageIcon("images/" + type + "/Symbol" + theme + " " + jadeSym + ".png");
+		else
+			symbol = new ImageIcon("images/" + type + "/Symbol" + theme + ".png");
 		// Select dialog box assets
 		pumpkin = new ImageIcon("images/icons/WhatPumpkin.png");
 		record = new ImageIcon("images/icons/Record.png");
@@ -908,17 +929,51 @@ public class CaptchaPanel extends JPanel {
 
 	}
 
+	// Keyboard Listener for all shortcuts
 	private class ShortcutListener extends KeyAdapter {
 
 		public void keyPressed(KeyEvent e) {
 
 			if(e.isControlDown()) {
-				if(e.getKeyCode() == KeyEvent.VK_N)
-					resetCode();
+				if(e.getKeyCode() == KeyEvent.VK_N) {
+					if(e.isShiftDown())
+						resetCode(false);
+					else
+						resetCode(true);
+				}
 				else if(e.getKeyCode() == KeyEvent.VK_S)
-					save();
+					save(0);
+				else if(e.getKeyCode() == KeyEvent.VK_Z) {
+					if(showAlcCards)
+						save(1);
+					else
+						e.consume();
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_X) {
+					if(showAlcCards)
+						save(2);
+					else
+						e.consume();
+				}
 				else if(e.getKeyCode() == KeyEvent.VK_L)
 					load();
+				else if(e.getKeyCode() == KeyEvent.VK_R) {
+					codeUpdate = "";
+					for (int i = 0; i < 8; i++)
+						codeUpdate += rand.getChar();
+					updateCode = true;
+					codeUpdate1 = "";
+					if(showAlcCards) {
+						for (int i = 0; i < 8; i++)
+							codeUpdate1 += rand.getChar();
+						updateAlcCode1 = true;
+						codeUpdate2 = "";
+						for (int i = 0; i < 8; i++)
+							codeUpdate2 += rand.getChar();
+						updateAlcCode2 = true;
+					}
+					resetHighlight();
+				}
 				else if(e.getKeyCode() == KeyEvent.VK_A)
 					changeSettings("Toggle Alchemy");
 				else if(e.getKeyCode() == KeyEvent.VK_G)
@@ -953,10 +1008,6 @@ public class CaptchaPanel extends JPanel {
 		for (int i = 0; i < binary.length; i++) {
 			for (int j = 0; j < binary[i].length; j++) {
 				int h = (6 * i) + j;
-				//if(binary[i][j] == 0)
-				//holes[h].setFilled(false);
-				//else
-				//holes[h].setFilled(true);
 				if(binary[i][j] == 0) {
 					holes[h].setColor(Color.white);
 					backHoles[h].setColor(Color.black);
@@ -1217,10 +1268,24 @@ public class CaptchaPanel extends JPanel {
 	}
 
 	// Reset all codes to 00000000
-	protected void resetCode(){
-		int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "Reset Codes",
-				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, gun);
-		if(confirm == JOptionPane.YES_OPTION){
+	protected void resetCode(boolean prompt){
+		if(prompt) {
+			int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "Reset Codes",
+					JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, gun);
+			if(confirm == JOptionPane.YES_OPTION){
+				code = "00000000";
+				alcCode1 = "00000000";
+				alcCode2 = "00000000";
+				punchHole();
+				if(showAlcCards){
+					punchAlcHole1();
+					punchAlcHole2();
+				}
+				resetHighlight();
+				recolor = true;
+			}
+		}
+		else {
 			code = "00000000";
 			alcCode1 = "00000000";
 			alcCode2 = "00000000";
@@ -1235,10 +1300,17 @@ public class CaptchaPanel extends JPanel {
 	}
 
 	// Save the main code
-	protected void save(){
+	protected void save(int c) {
+		String cd = "";
+		if(c == 0)
+			cd = code;
+		else if(c == 1)
+			cd = alcCode1;
+		else if(c == 2)
+			cd = alcCode2;
 		// A dialog box asks for the what the file will be titled
 		String filename = (String) JOptionPane.showInputDialog(null, "Enter Filename", "Save", JOptionPane.INFORMATION_MESSAGE,
-				record, null, code);
+				record, null, cd);
 		if(filename != null){
 			File directory = new File("saves");
 			try {
@@ -1247,7 +1319,7 @@ public class CaptchaPanel extends JPanel {
 					directory.mkdir();
 				// The code is saved as a .txt file
 				PrintWriter writer = new PrintWriter(new File("saves/" + filename + ".txt"));
-				writer.print(code);
+				writer.print(cd);
 				writer.close();
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
@@ -1337,12 +1409,27 @@ public class CaptchaPanel extends JPanel {
 		captchaCard = new ImageIcon("images/" + ty + "/CaptchaCard" + th + ".png");
 		card1 = new ImageIcon("images/" + ty + "/SmallCard" + th + ".png");
 		card2 = new ImageIcon("images/" + ty + "/SmallCard" + th + ".png");
-		symbol = new ImageIcon("images/" + ty + "/Symbol" + th + ".png");
+		if(th.equals("Green (Jade)"))
+			symbol = new ImageIcon("images/" + ty + "/Symbol" + th + " " + jadeSym + ".png");
+		else
+			symbol = new ImageIcon("images/" + ty + "/Symbol" + th + ".png");
 		theme = th;
 		type = ty;
 		recolor = true;
 	}
 
+	// Jade's wardrobifier run method
+	private class WardrobeListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				jadeSym = gen.nextInt(10);
+				if(theme.equals("Green (Jade)"))
+					changeTheme("Green (Jade)", "humans");
+			}catch(Exception ex) {}
+		}
+	}
+	
+	// Change various settings
 	protected void changeSettings(String opt){
 		// For the Toggle Alchemy Cards option
 		if(opt.equals("Toggle Alchemy")){
@@ -1371,12 +1458,12 @@ public class CaptchaPanel extends JPanel {
 					"\nEmail: " + email + "\nGitHub Page: " + link + "\nVersion: " +
 					version, "About", JOptionPane.INFORMATION_MESSAGE, mspa);
 		// For the Shortcuts menu
-		else if(opt.equals("Shortcuts"))
-			JOptionPane.showMessageDialog(null, "Ctrl + N  -  New" + "\nCtrl + S  -  Save" + "\nCtrl + L  -  Load" + 
-					"\nCtrl + A  -  Toggle Alchemy" + "\nCtrl + G  -  Toggle Grids" + 
-					"\nCtrl + O  -  Toggle Other Operations" + "\nCtrl + Y  -  Toggle Symbol" +
-					"\nCtrl + T  -  About Page" + "\nCtrl + Shift + /  -  Trigger ??? Effect" +
-					"\nEscape  -  Exit Program", "Shortcuts", JOptionPane.INFORMATION_MESSAGE, apple);
+		else if(opt.equals("Shortcuts")) {
+			String sc = "";
+			for(int i = 0; i < shortcuts.length; i += 2)
+				sc += String.format("%-45s%s%n", shortcuts[i], shortcuts[i + 1]);
+			JOptionPane.showMessageDialog(null, sc, "Shortcuts", JOptionPane.INFORMATION_MESSAGE, apple);
+		}
 	}
 
 	// Save options to json file
@@ -1384,6 +1471,7 @@ public class CaptchaPanel extends JPanel {
 		JSONObject options = new JSONObject();
 		options.put("theme", theme);
 		options.put("type", type);
+		options.put("jade", jadeSym);
 		options.put("symbol", showSymbol);
 		options.put("alchemy", showAlcCards);
 		options.put("grids", showGrids);
