@@ -73,7 +73,7 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.3";
+	private String version = "1.3.1";
 	// Shortcut information
 	private String[] shortcuts = new String[] {
 			"Ctrl + N  -  New", "Ctrl + Shift + N  -  New (No Prompt)", "Ctrl + S  -  Save Main Code", 
@@ -607,6 +607,8 @@ public class CaptchaPanel extends JPanel {
 								}
 							}
 						}
+						else
+							maintain = false;
 					}
 				}
 				if(fill2.containsPoint(mouseX, mouseY)){
@@ -634,6 +636,8 @@ public class CaptchaPanel extends JPanel {
 								}
 							}
 						}
+						else
+							maintain = false;
 					}
 				}
 				if(rand1.containsPoint(mouseX, mouseY)){
@@ -677,6 +681,8 @@ public class CaptchaPanel extends JPanel {
 							}
 						}
 					}
+					else
+						maintain = false;
 				}
 			}
 			// If any of the "RANDOMIZE" or "R" buttons are clicked, the corresponding code is randomized
