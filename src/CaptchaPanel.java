@@ -81,7 +81,7 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.4";
+	private String version = "1.3.2";
 	// Shortcut information
 	private String[] shortcuts = new String[] {
 			"Ctrl + N  -  New", "Ctrl + Shift + N  -  New (No Prompt)", "Ctrl + S  -  Save Main Code", 
@@ -136,17 +136,50 @@ public class CaptchaPanel extends JPanel {
 		// Load options from json file
 		Scanner reader = new Scanner(new File("res/options.json"));
 		JSONObject options = new JSONObject(reader.nextLine());
-		theme = options.getString("theme");
-		type = options.getString("type");
-		jadeSym = options.getInt("jade");
-		showSymbol = options.getBoolean("symbol");
-		showAlcCards = options.getBoolean("alchemy");
-		showGrids = options.getBoolean("grids");
-		showOtherOps = options.getBoolean("operations");
-		code = options.getString("main_code");
-		alcCode1 = options.getString("alchemy_code_1");
-		alcCode2 = options.getString("alchemy_code_2");
-		operation = options.getString("oper");
+		if(options.has("theme"))
+			theme = options.getString("theme");
+		else
+			theme = "Blue (John)";
+		if(options.has("type"))
+			type = options.getString("type");
+		else
+			type = "humans";
+		if(options.has("jade"))
+			jadeSym = options.getInt("jade");
+		else
+			jadeSym = 0;
+		if(options.has("symbol"))
+			showSymbol = options.getBoolean("symbol");
+		else
+			showSymbol = false;
+		if(options.has("alchemy"))
+			showAlcCards = options.getBoolean("alchemy");
+		else
+			showAlcCards = false;
+		if(options.has("grids"))
+			showGrids = options.getBoolean("grids");
+		else
+			showGrids = false;
+		if(options.has("operations"))
+			showOtherOps = options.getBoolean("operations");
+		else
+			showOtherOps = false;
+		if(options.has("main_code"))
+			code = options.getString("main_code");
+		else
+			code = "00000000";
+		if(options.has("alchemy_code_1"))
+			alcCode1 = options.getString("alchemy_code_1");
+		else
+			alcCode1 = "00000000";
+		if(options.has("alchemy_code_2"))
+			alcCode2 = options.getString("alchemy_code_2");
+		else
+			alcCode2 = "00000000";
+		if(options.has("oper"))
+			operation = options.getString("oper");
+		else
+			operation = "NONE";
 		reader.close();
 		// Call necessary methods
 		loadRect();
