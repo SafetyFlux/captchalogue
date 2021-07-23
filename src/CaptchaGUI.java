@@ -31,27 +31,21 @@ public class CaptchaGUI extends JFrame {
 	// All the JMenu components
 	private JMenuBar bar = new JMenuBar();
 	private JMenuItem newMI = new JMenuItem("New");
-	private JMenu save = new JMenu("Save");
-	private JMenuItem saveMI0 = new JMenuItem("Main Code");
-	private JMenuItem saveMI1 = new JMenuItem("Alchemy Code (Top)");
-	private JMenuItem saveMI2 = new JMenuItem("Alchemy Code (Bottom)");
-	private JMenuItem loadMI = new JMenuItem("Load");
-	private JMenu themes = new JMenu("Themes");
+	private JMenuItem saveMI = new JMenuItem("Save Card as Image ");
 	private JMenuItem symbolMI = new JMenuItem("Toggle Symbols");
 	private JMenu humans = new JMenu("Humans");
 	private JMenu trolls = new JMenu("Trolls");
 	private JMenu aspects = new JMenu("Aspects");
-	private JMenu sways = new JMenu("Lunar Sways");
+	private JMenu misc = new JMenu("Miscellaneous  ");
 	private JMenuItem themesHuman[] = new JMenuItem[8];
 	private JMenuItem themesTroll[] = new JMenuItem[12];
 	private JMenuItem themesAspect[] = new JMenuItem[12];
-	private JMenuItem themesSway[] = new JMenuItem[2];
+	private JMenuItem themesMisc[] = new JMenuItem[4];
 	private JMenuItem alchemyMI = new JMenuItem("Toggle Alchemy");
 	private JMenuItem gridMI = new JMenuItem("Toggle Grids");
-	private JMenuItem operationMI = new JMenuItem("Toggle Other Operations");
+	private JMenuItem operationMI = new JMenuItem("Toggle Other Operations ");
 	private JMenuItem aboutMI = new JMenuItem("About");
 	private JMenuItem shortcutMI = new JMenuItem("Shortcuts");
-	private JMenuItem secretMI = new JMenuItem("???");
 	// The font used for the toolbar
 	private Font f = new Font("Courier", Font.BOLD, 14);
 	
@@ -63,34 +57,12 @@ public class CaptchaGUI extends JFrame {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setFont(f);
 		newMI.setFont(f);
-		save.setFont(f);
-		loadMI.setFont(f);
-		saveMI0.setFont(f);
-		saveMI1.setFont(f);
-		saveMI2.setFont(f);
+		saveMI.setFont(f);
 		fileMenu.add(newMI);
-		fileMenu.add(save);
-		fileMenu.add(loadMI);
-		save.add(saveMI0);
-		save.add(saveMI1);
-		save.add(saveMI2);
-		JMenu optMenu = new JMenu("Options");
-		optMenu.setFont(f);
-		themes.setFont(f);
-		alchemyMI.setFont(f);
-		gridMI.setFont(f);
-		operationMI.setFont(f);
-		symbolMI.setFont(f);
-		humans.setFont(f);
-		trolls.setFont(f);
-		aspects.setFont(f);
-		sways.setFont(f);
-		optMenu.add(themes);
-		optMenu.add(alchemyMI);
-		optMenu.add(gridMI);
-		optMenu.add(operationMI);
-		themes.add(symbolMI);
-		themes.add(humans);
+		fileMenu.add(saveMI);
+		JMenu themeMenu = new JMenu("Themes");
+		themeMenu.setFont(f);
+		themeMenu.add(humans);
 		Scanner reader = new Scanner(new File("res/ThemesHuman.txt"));
 		for (int i = 0; i < themesHuman.length; i++){
 			String th = reader.nextLine();
@@ -99,7 +71,7 @@ public class CaptchaGUI extends JFrame {
 			humans.add(themesHuman[i]);
 		}
 		reader.close();
-		themes.add(trolls);
+		themeMenu.add(trolls);
 		reader = new Scanner(new File("res/ThemesTroll.txt"));
 		for (int i = 0; i < themesTroll.length; i++){
 			String th = reader.nextLine();
@@ -108,7 +80,7 @@ public class CaptchaGUI extends JFrame {
 			trolls.add(themesTroll[i]);
 		}
 		reader.close();
-		themes.add(aspects);
+		themeMenu.add(aspects);
 		reader = new Scanner(new File("res/ThemesAspect.txt"));
 		for (int i = 0; i < themesAspect.length; i++){
 			String th = reader.nextLine();
@@ -117,34 +89,44 @@ public class CaptchaGUI extends JFrame {
 			aspects.add(themesAspect[i]);
 		}
 		reader.close();
-		themes.add(sways);
-		reader = new Scanner(new File("res/ThemesSway.txt"));
-		for (int i = 0; i < themesSway.length; i++){
+		themeMenu.add(misc);
+		reader = new Scanner(new File("res/ThemesMisc.txt"));
+		for (int i = 0; i < themesMisc.length; i++){
 			String th = reader.nextLine();
-			themesSway[i] = new JMenuItem(th);
-			themesSway[i].setFont(f);
-			sways.add(themesSway[i]);
+			themesMisc[i] = new JMenuItem(th);
+			themesMisc[i].setFont(f);
+			misc.add(themesMisc[i]);
 		}
 		reader.close();
+		JMenu optMenu = new JMenu("Options");
+		optMenu.setFont(f);
+		alchemyMI.setFont(f);
+		gridMI.setFont(f);
+		operationMI.setFont(f);
+		symbolMI.setFont(f);
+		humans.setFont(f);
+		trolls.setFont(f);
+		aspects.setFont(f);
+		misc.setFont(f);
+		optMenu.add(alchemyMI);
+		optMenu.add(gridMI);
+		optMenu.add(operationMI);
+		optMenu.add(symbolMI);
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.setFont(f);
 		aboutMI.setFont(f);
 		shortcutMI.setFont(f);
-		secretMI.setFont(f);
 		helpMenu.add(aboutMI);
 		helpMenu.add(shortcutMI);
-		helpMenu.add(secretMI);
 		bar.add(fileMenu);
+		bar.add(themeMenu);
 		bar.add(optMenu);
 		bar.add(helpMenu);
 		setJMenuBar(bar);
 		
 		// Add action listeners for each toolbar item
 		newMI.addActionListener(new NewListener());
-		saveMI0.addActionListener(new SaveListener0());
-		saveMI1.addActionListener(new SaveListener1());
-		saveMI2.addActionListener(new SaveListener2());
-		loadMI.addActionListener(new LoadListener());
+		saveMI.addActionListener(new SaveListener());
 		symbolMI.addActionListener(new SymbolListener());
 		for (int i = 0; i < themesHuman.length; i++){
 			final int j = i;
@@ -170,11 +152,11 @@ public class CaptchaGUI extends JFrame {
 				}
 			});
 		}
-		for (int i = 0; i < themesSway.length; i++){
+		for (int i = 0; i < themesMisc.length; i++){
 			final int j = i;
-			themesSway[j].addActionListener(new ActionListener(){
+			themesMisc[j].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					panel.changeTheme(themesSway[j].getText(), "sways");
+					panel.changeTheme(themesMisc[j].getText(), "miscellaneous");
 				}
 			});
 		}
@@ -183,7 +165,6 @@ public class CaptchaGUI extends JFrame {
 		operationMI.addActionListener(new OperationListener());
 		aboutMI.addActionListener(new AboutListener());
 		shortcutMI.addActionListener(new ShortcutListener());
-		secretMI.addActionListener(new SecretListener());
 		
 	}
 	
@@ -194,27 +175,9 @@ public class CaptchaGUI extends JFrame {
 		}
 	}
 	
-	private class SaveListener0 implements ActionListener{
+	private class SaveListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			panel.save(0);
-		}
-	}
-	
-	private class SaveListener1 implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			panel.save(1);
-		}
-	}
-	
-	private class SaveListener2 implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			panel.save(2);
-		}
-	}
-	
-	private class LoadListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			panel.load();
+			panel.savePrompt();
 		}
 	}
 	
@@ -251,12 +214,6 @@ public class CaptchaGUI extends JFrame {
 	private class ShortcutListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			panel.changeSettings("Shortcuts");
-		}
-	}
-	
-	private class SecretListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			panel.secretCode();
 		}
 	}
 	
