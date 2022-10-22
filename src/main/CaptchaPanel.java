@@ -44,8 +44,8 @@ import resources.ResourceLoader;
 public class CaptchaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Image captchaCard, card1, card2, symbol, symbolS;			// Images for the assets
-	private Image record, mspa, gun, arrow, apple, weasel;				// Images for dialog box icons
+	private ImageIcon captchaCard, card1, card2, symbol, symbolS;		// Images for the assets
+	private ImageIcon record, mspa, gun, arrow, apple, weasel;			// Images for dialog box icons
 	private Conversion cv = new Conversion();							// Class for conversion and operations
 	private DigitValues dv = new DigitValues();							// Class for valid digit values
 	private Randomize rand = new Randomize();							// Class for randomizing codes
@@ -144,24 +144,24 @@ public class CaptchaPanel extends JPanel {
 		fixButtons();
 		wardrobifier.start();
 		// Select default captcha card assets
-		captchaCard = ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png");
-		card1 = ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png");
-		card2 = ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png");
+		captchaCard = new ImageIcon(ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png"));
+		card1 = rescaleImage(ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png"), 226, 178);
+		card2 = rescaleImage(ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png"), 226, 178);
 		if (theme.equals("Green (Jade)")) {
-			symbol = ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png");
-			symbolS = ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png");
+			symbol = new ImageIcon(ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png"));
+			symbolS = rescaleImage(ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png"), 77, 90);
 		}
 		else {
-			symbol = ResourceLoader.loadImage(type + "/Symbol" + theme + ".png");
-			symbolS = ResourceLoader.loadImage(type + "/Symbol" + theme + ".png");
+			symbol = new ImageIcon(ResourceLoader.loadImage(type + "/Symbol" + theme + ".png"));
+			symbolS = rescaleImage(ResourceLoader.loadImage(type + "/Symbol" + theme + ".png"), 77, 90);
 		}
 		// Select dialog box assets
-		record = ResourceLoader.loadImage("icons/Record.png");
-		mspa = ResourceLoader.loadImage("icons/MSPAFace.png");
-		gun = ResourceLoader.loadImage("icons/MSPAReader.png");
-		arrow = ResourceLoader.loadImage("icons/RightArrow.png");
-		apple = ResourceLoader.loadImage("icons/Apple.png");
-		weasel = ResourceLoader.loadImage("icons/Weasel.png");
+		record = new ImageIcon(ResourceLoader.loadImage("icons/Record.png"));
+		mspa = new ImageIcon(ResourceLoader.loadImage("icons/MSPAFace.png"));
+		gun = new ImageIcon(ResourceLoader.loadImage("icons/MSPAReader.png"));
+		arrow = new ImageIcon(ResourceLoader.loadImage("icons/RightArrow.png"));
+		apple = new ImageIcon(ResourceLoader.loadImage("icons/Apple.png"));
+		weasel = new ImageIcon(ResourceLoader.loadImage("icons/Weasel.png"));
 		// Add GUI listeners
 		addMouseListener(new HoleListener());
 		addKeyListener(new EntryListener());
@@ -175,8 +175,8 @@ public class CaptchaPanel extends JPanel {
 		// Set up the font and font color
 		g.setFont(f);
 		g.setColor(Color.BLACK);
-		int symbolY = (captchaCard.getHeight(null) / 2) - (symbol.getHeight(null) / 2) + (symbol.getHeight(null) / 6);
-		int symbolYS = (card2.getHeight(null) / 2) - (card2.getHeight(null) / 2) + (card2.getHeight(null) / 6);
+		int symbolY = (captchaCard.getIconHeight() / 2) - (symbol.getIconHeight() / 2) + (symbol.getIconHeight() / 6);
+		int symbolYS = (card2.getIconHeight() / 2) - (card2.getIconHeight() / 2) + (card2.getIconHeight() / 6);
 		if (showAlcCards) {
 			// Add code digits
 			for (int i = 0; i < digits.length; i++) {
@@ -231,19 +231,18 @@ public class CaptchaPanel extends JPanel {
 			colXNOR = Color.CYAN;
 		// Add captcha card asset
 		if (showAlcCards) {
-			g.drawImage(captchaCard, 421, 40, null);
-			g.drawImage(card1, 100, 40, null);
-			g.drawImage(card1, 100, 40, 226, 178, null, null);
-			g.drawImage(card2, 100, 335, 226, 178, null, null);
+			captchaCard.paintIcon(this, g, 421, 40);
+			card1.paintIcon(this, g, 100, 40);
+			card2.paintIcon(this, g, 100, 335);
 			if (showSymbol) {
-				g.drawImage(symbol, 491, symbolY, null);
-				g.drawImage(symbolS, 135, 370 + symbolYS, 77, 90, null, null);
+				symbol.paintIcon(this, g, 491, symbolY);
+				symbolS.paintIcon(this, g, 135, 370 + symbolYS);
 			}
 		}
 		else{
-			g.drawImage(captchaCard, 39, 40, null);
-			if (showSymbol)
-				g.drawImage(symbol, 109, symbolY, null);
+			captchaCard.paintIcon(this, g, 39, 40);
+			if(showSymbol)
+				symbol.paintIcon(this, g, 109, symbolY);
 		}
 		// Draw operation buttons
 		if (showAlcCards) {
@@ -1229,7 +1228,7 @@ public class CaptchaPanel extends JPanel {
 	// Show save prompt
 	protected void savePrompt() {
 		// Set variables
-		BufferedImage saveImg = new BufferedImage(captchaCard.getWidth(null), captchaCard.getHeight(null), 
+		BufferedImage saveImg = new BufferedImage(captchaCard.getIconWidth(), captchaCard.getIconHeight(), 
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics g = saveImg.getGraphics();
 		ImageIcon saveSymbol;
@@ -1252,14 +1251,14 @@ public class CaptchaPanel extends JPanel {
 		}
 		// If "Cancel" is pressed, the symbol isn't included on the card
 		else {
-			saveSymbol = new ImageIcon(symbol);
+			saveSymbol = symbol;
 			paintSymbol = false;
 		}
 		
 		// Set the symbol position, then paint the card and symbol
-		int symbolY = (captchaCard.getHeight(null) / 2) - 
+		int symbolY = (captchaCard.getIconHeight() / 2) - 
 				(saveSymbol.getIconHeight() / 2) + (saveSymbol.getIconHeight() / 6);
-		g.drawImage(captchaCard, 0, 0, null);
+		captchaCard.paintIcon(this, g, 0, 0);
 		if (paintSymbol)
 			saveSymbol.paintIcon(this, g, 70, symbolY - 40);
 		
@@ -1374,16 +1373,16 @@ public class CaptchaPanel extends JPanel {
 	// Change the theme
 	protected void changeTheme(String th, String ty) {
 		// Since image files are named after the themes, the Images can be changed with one line of code each
-		captchaCard = ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png");
-		card1 = ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png");
-		card2 = ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png");
+		captchaCard = new ImageIcon(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"));
+		card1 = rescaleImage(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"), 226, 178);
+		card2 = rescaleImage(ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png"), 226, 178);
 		if (th.equals("Green (Jade)")) {
-			symbol = ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png");
-			symbolS = ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png");
+			symbol = new ImageIcon(ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png"));
+			symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png"), 77, 90);
 		}
 		else {
-			symbol = ResourceLoader.loadImage(ty + "/Symbol" + th + ".png");
-			symbolS = ResourceLoader.loadImage(ty + "/Symbol" + th + ".png");
+			symbol = new ImageIcon(ResourceLoader.loadImage(ty + "/Symbol" + th + ".png"));
+			symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + th + ".png"), 77, 90);
 		}
 		theme = th;
 		type = ty;
@@ -1495,20 +1494,12 @@ public class CaptchaPanel extends JPanel {
 	}
 	
 	// Resize an image
-	public ImageIcon rescaleImage(File source, int maxHeight, int maxWidth) {
+	public ImageIcon rescaleImage(Image original, int maxHeight, int maxWidth) {
 	    int newHeight = 0, newWidth = 0;        // Variables for the new height and width
 	    int priorHeight = 0, priorWidth = 0;
-	    BufferedImage image = null;
 	    ImageIcon sizeImage;
 
-	    try {
-	    	image = ImageIO.read(source);        // get the image
-	    } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Picture upload attempted & failed");
-	    }
-
-	    sizeImage = new ImageIcon(image);
+	    sizeImage = new ImageIcon(original);
 
 	    if (sizeImage != null) {
 	        priorHeight = sizeImage.getIconHeight(); 
@@ -1533,11 +1524,57 @@ public class CaptchaPanel extends JPanel {
 
 	    // 2. Use the Graphic object to draw a new image to the image in the buffer
 	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g2.drawImage(image, 0, 0, newWidth, newHeight, null);
+	    g2.drawImage(original, 0, 0, newWidth, newHeight, null);
 	    g2.dispose();
 
 	    // 3. Convert the buffered image into an Image for return
 	    return (new ImageIcon(resizedImg));
 	}
+	
+	// Resize an image
+		public ImageIcon rescaleImage(File source, int maxHeight, int maxWidth) {
+		    int newHeight = 0, newWidth = 0;        // Variables for the new height and width
+		    int priorHeight = 0, priorWidth = 0;
+		    BufferedImage image = null;
+		    ImageIcon sizeImage;
+
+		    try {
+		    	image = ImageIO.read(source);		// Get the image
+		    } catch (Exception e) {
+		    	e.printStackTrace();
+	            System.out.println("Picture upload attempted & failed");
+		    }
+
+		    sizeImage = new ImageIcon(image);
+
+		    if (sizeImage != null) {
+		        priorHeight = sizeImage.getIconHeight(); 
+		        priorWidth = sizeImage.getIconWidth();
+		    }
+
+		    // Calculate the correct new height and width
+		    if ((float)priorHeight/(float)priorWidth > (float)maxHeight/(float)maxWidth) {
+		        newHeight = maxHeight;
+		        newWidth = (int)(((float)priorWidth/(float)priorHeight)*(float)newHeight);
+		    }
+		    else {
+		        newWidth = maxWidth;
+		        newHeight = (int)(((float)priorHeight/(float)priorWidth)*(float)newWidth);
+		    }
+
+		    // Resize the image
+
+		    // 1. Create a new Buffered Image and Graphic2D object
+		    BufferedImage resizedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+		    Graphics2D g2 = resizedImg.createGraphics();
+
+		    // 2. Use the Graphic object to draw a new image to the image in the buffer
+		    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		    g2.drawImage(image, 0, 0, newWidth, newHeight, null);
+		    g2.dispose();
+
+		    // 3. Convert the buffered image into an Image for return
+		    return (new ImageIcon(resizedImg));
+		}
 
 }
