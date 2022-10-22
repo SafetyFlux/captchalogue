@@ -31,6 +31,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import shape.BorderRect;
 import shape.Rect;
 import utility.Conversion;
 import utility.DigitValues;
@@ -51,12 +52,9 @@ public class CaptchaPanel extends JPanel {
 	private int[][] alcBin1 = new int[8][6];
 	private int[][] alcBin2 = new int[8][6];
 	// Rect arrays for holes
-	private Rect holes[] = new Rect[48];
-	private Rect backHoles[] = new Rect[48];
-	private Rect alcHoles1[] = new Rect[48];
-	private Rect backHoles1[] = new Rect[48];
-	private Rect alcHoles2[] = new Rect[48];
-	private Rect backHoles2[] = new Rect[48];
+	private BorderRect holes[] = new BorderRect[48];
+	private BorderRect alcHoles1[] = new BorderRect[48];
+	private BorderRect alcHoles2[] = new BorderRect[48];
 	// Rect arrays for code digits
 	private Rect entries[] = new Rect[8];
 	private Rect alcEnt1[] = new Rect[8];
@@ -66,11 +64,8 @@ public class CaptchaPanel extends JPanel {
 	private String alcDig1[] = new String[8];
 	private String alcDig2[] = new String[8];
 	// All button rectangles
-	private Rect buttonAND, buttonOR, buttonXOR, buttonNAND, buttonNOR, buttonXNOR, buttonNOT, buttonNOT1, buttonNOT2,
+	private BorderRect buttonAND, buttonOR, buttonXOR, buttonNAND, buttonNOR, buttonXNOR, buttonNOT, buttonNOT1, buttonNOT2,
 	fill, fill1, fill2, randomize, rand1, rand2;
-	// All button border rectangles (black outline)
-	private Rect borderAND, borderOR, borderXOR, borderNAND, borderNOR, borderXNOR, borderNOT, borderNOT1, borderNOT2,
-	borderFill, borderFill1, borderFill2, borderRandomize, borderRand1, borderRand2;
 	// All grid rectangle arrays
 	private Rect mainGrid[] = new Rect[8];
 	private Rect alcGrid1[] = new Rect[8];
@@ -140,6 +135,7 @@ public class CaptchaPanel extends JPanel {
 		UIManager.put("OptionPane.messageFont", new Font("Courier New", Font.BOLD, 14));
 		UIManager.put("OptionPane.buttonFont", new Font("Courier New", Font.BOLD, 18));
 		// Call necessary methods
+		loadSettings();
 		loadRect();
 		punchHole();
 		changeCards();
@@ -249,56 +245,26 @@ public class CaptchaPanel extends JPanel {
 		// Draw operation buttons
 		if(showAlcCards){
 			buttonAND.draw(g);
-			buttonAND.setFilled(true);
-			borderAND.draw(g);
 			buttonOR.draw(g);
-			buttonOR.setFilled(true);
-			borderOR.draw(g);
 			if(showOtherOps) {
 				buttonXOR.draw(g);
-				buttonXOR.setFilled(true);
-				borderXOR.draw(g);
 				buttonNAND.draw(g);
-				buttonNAND.setFilled(true);
-				borderNAND.draw(g);
 				buttonNOR.draw(g);
-				buttonNOR.setFilled(true);
-				borderNOR.draw(g);
 				buttonXNOR.draw(g);
-				buttonXNOR.setFilled(true);
-				borderXNOR.draw(g);
 				buttonNOT1.draw(g);
-				buttonNOT1.setFilled(true);
-				borderNOT1.draw(g);
 				buttonNOT2.draw(g);
-				buttonNOT2.setFilled(true);
-				borderNOT2.draw(g);
 			}
 			fill1.draw(g);
-			fill1.setFilled(true);
-			borderFill1.draw(g);
 			fill2.draw(g);
-			fill2.setFilled(true);
-			borderFill2.draw(g);
 			rand1.draw(g);
-			rand1.setFilled(true);
-			borderRand1.draw(g);
 			rand2.draw(g);
-			rand2.setFilled(true);
-			borderRand2.draw(g);
 		}
 		if(showOtherOps) {
 			buttonNOT.draw(g);
-			buttonNOT.setFilled(true);
-			borderNOT.draw(g);
 		}
 		// Draw other buttons
 		fill.draw(g);
-		fill.setFilled(true);
-		borderFill.draw(g);
 		randomize.draw(g);
-		randomize.setFilled(true);
-		borderRandomize.draw(g);
 		if(showAlcCards){
 			// Draw operation strings
 			if(showOtherOps) {
@@ -376,19 +342,12 @@ public class CaptchaPanel extends JPanel {
 		}
 		// Draw holes
 		for (int i = 0; i < holes.length; i++){
-			backHoles[i].draw(g);
-			//backHoles[i].setFilled(true);
 			holes[i].draw(g);
-			holes[i].setFilled(true);
 		}
 		if(showAlcCards){
 			for (int i = 0; i < alcHoles1.length; i++){
-				backHoles1[i].draw(g);
 				alcHoles1[i].draw(g);
-				alcHoles1[i].setFilled(true);
-				backHoles2[i].draw(g);
 				alcHoles2[i].draw(g);
-				alcHoles2[i].setFilled(true);
 			}
 		}
 		repaint();
@@ -450,16 +409,16 @@ public class CaptchaPanel extends JPanel {
 		// Repaint and save new options
 		if(recolor){
 			if(showOtherOps) {
-				buttonAND = new Rect(351, 227, 48, 32, colAND);
-				buttonOR = new Rect(351, 259, 48, 32, colOR);
-				buttonXOR = new Rect(351, 291, 48, 32, colXOR);
-				buttonNAND = new Rect(351, 323, 48, 32, colNAND);
-				buttonNOR = new Rect(351, 355, 48, 32, colNOR);
-				buttonXNOR = new Rect(351, 387, 48, 32, colXNOR);
+				buttonAND = new BorderRect(351, 227, 48, 32, colAND);
+				buttonOR = new BorderRect(351, 259, 48, 32, colOR);
+				buttonXOR = new BorderRect(351, 291, 48, 32, colXOR);
+				buttonNAND = new BorderRect(351, 323, 48, 32, colNAND);
+				buttonNOR = new BorderRect(351, 355, 48, 32, colNOR);
+				buttonXNOR = new BorderRect(351, 387, 48, 32, colXNOR);
 			}
 			else {
-				buttonAND = new Rect(351, 291, 48, 32, colAND);
-				buttonOR = new Rect(351, 323, 48, 32, colOR);
+				buttonAND = new BorderRect(351, 291, 48, 32, colAND);
+				buttonOR = new BorderRect(351, 323, 48, 32, colOR);
 			}
 			repaint();
 			try {
@@ -717,36 +676,33 @@ public class CaptchaPanel extends JPanel {
 
 			// If a hole is clicked, it will toggle on or off
 			for (int i = 0; i < holes.length; i++) {
-				Rect r = backHoles[i];
-				Rect h = holes[i];
-				Rect s = alcHoles1[i];
-				Rect v = backHoles1[i];
-				Rect t = alcHoles2[i];
-				Rect u = backHoles2[i];
-				if(r.containsPoint(mouseX, mouseY)) {
-					if(r.getColor() == Color.WHITE){
-						r.setColor(Color.BLACK);
+				BorderRect h = holes[i];
+				BorderRect s = alcHoles1[i];
+				BorderRect t = alcHoles2[i];
+				if(h.containsPoint(mouseX, mouseY)) {
+					if(h.getColor() == Color.BLACK) {
+						h.setBorderColor(Color.BLACK);
 						h.setColor(Color.WHITE);
 						binary[i / 6][i % 6] = 0;
 					}
-					else{
-						r.setColor(Color.WHITE);
+					else {
+						h.setBorderColor(Color.WHITE);
 						h.setColor(Color.BLACK);
 						binary[i / 6][i % 6] = 1;
 					}
 					resetHighlight();
 					updateHole = true;
 				}
-				if(showAlcCards){
-					if(v.containsPoint(mouseX, mouseY)) {
+				if(showAlcCards) {
+					if(s.containsPoint(mouseX, mouseY)) {
 						// Toggle the hole when it's clicked
-						if(v.getColor() == Color.WHITE){
-							v.setColor(Color.BLACK);
+						if(s.getColor() == Color.BLACK) {
+							s.setBorderColor(Color.BLACK);
 							s.setColor(Color.WHITE);
 							alcBin1[i / 6][i % 6] = 0;
 						}
-						else{
-							v.setColor(Color.WHITE);
+						else {
+							s.setBorderColor(Color.WHITE);
 							s.setColor(Color.BLACK);
 							alcBin1[i / 6][i % 6] = 1;
 						}
@@ -783,15 +739,15 @@ public class CaptchaPanel extends JPanel {
 						}
 						updateAlcHole1 = true;
 					}
-					if(u.containsPoint(mouseX, mouseY)) {
+					if(t.containsPoint(mouseX, mouseY)) {
 						// Toggle the hole when it's clicked
-						if(u.getColor() == Color.WHITE){
-							u.setColor(Color.BLACK);
+						if(t.getColor() == Color.BLACK) {
+							t.setBorderColor(Color.BLACK);
 							t.setColor(Color.WHITE);
 							alcBin2[i / 6][i % 6] = 0;
 						}
-						else{
-							u.setColor(Color.WHITE);
+						else {
+							t.setBorderColor(Color.WHITE);
 							t.setColor(Color.BLACK);
 							alcBin2[i / 6][i % 6] = 1;
 						}
@@ -1005,11 +961,11 @@ public class CaptchaPanel extends JPanel {
 				int h = (6 * i) + j;
 				if(binary[i][j] == 0) {
 					holes[h].setColor(Color.WHITE);
-					backHoles[h].setColor(Color.BLACK);
+					holes[h].setBorderColor(Color.BLACK);
 				}
 				else {
 					holes[h].setColor(Color.BLACK);
-					backHoles[h].setColor(Color.WHITE);
+					holes[h].setBorderColor(Color.WHITE);
 				}
 
 			}
@@ -1028,11 +984,11 @@ public class CaptchaPanel extends JPanel {
 				int h = (6 * i) + j;
 				if(alcBin1[i][j] == 0) {
 					alcHoles1[h].setColor(Color.WHITE);
-					backHoles1[h].setColor(Color.BLACK);
+					alcHoles1[h].setBorderColor(Color.BLACK);
 				}
 				else {
 					alcHoles1[h].setColor(Color.BLACK);
-					backHoles1[h].setColor(Color.WHITE);
+					alcHoles1[h].setBorderColor(Color.WHITE);
 				}
 
 			}
@@ -1051,11 +1007,11 @@ public class CaptchaPanel extends JPanel {
 				int h = (6 * i) + j;
 				if(alcBin2[i][j] == 0) {
 					alcHoles2[h].setColor(Color.WHITE);
-					backHoles2[h].setColor(Color.BLACK);
+					alcHoles2[h].setBorderColor(Color.BLACK);
 				}
 				else {
 					alcHoles2[h].setColor(Color.BLACK);
-					backHoles2[h].setColor(Color.WHITE);
+					alcHoles2[h].setBorderColor(Color.WHITE);
 				}
 
 			}
@@ -1078,13 +1034,9 @@ public class CaptchaPanel extends JPanel {
 
 	private void loadRect(){
 		// Load button rectangles
-		buttonNOT = new Rect(394, 97, 48, 32, new Color(175, 165, 255));
-		fill = new Rect(410, 560, 32, 32, Color.green);
-		randomize = new Rect(346, 40, 96, 32, Color.yellow);
-		// Load button borders (black outline)
-		borderNOT = new Rect(394, 97, 48, 32, Color.BLACK);
-		borderFill = new Rect(410, 560, 32, 32, Color.BLACK);
-		borderRandomize = new Rect(346, 40, 96, 32, Color.BLACK);
+		buttonNOT = new BorderRect(394, 97, 48, 32, new Color(175, 165, 255));
+		fill = new BorderRect(410, 560, 32, 32, Color.GREEN);
+		randomize = new BorderRect(346, 40, 96, 32, Color.YELLOW);
 		// Load entry rectangles
 		for (int i = 0; i < entries.length; i++)
 			entries[i] = new Rect((32 + (47 * i)), 560, 32, 32, Color.BLACK);
@@ -1156,8 +1108,7 @@ public class CaptchaPanel extends JPanel {
 				break;
 			}
 
-			holes[i] = new Rect(x, y, 29, 11, Color.WHITE);
-			backHoles[i] = new Rect(x - 1, y - 1, 30, 12, Color.BLACK);
+			holes[i] = new BorderRect(x, y, 30, 12, Color.WHITE);
 		}
 
 	}
@@ -1167,48 +1118,26 @@ public class CaptchaPanel extends JPanel {
 		if(showAlcCards){
 			// Load button rectangles
 			if(showOtherOps) {
-				buttonAND = new Rect(351, 227, 48, 32, colAND);
-				buttonOR = new Rect(351, 259, 48, 32, colOR);
+				buttonAND = new BorderRect(351, 227, 48, 32, colAND);
+				buttonOR = new BorderRect(351, 259, 48, 32, colOR);
 			}
 			else {
-				buttonAND = new Rect(351, 291, 48, 32, colAND);
-				buttonOR = new Rect(351, 323, 48, 32, colOR);
+				buttonAND = new BorderRect(351, 291, 48, 32, colAND);
+				buttonOR = new BorderRect(351, 323, 48, 32, colOR);
 			}
-			buttonXOR = new Rect(351, 291, 48, 32, colXOR);
-			buttonNAND = new Rect(351, 323, 48, 32, colNAND);
-			buttonNOR = new Rect(351, 355, 48, 32, colNOR);
-			buttonXNOR = new Rect(351, 387, 48, 32, colXNOR);
-			buttonNOT = new Rect(782, 97, 48, 32, new Color(175, 165, 255));
-			buttonNOT1 = new Rect(282, 40, 48, 32, new Color(175, 165, 255));
-			buttonNOT2 = new Rect(282, 335, 48, 32, new Color(175, 165, 255));
-			fill = new Rect(798, 560, 32, 32, Color.green);
-			fill1 = new Rect(280, 277, 20, 20, Color.green);
-			fill2 = new Rect(280, 572, 20, 20, Color.green);
-			randomize = new Rect(734, 40, 96, 32, Color.yellow);
-			rand1 = new Rect(310, 277, 20, 20, Color.yellow);
-			rand2 = new Rect(310, 572, 20, 20, Color.yellow);
-			// Load button borders (black outline)
-			if(showOtherOps) {
-				borderAND = new Rect(351, 227, 48, 32, Color.BLACK);
-				borderOR = new Rect(351, 259, 48, 32, Color.BLACK);
-			}
-			else {
-				borderAND = new Rect(351, 291, 48, 32, Color.BLACK);
-				borderOR = new Rect(351, 323, 48, 32, Color.BLACK);
-			}
-			borderXOR = new Rect(351, 291, 48, 32, Color.BLACK);
-			borderNAND = new Rect(351, 323, 48, 32, Color.BLACK);
-			borderNOR = new Rect(351, 355, 48, 32, Color.BLACK);
-			borderXNOR = new Rect(351, 387, 48, 32, Color.BLACK);
-			borderNOT = new Rect(782, 97, 48, 32, Color.BLACK);
-			borderNOT1 = new Rect(282, 40, 48, 32, Color.BLACK);
-			borderNOT2 = new Rect(282, 335, 48, 32, Color.BLACK);
-			borderFill = new Rect(798, 560, 32, 32, Color.BLACK);
-			borderFill1 = new Rect(280, 277, 20, 20, Color.BLACK);
-			borderFill2 = new Rect(280, 572, 20, 20, Color.BLACK);
-			borderRandomize = new Rect(734, 40, 96, 32, Color.BLACK);
-			borderRand1 = new Rect(310, 277, 20, 20, Color.BLACK);
-			borderRand2 = new Rect(310, 572, 20, 20, Color.BLACK);
+			buttonXOR = new BorderRect(351, 291, 48, 32, colXOR);
+			buttonNAND = new BorderRect(351, 323, 48, 32, colNAND);
+			buttonNOR = new BorderRect(351, 355, 48, 32, colNOR);
+			buttonXNOR = new BorderRect(351, 387, 48, 32, colXNOR);
+			buttonNOT = new BorderRect(782, 97, 48, 32, new Color(175, 165, 255));
+			buttonNOT1 = new BorderRect(282, 40, 48, 32, new Color(175, 165, 255));
+			buttonNOT2 = new BorderRect(282, 335, 48, 32, new Color(175, 165, 255));
+			fill = new BorderRect(798, 560, 32, 32, Color.green);
+			fill1 = new BorderRect(280, 277, 20, 20, Color.green);
+			fill2 = new BorderRect(280, 572, 20, 20, Color.green);
+			randomize = new BorderRect(734, 40, 96, 32, Color.yellow);
+			rand1 = new BorderRect(310, 277, 20, 20, Color.yellow);
+			rand2 = new BorderRect(310, 572, 20, 20, Color.yellow);
 			// Load entry rectangles
 			for (int i = 0; i < entries.length; i++)
 				entries[i] = new Rect((414 + (47 * i)), 560, 32, 32, Color.BLACK);
@@ -1240,16 +1169,13 @@ public class CaptchaPanel extends JPanel {
 			// Load main hole rectangles and backgrounds
 			for (int i = 0; i < holes.length; i++){
 				holes[i].move(382, 0);
-				backHoles[i].move(382, 0);
 			}
 			int x = 125;
 			int y = 86;
 			// Load alchemy card hole rectangles
 			for (int i = 0; i < alcHoles1.length; i++){
-				alcHoles1[i] = new Rect(x, y, 12, 4, Color.WHITE);
-				backHoles1[i] = new Rect(x - 1, y - 1, 13, 5, Color.BLACK);
-				alcHoles2[i] = new Rect(x, y + 295, 12, 4, Color.WHITE);
-				backHoles2[i] = new Rect(x - 1, y + 294, 13, 5, Color.BLACK);
+				alcHoles1[i] = new BorderRect(x, y, 13, 5, Color.WHITE);
+				alcHoles2[i] = new BorderRect(x, y + 295, 13, 5, Color.WHITE);
 				if(i % 12 == 11){
 					x += 25;
 					y = 86;
@@ -1273,25 +1199,17 @@ public class CaptchaPanel extends JPanel {
 	private void fixButtons() {
 		if(showAlcCards) {
 			if(showOtherOps) {
-				buttonAND = new Rect(351, 227, 48, 32, colAND);
-				buttonOR = new Rect(351, 259, 48, 32, colOR);
-				borderAND = new Rect(351, 227, 48, 32, Color.BLACK);
-				borderOR = new Rect(351, 259, 48, 32, Color.BLACK);
+				buttonAND = new BorderRect(351, 227, 48, 32, colAND);
+				buttonOR = new BorderRect(351, 259, 48, 32, colOR);
 			}
 			else {
-				buttonAND = new Rect(351, 291, 48, 32, colAND);
-				buttonOR = new Rect(351, 323, 48, 32, colOR);
-				borderAND = new Rect(351, 291, 48, 32, Color.BLACK);
-				borderOR = new Rect(351, 323, 48, 32, Color.BLACK);
+				buttonAND = new BorderRect(351, 291, 48, 32, colAND);
+				buttonOR = new BorderRect(351, 323, 48, 32, colOR);
 			}
-			buttonXOR = new Rect(351, 291, 48, 32, colXOR);
-			buttonNAND = new Rect(351, 323, 48, 32, colNAND);
-			buttonNOR = new Rect(351, 355, 48, 32, colNOR);
-			buttonXNOR = new Rect(351, 387, 48, 32, colXNOR);
-			borderXOR = new Rect(351, 291, 48, 32, Color.BLACK);
-			borderNAND = new Rect(351, 323, 48, 32, Color.BLACK);
-			borderNOR = new Rect(351, 355, 48, 32, Color.BLACK);
-			borderXNOR = new Rect(351, 387, 48, 32, Color.BLACK);
+			buttonXOR = new BorderRect(351, 291, 48, 32, colXOR);
+			buttonNAND = new BorderRect(351, 323, 48, 32, colNAND);
+			buttonNOR = new BorderRect(351, 355, 48, 32, colNOR);
+			buttonXNOR = new BorderRect(351, 387, 48, 32, colXNOR);
 		}
 	}
 
@@ -1512,7 +1430,7 @@ public class CaptchaPanel extends JPanel {
 		jadeSym = options.has("jade") ? options.getInt("jade") : 0;
 		showSymbol = options.has("symbol") ? options.getBoolean("symbol") : false;
 		showAlcCards = options.has("alchemy") ? options.getBoolean("alchemy") : false;
-		showGrids = options.has("grids") ? options.getBoolean("grid") : false;
+		showGrids = options.has("grids") ? options.getBoolean("grids") : false;
 		showOtherOps = options.has("operations") ? options.getBoolean("operations") : false;
 		code = options.has("main_code") ? options.getString("main_code") : "00000000";
 		alcCode1 = options.has("alchemy_code_1") ? options.getString("alchemy_code_1") : "00000000";
@@ -1600,11 +1518,10 @@ public class CaptchaPanel extends JPanel {
 	    ImageIcon sizeImage;
 
 	    try {
-	            image = ImageIO.read(source);        // get the image
+	    	image = ImageIO.read(source);        // get the image
 	    } catch (Exception e) {
-
-	            e.printStackTrace();
-	            System.out.println("Picture upload attempted & failed");
+            e.printStackTrace();
+            System.out.println("Picture upload attempted & failed");
 	    }
 
 	    sizeImage = new ImageIcon(image);
@@ -1626,7 +1543,6 @@ public class CaptchaPanel extends JPanel {
 	        newWidth = maxWidth;
 	        newHeight = (int)(((float)priorHeight/(float)priorWidth)*(float)newWidth);
 	    }
-
 
 	    // Resize the image
 

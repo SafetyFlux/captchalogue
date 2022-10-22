@@ -7,7 +7,6 @@ public class Rect implements Shape{
 
    private int cornerX, cornerY, width, height;
    private Color color;
-   //private group fggfsdf
    private boolean filled;
 
    public Rect(int x, int y, int w, int h, Color c){
