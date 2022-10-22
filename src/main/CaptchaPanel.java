@@ -82,11 +82,11 @@ public class CaptchaPanel extends JPanel {
 	private String advisor = "DetectiveDyn";
 	private String email = "dekuwither@gmail.com";
 	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.4";
+	private String version = "1.4.1";
 	// Shortcut information
 	private String[] shortcuts = new String[] {
 			"Ctrl + N  -  New", "Ctrl + Shift + N  -  New (No Prompt)", "Ctrl + S  -  Save Image", 
-			"Ctrl + R  -  Randomize All Codes", "Ctrl + A  -  Toggle Alchemy", "Ctrl + G  -  Toggle Grids", 
+			"Ctrl + R  -  Randomize All Codes", "Ctrl + A  -  Toggle Alchemy", "Ctrl + G  -  Toggle Grid", 
 			"Ctrl + O  -  Toggle Other Operations", "Ctrl + Y  -  Toggle Symbols", "Ctrl + T  -  About Page", 
 			"Escape  -  Exit Program"
 	};
