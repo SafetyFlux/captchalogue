@@ -68,8 +68,6 @@ public class CaptchaPanel extends JPanel {
 	fill, fill1, fill2, randomize, rand1, rand2;
 	// All grid rectangle arrays
 	private Rect mainGrid[] = new Rect[8];
-	private Rect alcGrid1[] = new Rect[8];
-	private Rect alcGrid2[] = new Rect[8];
 	// Strings for codes, code updates, and the current operation
 	private String code = "";
 	private String alcCode1 = "";
@@ -309,14 +307,10 @@ public class CaptchaPanel extends JPanel {
 			}
 		}
 		// Draw grids
-		if(showGrids){
+		if (showGrids) {
 			for (int i = 0; i < mainGrid.length; i++)
 				mainGrid[i].draw(g);
-			if(showAlcCards){
-				for (int i = 0; i < alcGrid1.length; i++){
-					alcGrid1[i].draw(g);
-					alcGrid2[i].draw(g);
-				}
+			if (showAlcCards) {
 				g.setFont(ft);
 				g.drawString("1", 465, 135);
 				g.drawString("2", 465, 462);
@@ -327,7 +321,7 @@ public class CaptchaPanel extends JPanel {
 				g.drawString("7", 640, 135);
 				g.drawString("8", 640, 462);
 			}
-			else{
+			else {
 				g.setFont(ft);
 				g.drawString("1", 83, 135);
 				g.drawString("2", 83, 462);
@@ -1148,24 +1142,6 @@ public class CaptchaPanel extends JPanel {
 			// Load main grids
 			for (int i = 0; i < mainGrid.length; i++)
 				mainGrid[i].move(382, 0);
-			// Load alchemy card 1 grids
-			alcGrid1[0] = new Rect(119, 80, 25, 75, Color.BLACK);
-			alcGrid1[1] = new Rect(119, 155, 25, 72, Color.BLACK);
-			alcGrid1[2] = new Rect(144, 80, 25, 75, Color.BLACK);
-			alcGrid1[3] = new Rect(144, 155, 25, 72, Color.BLACK);
-			alcGrid1[4] = new Rect(169, 80, 25, 75, Color.BLACK);
-			alcGrid1[5] = new Rect(169, 155, 25, 72, Color.BLACK);
-			alcGrid1[6] = new Rect(194, 80, 25, 75, Color.BLACK);
-			alcGrid1[7] = new Rect(194, 155, 25, 72, Color.BLACK);
-			// Load alchemy card 2 grids
-			alcGrid2[0] = new Rect(119, 375, 25, 75, Color.BLACK);
-			alcGrid2[1] = new Rect(119, 450, 25, 72, Color.BLACK);
-			alcGrid2[2] = new Rect(144, 375, 25, 75, Color.BLACK);
-			alcGrid2[3] = new Rect(144, 450, 25, 72, Color.BLACK);
-			alcGrid2[4] = new Rect(169, 375, 25, 75, Color.BLACK);
-			alcGrid2[5] = new Rect(169, 450, 25, 72, Color.BLACK);
-			alcGrid2[6] = new Rect(194, 375, 25, 75, Color.BLACK);
-			alcGrid2[7] = new Rect(194, 450, 25, 72, Color.BLACK);
 			// Load main hole rectangles and backgrounds
 			for (int i = 0; i < holes.length; i++){
 				holes[i].move(384, 0);
