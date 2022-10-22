@@ -1410,11 +1410,12 @@ public class CaptchaPanel extends JPanel {
 	// Jade's wardrobifier run method
 	private class WardrobeListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			try {
-				jadeSym = gen.nextInt(10);
-				if(theme.equals("Green (Jade)"))
+			if (theme.equals("Green (Jade)")) {
+				try {
+					jadeSym = gen.nextInt(10);
 					changeTheme("Green (Jade)", "humans");
-			}catch(Exception ex) {}
+				} catch (Exception ex) {}
+			}
 		}
 	}
 	
