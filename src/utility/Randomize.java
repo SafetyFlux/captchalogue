@@ -1,5 +1,6 @@
 package utility;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Random;
@@ -13,8 +14,8 @@ public class Randomize {
 	
 	public Randomize() throws FileNotFoundException{
 		
-		InputStream digStr = getClass().getResourceAsStream("resources.text/Digits.txt");
-		Scanner digScan = new Scanner(digStr);
+		File digFile = new File("text/Digits.txt");
+		Scanner digScan = new Scanner(digFile);
 		
 		int count = 0;
 		

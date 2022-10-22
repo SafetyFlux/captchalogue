@@ -1,7 +1,7 @@
 package utility;
 
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Scanner;
 
 
@@ -12,8 +12,8 @@ public class DigitValues {
 	
 	public DigitValues() throws FileNotFoundException{
 
-		InputStream digStr = getClass().getResourceAsStream("text/Digits.txt");
-		Scanner digScan = new Scanner(digStr);
+		File digFile = new File("text/Digits.txt");
+		Scanner digScan = new Scanner(digFile);
 		
 		int count = 0;
 		

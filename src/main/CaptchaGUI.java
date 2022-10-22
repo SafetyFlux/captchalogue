@@ -67,8 +67,8 @@ public class CaptchaGUI extends JFrame {
 		JMenu themeMenu = new JMenu("Themes");
 		themeMenu.setFont(f);
 		themeMenu.add(humans);
-		InputStream stream = getClass().getResourceAsStream("resources.text/ThemesHuman.txt");
-		Scanner reader = new Scanner(stream);
+		File file = new File("text/ThemesHuman.txt");
+		Scanner reader = new Scanner(file);
 		for (int i = 0; i < themesHuman.length; i++) {
 			String th = reader.nextLine();
 			themesHuman[i] = new JMenuItem(th);
@@ -77,8 +77,8 @@ public class CaptchaGUI extends JFrame {
 		}
 		reader.close();
 		themeMenu.add(trolls);
-		stream = getClass().getResourceAsStream("resources.text/ThemesTroll.txt");
-		reader = new Scanner(stream);
+		file = new File("text/ThemesTroll.txt");
+		reader = new Scanner(file);
 		for (int i = 0; i < themesTroll.length; i++) {
 			String th = reader.nextLine();
 			themesTroll[i] = new JMenuItem(th);
@@ -87,8 +87,8 @@ public class CaptchaGUI extends JFrame {
 		}
 		reader.close();
 		themeMenu.add(aspects);
-		stream = getClass().getResourceAsStream("resources.text/ThemesAspect.txt");
-		reader = new Scanner(stream);
+		file = new File("text/ThemesAspect.txt");
+		reader = new Scanner(file);
 		for (int i = 0; i < themesAspect.length; i++) {
 			String th = reader.nextLine();
 			themesAspect[i] = new JMenuItem(th);
@@ -97,8 +97,8 @@ public class CaptchaGUI extends JFrame {
 		}
 		reader.close();
 		themeMenu.add(misc);
-		stream = getClass().getResourceAsStream("resources.text/ThemesMisc.txt");
-		reader = new Scanner(stream);
+		file = new File("text/ThemesMisc.txt");
+		reader = new Scanner(file);
 		for (int i = 0; i < themesMisc.length; i++) {
 			String th = reader.nextLine();
 			themesMisc[i] = new JMenuItem(th);
