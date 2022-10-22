@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import shape.Rect;
@@ -138,54 +139,6 @@ public class CaptchaPanel extends JPanel {
 		// Set dialog box font and font size
 		UIManager.put("OptionPane.messageFont", new Font("Courier New", Font.BOLD, 14));
 		UIManager.put("OptionPane.buttonFont", new Font("Courier New", Font.BOLD, 18));
-		// Load options from json file
-		Scanner reader = new Scanner(new File("res/options.json"));
-		JSONObject options = new JSONObject(reader.nextLine());
-		if(options.has("theme"))
-			theme = options.getString("theme");
-		else
-			theme = "Blue (John)";
-		if(options.has("type"))
-			type = options.getString("type");
-		else
-			type = "humans";
-		if(options.has("jade"))
-			jadeSym = options.getInt("jade");
-		else
-			jadeSym = 0;
-		if(options.has("symbol"))
-			showSymbol = options.getBoolean("symbol");
-		else
-			showSymbol = false;
-		if(options.has("alchemy"))
-			showAlcCards = options.getBoolean("alchemy");
-		else
-			showAlcCards = false;
-		if(options.has("grids"))
-			showGrids = options.getBoolean("grids");
-		else
-			showGrids = false;
-		if(options.has("operations"))
-			showOtherOps = options.getBoolean("operations");
-		else
-			showOtherOps = false;
-		if(options.has("main_code"))
-			code = options.getString("main_code");
-		else
-			code = "00000000";
-		if(options.has("alchemy_code_1"))
-			alcCode1 = options.getString("alchemy_code_1");
-		else
-			alcCode1 = "00000000";
-		if(options.has("alchemy_code_2"))
-			alcCode2 = options.getString("alchemy_code_2");
-		else
-			alcCode2 = "00000000";
-		if(options.has("oper"))
-			operation = options.getString("oper");
-		else
-			operation = "NONE";
-		reader.close();
 		// Call necessary methods
 		loadRect();
 		punchHole();
@@ -510,7 +463,7 @@ public class CaptchaPanel extends JPanel {
 			}
 			repaint();
 			try {
-				saveSettings("res/options.json");
+				saveSettings("res/config.json");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1547,8 +1500,31 @@ public class CaptchaPanel extends JPanel {
 		}
 	}
 	
+	// Load settings from json file
+	protected void loadSettings() throws FileNotFoundException, JSONException {
+		// Set up scanner and JSONObject
+		Scanner reader = new Scanner(new File("res/config.json"));
+		JSONObject options = new JSONObject(reader.nextLine());
+		
+		// Set variables to options
+		theme = options.has("theme") ? options.getString("theme") : "Blue (John)";
+		type = options.has("type") ? options.getString("type") : "humans";
+		jadeSym = options.has("jade") ? options.getInt("jade") : 0;
+		showSymbol = options.has("symbol") ? options.getBoolean("symbol") : false;
+		showAlcCards = options.has("alchemy") ? options.getBoolean("alchemy") : false;
+		showGrids = options.has("grids") ? options.getBoolean("grid") : false;
+		showOtherOps = options.has("operations") ? options.getBoolean("operations") : false;
+		code = options.has("main_code") ? options.getString("main_code") : "00000000";
+		alcCode1 = options.has("alchemy_code_1") ? options.getString("alchemy_code_1") : "00000000";
+		alcCode2 = options.has("alchemy_code_2") ? options.getString("alchemy_code_2") : "00000000";
+		operation = options.has("oper") ? options.getString("oper") : "NONE";
+		
+		// Close scanner
+		reader.close();
+	}
+	
 	// Change various settings
-	protected void changeSettings(String opt){
+	protected void changeSettings(String opt) {
 		switch(opt) {
 		// For the Toggle Alchemy option
 		case "Toggle Alchemy":
@@ -1588,7 +1564,7 @@ public class CaptchaPanel extends JPanel {
 	}
 
 	// Save options to json file
-	protected void saveSettings(String filename) throws Exception{
+	protected void saveSettings(String filename) throws Exception {
 		JSONObject options = new JSONObject();
 		options.put("theme", theme);
 		options.put("type", type);
