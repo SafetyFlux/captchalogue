@@ -1,3 +1,4 @@
+package shape;
 // Interface for shapes
 
 import java.awt.*;

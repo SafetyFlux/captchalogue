@@ -1,14 +1,10 @@
-/*
- 	Author: Dallin Gardner
- 	Alchemy Wiz-kid: Dylan Brady
- 	Date Created: 03/02/20
- 	Date Modified: 02/12/21
- 	Notes: A program outlining the concept of captchalogue
- 		   conversion in Homestuck.
- */
+package unused;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
+import utility.BinaryConverter;
+import utility.DigitValues;
 
 
 public class BaseConcept {

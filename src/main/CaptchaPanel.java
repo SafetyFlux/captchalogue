@@ -1,3 +1,4 @@
+package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -28,6 +29,11 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.JSONObject;
+
+import shape.Rect;
+import utility.Conversion;
+import utility.DigitValues;
+import utility.Randomize;
 
 public class CaptchaPanel extends JPanel {
 
@@ -114,9 +120,9 @@ public class CaptchaPanel extends JPanel {
 	private boolean showSymbol = true;
 	private boolean showOtherOps = false;
 	// All fonts used; f is the main one
-	private Font f = new Font("Courier", Font.BOLD, 26);
-	private Font fs = new Font("Courier", Font.BOLD, 16);
-	private Font ft = new Font("Courier", Font.BOLD, 12);
+	private Font f = new Font("Courier New", Font.BOLD, 26);
+	private Font fs = new Font("Courier New", Font.BOLD, 16);
+	private Font ft = new Font("Courier New", Font.BOLD, 12);
 	// Operation button (and highlight) colors
 	private Color colAND = Color.CYAN;
 	private Color colOR = Color.CYAN;
@@ -130,8 +136,8 @@ public class CaptchaPanel extends JPanel {
 
 		this.setBackground(Color.WHITE);
 		// Set dialog box font and font size
-		UIManager.put("OptionPane.messageFont", new Font("Courier", Font.BOLD, 14));
-		UIManager.put("OptionPane.buttonFont", new Font("Courier", Font.BOLD, 18));
+		UIManager.put("OptionPane.messageFont", new Font("Courier New", Font.BOLD, 14));
+		UIManager.put("OptionPane.buttonFont", new Font("Courier New", Font.BOLD, 18));
 		// Load options from json file
 		Scanner reader = new Scanner(new File("res/options.json"));
 		JSONObject options = new JSONObject(reader.nextLine());
@@ -1469,21 +1475,21 @@ public class CaptchaPanel extends JPanel {
 		}
 		
 		// Set filename
-		String filename = (String) JOptionPane.showInputDialog(null, "Set Filename", "Save Card", JOptionPane.INFORMATION_MESSAGE,
-				record, null, "card");
-		if(filename != null)
-			filename = filename;
-		else
+		String filename = (String) JOptionPane.showInputDialog(null, "Set Filename", "Save Card", 
+				JOptionPane.INFORMATION_MESSAGE, record, null, "card");
+		if(filename == null)
 			filename = "card";
 		
 		// Show preview with option to cancel
 		JLabel lbl = new JLabel(new ImageIcon(saveImg));
 		String[] previewOptions = {"Save", "Cancel"};
-		int option = JOptionPane.showOptionDialog(null, lbl, "Preview", 0, JOptionPane.INFORMATION_MESSAGE, record, previewOptions, null);
+		int option = JOptionPane.showOptionDialog(null, lbl, "Preview", 0, 
+				JOptionPane.INFORMATION_MESSAGE, record, previewOptions, null);
 		if(option == 0)
 			saveImage(saveImg, filename);
 		else
-			JOptionPane.showMessageDialog(null, "Save canceled.", "Canceled", JOptionPane.INFORMATION_MESSAGE, record);
+			JOptionPane.showMessageDialog(null, "Save canceled.", "Canceled", 
+					JOptionPane.INFORMATION_MESSAGE, record);
 		
 	}
 	
@@ -1504,9 +1510,11 @@ public class CaptchaPanel extends JPanel {
 	// Show an error message
 	private void errorMessage(String err) {
 		if(err.equals("badLength"))
-			JOptionPane.showMessageDialog(null, "Error: Code must be 8 digits long.", "Error", JOptionPane.INFORMATION_MESSAGE, weasel);
+			JOptionPane.showMessageDialog(null, "Error: Code must be 8 digits long.", "Error", 
+					JOptionPane.INFORMATION_MESSAGE, weasel);
 		else if(err.equals("badDigit"))
-			JOptionPane.showMessageDialog(null, "Error: Code contains an invalid digit.", "Error", JOptionPane.INFORMATION_MESSAGE, weasel);
+			JOptionPane.showMessageDialog(null, "Error: Code contains an invalid digit.", "Error", 
+					JOptionPane.INFORMATION_MESSAGE, weasel);
 	}
 
 	// Change the theme

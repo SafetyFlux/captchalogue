@@ -1,3 +1,4 @@
+package shape;
 // Represents a rectangle
 
 import java.awt.*;

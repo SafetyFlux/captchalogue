@@ -1,3 +1,4 @@
+package main;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Image;
@@ -30,7 +31,7 @@ public class CaptchaGUI extends JFrame {
 	
 	// All the JMenu components
 	private JMenuBar bar = new JMenuBar();
-	private JMenuItem newMI = new JMenuItem("New");
+	private JMenuItem newMI = new JMenuItem("Reset Card");
 	private JMenuItem saveMI = new JMenuItem("Save Card as Image ");
 	private JMenuItem symbolMI = new JMenuItem("Toggle Symbols");
 	private JMenu humans = new JMenu("Humans");
@@ -47,7 +48,7 @@ public class CaptchaGUI extends JFrame {
 	private JMenuItem aboutMI = new JMenuItem("About");
 	private JMenuItem shortcutMI = new JMenuItem("Shortcuts");
 	// The font used for the toolbar
-	private Font f = new Font("Courier", Font.BOLD, 14);
+	private Font f = new Font("Courier New", Font.BOLD, 14);
 	
 	public CaptchaGUI() throws FileNotFoundException{
 		
