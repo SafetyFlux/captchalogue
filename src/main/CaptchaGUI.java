@@ -8,13 +8,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import resources.ResourceLoader;
 
 public class CaptchaGUI extends JFrame {
 	
@@ -65,7 +67,8 @@ public class CaptchaGUI extends JFrame {
 		JMenu themeMenu = new JMenu("Themes");
 		themeMenu.setFont(f);
 		themeMenu.add(humans);
-		Scanner reader = new Scanner(new File("res/ThemesHuman.txt"));
+		InputStream stream = getClass().getResourceAsStream("resources.text/ThemesHuman.txt");
+		Scanner reader = new Scanner(stream);
 		for (int i = 0; i < themesHuman.length; i++) {
 			String th = reader.nextLine();
 			themesHuman[i] = new JMenuItem(th);
@@ -74,7 +77,8 @@ public class CaptchaGUI extends JFrame {
 		}
 		reader.close();
 		themeMenu.add(trolls);
-		reader = new Scanner(new File("res/ThemesTroll.txt"));
+		stream = getClass().getResourceAsStream("resources.text/ThemesTroll.txt");
+		reader = new Scanner(stream);
 		for (int i = 0; i < themesTroll.length; i++) {
 			String th = reader.nextLine();
 			themesTroll[i] = new JMenuItem(th);
@@ -83,7 +87,8 @@ public class CaptchaGUI extends JFrame {
 		}
 		reader.close();
 		themeMenu.add(aspects);
-		reader = new Scanner(new File("res/ThemesAspect.txt"));
+		stream = getClass().getResourceAsStream("resources.text/ThemesAspect.txt");
+		reader = new Scanner(stream);
 		for (int i = 0; i < themesAspect.length; i++) {
 			String th = reader.nextLine();
 			themesAspect[i] = new JMenuItem(th);
@@ -92,7 +97,8 @@ public class CaptchaGUI extends JFrame {
 		}
 		reader.close();
 		themeMenu.add(misc);
-		reader = new Scanner(new File("res/ThemesMisc.txt"));
+		stream = getClass().getResourceAsStream("resources.text/ThemesMisc.txt");
+		reader = new Scanner(stream);
 		for (int i = 0; i < themesMisc.length; i++) {
 			String th = reader.nextLine();
 			themesMisc[i] = new JMenuItem(th);
@@ -224,11 +230,8 @@ public class CaptchaGUI extends JFrame {
 		
 		boolean run = true;
 		CaptchaGUI theGUI = new CaptchaGUI();
-		// Set window icon, title, and size
-		try {
-			Image icon = ImageIO.read(new File("images/icons/CardIcon.png"));
-			theGUI.setIconImage(icon);
-		} catch (IOException e) {}
+		Image icon = ResourceLoader.loadImage("icons/CardIcon.png");
+		theGUI.setIconImage(icon);
 		theGUI.setTitle("Captchalogue Card Simulator");
 		if(panel.getCards())
 			theGUI.setSize(881, 692);

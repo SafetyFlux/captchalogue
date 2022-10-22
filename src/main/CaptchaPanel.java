@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,12 +16,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -37,12 +40,13 @@ import shape.Rect;
 import utility.Conversion;
 import utility.DigitValues;
 import utility.Randomize;
+import resources.ResourceLoader;
 
 public class CaptchaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private ImageIcon captchaCard, card1, card2, symbol, symbolS;		// ImageIcons for the assets
-	private ImageIcon record, mspa, gun, arrow, apple, weasel;			// ImageIcons for dialog box icons
+	private Image captchaCard, card1, card2, symbol, symbolS;			// Images for the assets
+	private Image record, mspa, gun, arrow, apple, weasel;				// Images for dialog box icons
 	private Conversion cv = new Conversion();							// Class for conversion and operations
 	private DigitValues dv = new DigitValues();							// Class for valid digit values
 	private Randomize rand = new Randomize();							// Class for randomizing codes
@@ -141,24 +145,24 @@ public class CaptchaPanel extends JPanel {
 		fixButtons();
 		wardrobifier.start();
 		// Select default captcha card assets
-		captchaCard = new ImageIcon("images/" + type + "/CaptchaCard" + theme + ".png");
-		card1 = rescaleImage(new File("images/" + type + "/CaptchaCard" + theme + ".png"), 226, 178);
-		card2 = rescaleImage(new File("images/miscellaneous/CaptchaCardBlank.png"), 226, 178);
+		captchaCard = ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png");
+		card1 = ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png");
+		card2 = ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png");
 		if (theme.equals("Green (Jade)")) {
-			symbol = new ImageIcon("images/" + type + "/Symbol" + theme + " " + jadeSym + ".png");
-			symbolS = rescaleImage(new File("images/" + type + "/Symbol" + theme + " " + jadeSym + ".png"), 77, 90);
+			symbol = ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png");
+			symbolS = ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png");
 		}
 		else {
-			symbol = new ImageIcon("images/" + type + "/Symbol" + theme + ".png");
-			symbolS = rescaleImage(new File("images/" + type + "/Symbol" + theme + ".png"), 77, 90);
+			symbol = ResourceLoader.loadImage(type + "/Symbol" + theme + ".png");
+			symbolS = ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png");
 		}
 		// Select dialog box assets
-		record = new ImageIcon("images/icons/Record.png");
-		mspa = new ImageIcon("images/icons/MSPAFace.png");
-		gun = new ImageIcon("images/icons/MSPAReader.png");
-		arrow = new ImageIcon("images/icons/RightArrow.png");
-		apple = new ImageIcon("images/icons/Apple.png");
-		weasel = new ImageIcon("images/icons/Weasel.png");
+		record = ResourceLoader.loadImage("icons/Record.png");
+		mspa = ResourceLoader.loadImage("icons/MSPAFace.png");
+		gun = ResourceLoader.loadImage("icons/MSPAReader.png");
+		arrow = ResourceLoader.loadImage("icons/RightArrow.png");
+		apple = ResourceLoader.loadImage("icons/Apple.png");
+		weasel = ResourceLoader.loadImage("icons/Weasel.png");
 		// Add GUI listeners
 		addMouseListener(new HoleListener());
 		addKeyListener(new EntryListener());
@@ -172,8 +176,8 @@ public class CaptchaPanel extends JPanel {
 		// Set up the font and font color
 		g.setFont(f);
 		g.setColor(Color.BLACK);
-		int symbolY = (captchaCard.getIconHeight() / 2) - (symbol.getIconHeight() / 2) + (symbol.getIconHeight() / 6);
-		int symbolYS = (card2.getIconHeight() / 2) - (card2.getIconHeight() / 2) + (card2.getIconHeight() / 6);
+		int symbolY = (captchaCard.getHeight(null) / 2) - (symbol.getHeight(null) / 2) + (symbol.getHeight(null) / 6);
+		int symbolYS = (card2.getHeight(null) / 2) - (card2.getHeight(null) / 2) + (card2.getHeight(null) / 6);
 		if (showAlcCards) {
 			// Add code digits
 			for (int i = 0; i < digits.length; i++) {
@@ -228,18 +232,19 @@ public class CaptchaPanel extends JPanel {
 			colXNOR = Color.CYAN;
 		// Add captcha card asset
 		if (showAlcCards) {
-			captchaCard.paintIcon(this, g, 421, 40);
-			card1.paintIcon(this, g, 100, 40);
-			card2.paintIcon(this, g, 100, 335);
+			g.drawImage(captchaCard, 421, 40, null);
+			g.drawImage(card1, 100, 40, null);
+			g.drawImage(card1, 100, 40, 226, 178, null, null);
+			g.drawImage(card2, 100, 335, 226, 178, null, null);
 			if (showSymbol) {
-				symbol.paintIcon(this, g, 491, symbolY);
-				symbolS.paintIcon(this, g, 135, 370 + symbolYS);
+				g.drawImage(symbol, 491, symbolY, null);
+				g.drawImage(symbolS, 135, 370 + symbolYS, 77, 90, null, null);
 			}
 		}
 		else{
-			captchaCard.paintIcon(this, g, 39, 40);
+			g.drawImage(captchaCard, 39, 40, null);
 			if (showSymbol)
-				symbol.paintIcon(this, g, 109, symbolY);
+				g.drawImage(symbol, 109, symbolY, null);
 		}
 		// Draw operation buttons
 		if (showAlcCards) {
@@ -417,7 +422,7 @@ public class CaptchaPanel extends JPanel {
 			}
 			repaint();
 			try {
-				saveSettings("res/config.json");
+				saveSettings("resources.text/config.json");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -519,8 +524,8 @@ public class CaptchaPanel extends JPanel {
 				if (fill1.containsPoint(mouseX, mouseY)) {
 					boolean maintain = true;
 					while(maintain) {
-						String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
-								arrow, null, "00000000");
+						String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", 
+								JOptionPane.INFORMATION_MESSAGE, (Icon) arrow, null, "00000000");
 						if (update != null) {
 							codeUpdate1 = update.trim();
 							// The code is set to 00000000 if the input isn't 8 digits long
@@ -548,8 +553,8 @@ public class CaptchaPanel extends JPanel {
 				if (fill2.containsPoint(mouseX, mouseY)) {
 					boolean maintain = true;
 					while(maintain) {
-						String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
-								arrow, null, "00000000");
+						String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", 
+								JOptionPane.INFORMATION_MESSAGE, (Icon) arrow, null, "00000000");
 						if (update != null) {
 							codeUpdate2 = update.trim();
 							// The code is set to 00000000 if the input isn't 8 digits long
@@ -603,8 +608,8 @@ public class CaptchaPanel extends JPanel {
 			if (fill.containsPoint(mouseX, mouseY)) {
 				boolean maintain = true;
 				while(maintain) {
-					String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", JOptionPane.INFORMATION_MESSAGE,
-							arrow, null, "00000000");
+					String update = (String) JOptionPane.showInputDialog(null, "Enter Code", "Fill", 
+							JOptionPane.INFORMATION_MESSAGE, (Icon) arrow, null, "00000000");
 					if (update != null) {
 						codeUpdate = update.trim();
 						// The code is set to 00000000 if the input isn't 8 digits long
@@ -1194,7 +1199,7 @@ public class CaptchaPanel extends JPanel {
 	protected void resetCode(boolean prompt) {
 		if (prompt) {
 			int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "Reset Codes",
-					JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, gun);
+					JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, (Icon) gun);
 			if (confirm == JOptionPane.YES_OPTION) {
 				code = "00000000";
 				alcCode1 = "00000000";
@@ -1225,7 +1230,8 @@ public class CaptchaPanel extends JPanel {
 	// Show save prompt
 	protected void savePrompt() {
 		// Set variables
-		BufferedImage saveImg = new BufferedImage(captchaCard.getIconWidth(), captchaCard.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage saveImg = new BufferedImage(captchaCard.getWidth(null), captchaCard.getHeight(null), 
+				BufferedImage.TYPE_INT_ARGB);
 		Graphics g = saveImg.getGraphics();
 		ImageIcon saveSymbol;
 		boolean paintSymbol;
@@ -1247,13 +1253,14 @@ public class CaptchaPanel extends JPanel {
 		}
 		// If "Cancel" is pressed, the symbol isn't included on the card
 		else {
-			saveSymbol = symbol;
+			saveSymbol = new ImageIcon(symbol);
 			paintSymbol = false;
 		}
 		
 		// Set the symbol position, then paint the card and symbol
-		int symbolY = (captchaCard.getIconHeight() / 2) - (saveSymbol.getIconHeight() / 2) + (saveSymbol.getIconHeight() / 6);
-		captchaCard.paintIcon(this, g, 0, 0);
+		int symbolY = (captchaCard.getHeight(null) / 2) - 
+				(saveSymbol.getIconHeight() / 2) + (saveSymbol.getIconHeight() / 6);
+		g.drawImage(captchaCard, 0, 0, null);
 		if (paintSymbol)
 			saveSymbol.paintIcon(this, g, 70, symbolY - 40);
 		
@@ -1324,7 +1331,7 @@ public class CaptchaPanel extends JPanel {
 		
 		// Set filename
 		String filename = (String) JOptionPane.showInputDialog(null, "Set Filename", "Save Card", 
-				JOptionPane.INFORMATION_MESSAGE, record, null, "card");
+				JOptionPane.INFORMATION_MESSAGE, (Icon) record, null, "card");
 		if (filename == null)
 			filename = "card";
 		
@@ -1332,12 +1339,12 @@ public class CaptchaPanel extends JPanel {
 		JLabel lbl = new JLabel(new ImageIcon(saveImg));
 		String[] previewOptions = {"Save", "Cancel"};
 		int option = JOptionPane.showOptionDialog(null, lbl, "Preview", 0, 
-				JOptionPane.INFORMATION_MESSAGE, record, previewOptions, null);
+				JOptionPane.INFORMATION_MESSAGE, (Icon) record, previewOptions, null);
 		if (option == 0)
 			saveImage(saveImg, filename);
 		else
 			JOptionPane.showMessageDialog(null, "Save canceled.", "Canceled", 
-					JOptionPane.INFORMATION_MESSAGE, record);
+					JOptionPane.INFORMATION_MESSAGE, (Icon) record);
 		
 	}
 	
@@ -1349,7 +1356,7 @@ public class CaptchaPanel extends JPanel {
 				dir.mkdir();
 	        ImageIO.write(img, "png", new File("saves/" + fn + ".png"));
 	        JOptionPane.showMessageDialog(null, "The card has been saved! Check your saves folder.", "Saved",
-					  JOptionPane.INFORMATION_MESSAGE, record);
+					  JOptionPane.INFORMATION_MESSAGE, (Icon) record);
 	    } catch (IOException ex) {
 	        
 	    }
@@ -1359,25 +1366,25 @@ public class CaptchaPanel extends JPanel {
 	private void errorMessage(String err) {
 		if (err.equals("badLength"))
 			JOptionPane.showMessageDialog(null, "Error: Code must be 8 digits long.", "Error", 
-					JOptionPane.INFORMATION_MESSAGE, weasel);
+					JOptionPane.INFORMATION_MESSAGE, (Icon) weasel);
 		else if (err.equals("badDigit"))
 			JOptionPane.showMessageDialog(null, "Error: Code contains an invalid digit.", "Error", 
-					JOptionPane.INFORMATION_MESSAGE, weasel);
+					JOptionPane.INFORMATION_MESSAGE, (Icon) weasel);
 	}
 
 	// Change the theme
 	protected void changeTheme(String th, String ty) {
-		// Since image files are named after the themes, the ImageIcons can be changed with one line of code each
-		captchaCard = new ImageIcon("images/" + ty + "/CaptchaCard" + th + ".png");
-		card1 = rescaleImage(new File("images/" + ty + "/CaptchaCard" + th + ".png"), 226, 178);
-		card2 = rescaleImage(new File("images/miscellaneous/CaptchaCardBlank.png"), 226, 178);
+		// Since image files are named after the themes, the Images can be changed with one line of code each
+		captchaCard = ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png");
+		card1 = ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png");
+		card2 = ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png");
 		if (th.equals("Green (Jade)")) {
-			symbol = new ImageIcon("images/" + ty + "/Symbol" + th + " " + jadeSym + ".png");
-			symbolS = rescaleImage(new File("images/" + ty + "/Symbol" + th + " " + jadeSym + ".png"), 77, 90);
+			symbol = ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png");
+			symbolS = ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png");
 		}
 		else {
-			symbol = new ImageIcon("images/" + ty + "/Symbol" + th + ".png");
-			symbolS = rescaleImage(new File("images/" + ty + "/Symbol" + th + ".png"), 77, 90);
+			symbol = ResourceLoader.loadImage(ty + "/Symbol" + th + ".png");
+			symbolS = ResourceLoader.loadImage(ty + "/Symbol" + th + ".png");
 		}
 		theme = th;
 		type = ty;
@@ -1399,7 +1406,8 @@ public class CaptchaPanel extends JPanel {
 	// Load settings from json file
 	protected void loadSettings() throws FileNotFoundException, JSONException {
 		// Set up scanner and JSONObject
-		Scanner reader = new Scanner(new File("res/config.json"));
+		InputStream config = getClass().getResourceAsStream("resources.text/config.json");
+		Scanner reader = new Scanner(config);
 		JSONObject options = new JSONObject(reader.nextLine());
 		
 		// Set variables to options
@@ -1447,14 +1455,14 @@ public class CaptchaPanel extends JPanel {
 		case "About":
 			JOptionPane.showMessageDialog(null, "Programmer: " + author + "\nAdvisor: " + advisor +
 					"\nEmail: " + email + "\nGitHub Page: " + link + "\nVersion: " +
-					version, "About", JOptionPane.INFORMATION_MESSAGE, mspa);
+					version, "About", JOptionPane.INFORMATION_MESSAGE, (Icon) mspa);
 			break;
 		// For the Shortcuts menu
 		case "Shortcuts":
 			String sc = "";
 			for(int i = 0; i < shortcuts.length; i += 2)
 				sc += String.format("%-45s%s%n", shortcuts[i], shortcuts[i + 1]);
-			JOptionPane.showMessageDialog(null, sc, "Shortcuts", JOptionPane.INFORMATION_MESSAGE, apple);
+			JOptionPane.showMessageDialog(null, sc, "Shortcuts", JOptionPane.INFORMATION_MESSAGE, (Icon) apple);
 			break;
 		}
 	}
@@ -1529,7 +1537,7 @@ public class CaptchaPanel extends JPanel {
 	    g2.drawImage(image, 0, 0, newWidth, newHeight, null);
 	    g2.dispose();
 
-	    // 3. Convert the buffered image into an ImageIcon for return
+	    // 3. Convert the buffered image into an Image for return
 	    return (new ImageIcon(resizedImg));
 	}
 
