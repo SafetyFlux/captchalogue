@@ -1,5 +1,4 @@
 package shape;
-// Represents a rectangle
 
 import java.awt.*;
 
@@ -9,7 +8,7 @@ public class Rect implements Shape{
    private Color color;
    private boolean filled;
 
-   public Rect(int x, int y, int w, int h, Color c){
+   public Rect (int x, int y, int w, int h, Color c) {
       cornerX = x;
       cornerY = y;
       width = w;
@@ -20,7 +19,7 @@ public class Rect implements Shape{
       filled = false;
    }
 
-   public void draw(Graphics g){
+   public void draw(Graphics g) {
       Color oldColor = g.getColor();
       g.setColor(color);
       if (filled)
@@ -30,21 +29,21 @@ public class Rect implements Shape{
       g.setColor(oldColor);
    }
 
-   public boolean containsPoint(int x, int y){
+   public boolean containsPoint(int x, int y) {
       return x >= cornerX && x  <= cornerX + width &&
              y >= cornerY && y <= cornerY + height; 
    }
 
-   public void move(int xAmount, int yAmount){
+   public void move(int xAmount, int yAmount) {
       cornerX += xAmount;
       cornerY += yAmount;
    }
 
-   public void setFilled(boolean b){
+   public void setFilled(boolean b) {
       filled = b;
    }
    
-   public boolean isFilled(){
+   public boolean isFilled() {
 	   return filled;
    }
    

@@ -2,14 +2,12 @@ package utility;
 
 public class BinarySearch {
 
-	public BinarySearch() {
-
-	}
+	public BinarySearch() {}
 	
-	public int intSearch(int[] a, int searchValue){
+	public int intSearch(int[] a, int searchValue) {
 		int left = 0;
 		int right = a.length - 1;
-		while(left <= right){
+		while (left <= right) {
 			int midpoint = (left + right) / 2;
 			if(a[midpoint] == searchValue)
 				return midpoint;
@@ -22,10 +20,10 @@ public class BinarySearch {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public int objectSearch(Object[] a, Object searchValue){
+	public int objectSearch(Object[] a, Object searchValue) {
 		int left = 0;
 		int right = a.length - 1;
-		while(left <= right){
+		while (left <= right) {
 			int midpoint = (left + right) / 2;
 			@SuppressWarnings("rawtypes")
 			int result = ((Comparable)a[midpoint]).compareTo(searchValue);
@@ -39,10 +37,10 @@ public class BinarySearch {
 		return -1;
 	}
 	
-	public int charSearch(char[] a, char searchValue){
+	public int charSearch(char[] a, char searchValue) {
 		int left = 0;
 		int right = a.length - 1;
-		while(left <= right){
+		while (left <= right) {
 			int midpoint = (left + right) / 2;
 			if(a[midpoint] == searchValue)
 				return midpoint;

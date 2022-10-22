@@ -1,4 +1,5 @@
 package utility;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -15,13 +16,13 @@ public class DigitValues {
 		
 		int count = 0;
 		
-		while(count < digits.length && digScan.hasNext()){
+		while (count < digits.length && digScan.hasNext()) {
 			char character = digScan.nextLine().charAt(0);
 			digits[count] = character;
 			count++;
 		}
 		
-		if(digScan.hasNext())
+		if (digScan.hasNext())
 			System.out.println("Some data lost during digit input");
 		
 		//for (int i = 0; i < digits.length; i++)
@@ -42,8 +43,8 @@ public class DigitValues {
 	
 	public boolean checkDigit(char d) {
 		boolean good = false;
-		for(int i = 0; i < digits.length; i++) {
-			if(d == digits[i]) {
+		for (int i = 0; i < digits.length; i++) {
+			if (d == digits[i]) {
 				good = true;
 				break;
 			}

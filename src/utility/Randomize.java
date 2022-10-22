@@ -16,7 +16,7 @@ public class Randomize {
 		
 		int count = 0;
 		
-		while(count < digits.length && digScan.hasNext()){
+		while (count < digits.length && digScan.hasNext()) {
 			char character = digScan.nextLine().charAt(0);
 			digits[count] = character;
 			count++;

@@ -1,9 +1,8 @@
 package shape;
-// Interface for shapes
 
 import java.awt.*;
 
-public interface Shape{
+public interface Shape {
 
    public void draw(Graphics g);
    public boolean containsPoint(int x, int y);
