@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
@@ -154,7 +153,7 @@ public class CaptchaPanel extends JPanel {
 		}
 		else {
 			symbol = ResourceLoader.loadImage(type + "/Symbol" + theme + ".png");
-			symbolS = ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png");
+			symbolS = ResourceLoader.loadImage(type + "/Symbol" + theme + ".png");
 		}
 		// Select dialog box assets
 		record = ResourceLoader.loadImage("icons/Record.png");
@@ -422,7 +421,7 @@ public class CaptchaPanel extends JPanel {
 			}
 			repaint();
 			try {
-				saveSettings("resources.text/config.json");
+				saveSettings("text/config.json");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1406,7 +1405,7 @@ public class CaptchaPanel extends JPanel {
 	// Load settings from json file
 	protected void loadSettings() throws FileNotFoundException, JSONException {
 		// Set up scanner and JSONObject
-		InputStream config = getClass().getResourceAsStream("resources.text/config.json");
+		File config = new File("text/config.json");
 		Scanner reader = new Scanner(config);
 		JSONObject options = new JSONObject(reader.nextLine());
 		
