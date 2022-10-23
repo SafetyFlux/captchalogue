@@ -56,7 +56,7 @@ public class Conversion {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
 			for (int j = 0; j < c[i].length; j++) {
-				if ((a[i][j] == 0 && b[i][j] == 0) || (a[i][j] == 1 && b[i][j] == 1))
+				if (a[i][j] == b[i][j])
 					c[i][j] = 0;
 				else
 					c[i][j] = 1;
@@ -95,7 +95,7 @@ public class Conversion {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
 			for (int j = 0; j < c[i].length; j++) {
-				if ((a[i][j] == 0 && b[i][j] == 0) || (a[i][j] == 1 && b[i][j] == 1))
+				if (a[i][j] == b[i][j])
 					c[i][j] = 1;
 				else
 					c[i][j] = 0;
@@ -118,16 +118,13 @@ public class Conversion {
 	}
 	
 	public boolean checkCode(String code) {
-		boolean good = false;
 		for (int i = 0; i < code.length(); i++) {
-			if (!dv.checkDigit(code.charAt(i))) {
-				good = false;
-				break;
-			}
+			if (!dv.checkDigit(code.charAt(i)))
+				return false;
 			else
-				good = true;
+				continue;
 		}
-		return good;
+		return true;
 	}
 
 }
