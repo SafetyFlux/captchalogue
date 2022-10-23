@@ -314,27 +314,16 @@ public class CaptchaPanel extends JPanel {
 		if (showGrids) {
 			for (int i = 0; i < mainGrid.length; i++)
 				mainGrid[i].draw(g);
-			if (showAlcCards) {
-				g.setFont(ft);
-				g.drawString("1", 465, 135);
-				g.drawString("2", 465, 462);
-				g.drawString("3", 524, 135);
-				g.drawString("4", 524, 462);
-				g.drawString("5", 582, 135);
-				g.drawString("6", 582, 462);
-				g.drawString("7", 640, 135);
-				g.drawString("8", 640, 462);
-			}
-			else {
-				g.setFont(ft);
-				g.drawString("1", 83, 135);
-				g.drawString("2", 83, 462);
-				g.drawString("3", 142, 135);
-				g.drawString("4", 142, 462);
-				g.drawString("5", 200, 135);
-				g.drawString("6", 200, 462);
-				g.drawString("7", 258, 135);
-				g.drawString("8", 258, 462);
+			// Arrays for grid number coordinates
+			int[] gridNumX = {83, 142, 200, 258};
+			int[] gridNumY = {135, 462};
+			// Loop to draw grid numbers
+			g.setFont(ft);
+			for (int i = 0; i < 8; i++) {
+				if (showAlcCards)
+					g.drawString("" + (i + 1), gridNumX[i / 2] + 382, gridNumY[i % 2]);
+				else
+					g.drawString("" + (i + 1), gridNumX[i / 2], gridNumY[i % 2]);
 			}
 			g.setFont(f);
 		}
