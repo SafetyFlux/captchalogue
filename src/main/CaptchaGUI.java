@@ -5,10 +5,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -39,10 +36,6 @@ public class CaptchaGUI extends JFrame {
 	private JMenu trolls = new JMenu("Trolls");
 	private JMenu aspects = new JMenu("Aspects");
 	private JMenu misc = new JMenu("Miscellaneous  ");
-	private JMenuItem themesHuman[] = new JMenuItem[8];
-	private JMenuItem themesTroll[] = new JMenuItem[12];
-	private JMenuItem themesAspect[] = new JMenuItem[12];
-	private JMenuItem themesMisc[] = new JMenuItem[4];
 	private JMenuItem alchemyMI = new JMenuItem("Toggle Alchemy");
 	private JMenuItem gridMI = new JMenuItem("Toggle Grids");
 	private JMenuItem operationMI = new JMenuItem("Toggle Other Operations ");
@@ -50,6 +43,55 @@ public class CaptchaGUI extends JFrame {
 	private JMenuItem shortcutMI = new JMenuItem("Shortcuts");
 	// The font used for the toolbar
 	private Font f = new Font("Courier New", Font.BOLD, 14);
+	// Theme arrays
+	private String[] thListHuman =
+		{
+			"Blue (John)",
+			"Orchid (Rose)",
+			"Red (Dave)",
+			"Green (Jade)",
+			"Cyan (Jane)",
+			"Pink (Roxy)",
+			"Orange (Dirk)",
+			"Emerald (Jake)"
+		};
+	private String[] thListTroll =
+		{
+			"Rust (Aradia)",
+			"Bronze (Tavros)",
+			"Gold (Sollux)",
+			"Grey (Karkat)",
+			"Olive (Nepeta)",
+			"Jade (Kanaya)",
+			"Teal (Terezi)",
+			"Cobalt (Vriska)",
+			"Indigo (Equius)",
+			"Purple (Gamzee)",
+			"Violet (Eridan)",
+			"Fuchsia (Feferi)"
+		};
+	private String[] thListAspect =
+		{
+			"Space",
+			"Time",
+			"Breath",
+			"Blood",
+			"Mind",
+			"Heart",
+			"Light",
+			"Void",
+			"Life",
+			"Doom",
+			"Hope",
+			"Rage"
+		};
+	private String[] thListMisc =
+		{
+			"Prospit",
+			"Derse",
+			"Cherub (Caliborn)",
+			"Cherub (Calliope)"
+		};
 	
 	public CaptchaGUI() throws FileNotFoundException {
 		
@@ -65,45 +107,53 @@ public class CaptchaGUI extends JFrame {
 		JMenu themeMenu = new JMenu("Themes");
 		themeMenu.setFont(f);
 		themeMenu.add(humans);
-		File file = new File("text/ThemesHuman.txt");
-		Scanner reader = new Scanner(file);
-		for (int i = 0; i < themesHuman.length; i++) {
-			String th = reader.nextLine();
-			themesHuman[i] = new JMenuItem(th);
-			themesHuman[i].setFont(f);
-			humans.add(themesHuman[i]);
+		for (int i = 0; i < thListHuman.length; i++) {
+			String th = thListHuman[i];
+			JMenuItem item = new JMenuItem(th);
+			item.setFont(f);
+			item.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+					panel.changeTheme(item.getText(), "humans");
+				}
+			});
+			humans.add(item);
 		}
-		reader.close();
 		themeMenu.add(trolls);
-		file = new File("text/ThemesTroll.txt");
-		reader = new Scanner(file);
-		for (int i = 0; i < themesTroll.length; i++) {
-			String th = reader.nextLine();
-			themesTroll[i] = new JMenuItem(th);
-			themesTroll[i].setFont(f);
-			trolls.add(themesTroll[i]);
+		for (int i = 0; i < thListTroll.length; i++) {
+			String th = thListTroll[i];
+			JMenuItem item = new JMenuItem(th);
+			item.setFont(f);
+			item.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+					panel.changeTheme(item.getText(), "trolls");
+				}
+			});
+			trolls.add(item);
 		}
-		reader.close();
 		themeMenu.add(aspects);
-		file = new File("text/ThemesAspect.txt");
-		reader = new Scanner(file);
-		for (int i = 0; i < themesAspect.length; i++) {
-			String th = reader.nextLine();
-			themesAspect[i] = new JMenuItem(th);
-			themesAspect[i].setFont(f);
-			aspects.add(themesAspect[i]);
+		for (int i = 0; i < thListAspect.length; i++) {
+			String th = thListAspect[i];
+			JMenuItem item = new JMenuItem(th);
+			item.setFont(f);
+			item.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+					panel.changeTheme(item.getText(), "aspects");
+				}
+			});
+			aspects.add(item);
 		}
-		reader.close();
 		themeMenu.add(misc);
-		file = new File("text/ThemesMisc.txt");
-		reader = new Scanner(file);
-		for (int i = 0; i < themesMisc.length; i++) {
-			String th = reader.nextLine();
-			themesMisc[i] = new JMenuItem(th);
-			themesMisc[i].setFont(f);
-			misc.add(themesMisc[i]);
+		for (int i = 0; i < thListMisc.length; i++) {
+			String th = thListMisc[i];
+			JMenuItem item = new JMenuItem(th);
+			item.setFont(f);
+			item.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+					panel.changeTheme(item.getText(), "miscellaneous");
+				}
+			});
+			misc.add(item);
 		}
-		reader.close();
 		JMenu optMenu = new JMenu("Options");
 		optMenu.setFont(f);
 		alchemyMI.setFont(f);
@@ -134,38 +184,6 @@ public class CaptchaGUI extends JFrame {
 		newMI.addActionListener(new NewListener());
 		saveMI.addActionListener(new SaveListener());
 		symbolMI.addActionListener(new SymbolListener());
-		for (int i = 0; i < themesHuman.length; i++) {
-			final int j = i;
-			themesHuman[j].addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e){
-					panel.changeTheme(themesHuman[j].getText(), "humans");
-				}
-			});
-		}
-		for (int i = 0; i < themesTroll.length; i++) {
-			final int j = i;
-			themesTroll[j].addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e){
-					panel.changeTheme(themesTroll[j].getText(), "trolls");
-				}
-			});
-		}
-		for (int i = 0; i < themesAspect.length; i++) {
-			final int j = i;
-			themesAspect[j].addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e){
-					panel.changeTheme(themesAspect[j].getText(), "aspects");
-				}
-			});
-		}
-		for (int i = 0; i < themesMisc.length; i++) {
-			final int j = i;
-			themesMisc[j].addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e){
-					panel.changeTheme(themesMisc[j].getText(), "miscellaneous");
-				}
-			});
-		}
 		alchemyMI.addActionListener(new AlchemyListener());
 		gridMI.addActionListener(new GridListener());
 		operationMI.addActionListener(new OperationListener());
