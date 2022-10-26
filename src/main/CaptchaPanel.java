@@ -1391,11 +1391,31 @@ public class CaptchaPanel extends JPanel {
 	}
 	
 	// Load settings from json file
-	protected void loadSettings() throws FileNotFoundException, JSONException {
+	protected void loadSettings() throws JSONException {
 		// Set up scanner and JSONObject
+		File textDir = new File("text");
 		File config = new File("text/config.json");
-		Scanner reader = new Scanner(config);
-		JSONObject options = new JSONObject(reader.nextLine());
+		Scanner reader;
+		JSONObject options;
+
+		// Make directory if it doesn't exist
+		if (!textDir.exists())
+			textDir.mkdir();
+		
+		try {
+			// Create new file if it doesn't exist
+			if (config.createNewFile())
+				options = new JSONObject();
+			// Populate JSONObject with options if it doesn't exist
+			else {
+				config = new File("text/config.json");
+				reader = new Scanner(config);
+				options = new JSONObject(reader.nextLine());
+				reader.close();
+			}
+		} catch (IOException | JSONException e) {
+			options = new JSONObject();
+		}
 		
 		// Set variables to options
 		theme = options.has("theme") ? options.getString("theme") : "Blue (John)";
@@ -1409,9 +1429,6 @@ public class CaptchaPanel extends JPanel {
 		alcCode1 = options.has("alchemy_code_1") ? options.getString("alchemy_code_1") : "00000000";
 		alcCode2 = options.has("alchemy_code_2") ? options.getString("alchemy_code_2") : "00000000";
 		operation = options.has("oper") ? options.getString("oper") : "NONE";
-		
-		// Close scanner
-		reader.close();
 	}
 	
 	// Change various settings
