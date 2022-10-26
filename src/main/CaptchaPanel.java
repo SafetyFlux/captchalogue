@@ -205,30 +205,12 @@ public class CaptchaPanel extends JPanel {
 		}
 		g.setFont(f);
 		// Set highlights
-		if (operation.equals("AND"))
-			colAND = highlight;
-		else
-			colAND = Color.CYAN;
-		if (operation.equals("OR"))
-			colOR = highlight;
-		else
-			colOR = Color.CYAN;
-		if (operation.equals("XOR"))
-			colXOR = highlight;
-		else
-			colXOR = Color.CYAN;
-		if (operation.equals("NAND"))
-			colNAND = highlight;
-		else
-			colNAND = Color.CYAN;
-		if (operation.equals("NOR"))
-			colNOR = highlight;
-		else
-			colNOR = Color.CYAN;
-		if (operation.equals("XNOR"))
-			colXNOR = highlight;
-		else
-			colXNOR = Color.CYAN;
+		colAND = operation.equals("AND") ? highlight : Color.CYAN;
+		colOR = operation.equals("OR") ? highlight : Color.CYAN;
+		colXOR = operation.equals("XOR") ? highlight : Color.CYAN;
+		colNAND = operation.equals("NAND") ? highlight : Color.CYAN;
+		colNOR = operation.equals("NOR") ? highlight : Color.CYAN;
+		colXNOR = operation.equals("XNOR") ? highlight : Color.CYAN;
 		// Add captcha card asset
 		if (showAlcCards) {
 			captchaCard.paintIcon(this, g, 421, 40);
