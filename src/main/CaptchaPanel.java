@@ -380,7 +380,7 @@ public class CaptchaPanel extends JPanel {
 			}
 			repaint();
 			try {
-				saveSettings("text/config.json");
+				saveSettings("config.json");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1349,15 +1349,10 @@ public class CaptchaPanel extends JPanel {
 	// Load settings from json file
 	protected void loadSettings() throws JSONException {
 		// Set up scanner and JSONObject
-		File textDir = new File("text");
-		File config = new File("text/config.json");
+		File config = new File("config.json");
 		JSONObject options = new JSONObject();
 		String jsonStr = "";
 		Scanner reader;
-
-		// Make directory if it doesn't exist
-		if (!textDir.exists())
-			textDir.mkdir();
 		
 		try {
 			// Create new file if it doesn't exist
