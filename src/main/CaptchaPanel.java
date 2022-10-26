@@ -143,18 +143,7 @@ public class CaptchaPanel extends JPanel {
 		changeCards();
 		fixButtons();
 		wardrobifier.start();
-		// Select default captcha card assets
-		captchaCard = new ImageIcon(ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png"));
-		card1 = rescaleImage(ResourceLoader.loadImage(type + "/CaptchaCard" + theme + ".png"), 226, 178);
-		card2 = rescaleImage(ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png"), 226, 178);
-		if (theme.equals("Green (Jade)")) {
-			symbol = new ImageIcon(ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png"));
-			symbolS = rescaleImage(ResourceLoader.loadImage(type + "/Symbol" + theme + " " + jadeSym + ".png"), 77, 90);
-		}
-		else {
-			symbol = new ImageIcon(ResourceLoader.loadImage(type + "/Symbol" + theme + ".png"));
-			symbolS = rescaleImage(ResourceLoader.loadImage(type + "/Symbol" + theme + ".png"), 77, 90);
-		}
+		changeTheme(theme, type);
 		// Select dialog box assets
 		record = new ImageIcon(ResourceLoader.loadImage("icons/Record.png"));
 		mspa = new ImageIcon(ResourceLoader.loadImage("icons/MSPAFace.png"));
@@ -1329,14 +1318,19 @@ public class CaptchaPanel extends JPanel {
 		captchaCard = new ImageIcon(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"));
 		card1 = rescaleImage(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"), 226, 178);
 		card2 = rescaleImage(ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png"), 226, 178);
-		if (th.equals("Green (Jade)")) {
-			symbol = new ImageIcon(ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png"));
-			symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + th + " " + jadeSym + ".png"), 77, 90);
-		}
-		else {
-			symbol = new ImageIcon(ResourceLoader.loadImage(ty + "/Symbol" + th + ".png"));
-			symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + th + ".png"), 77, 90);
-		}
+		
+		String tempTh = th;
+		if (th.equals("Green (Jade)"))
+			tempTh = th + " " + jadeSym;
+		symbol = new ImageIcon(ResourceLoader.loadImage(ty + "/Symbol" + tempTh + ".png"));
+
+		// Set variables for smaller symbol size
+		double symHeight = (double) symbol.getIconHeight();
+		double symWidth = (double) symbol.getIconWidth();
+		int newHeight = (int) Math.round(symHeight / 2.22);
+		int newWidth = (int) Math.round(symWidth / 2.22);
+		symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + tempTh + ".png"), newHeight, newWidth);
+		
 		theme = th;
 		type = ty;
 		recolor = true;
@@ -1359,8 +1353,9 @@ public class CaptchaPanel extends JPanel {
 		// Set up scanner and JSONObject
 		File textDir = new File("text");
 		File config = new File("text/config.json");
+		JSONObject options = new JSONObject();
+		String jsonStr = "";
 		Scanner reader;
-		JSONObject options;
 
 		// Make directory if it doesn't exist
 		if (!textDir.exists())
@@ -1368,18 +1363,18 @@ public class CaptchaPanel extends JPanel {
 		
 		try {
 			// Create new file if it doesn't exist
-			if (config.createNewFile())
-				options = new JSONObject();
+			if (!config.exists()) {
+				config.createNewFile();
+			}
 			// Populate JSONObject with options if it doesn't exist
 			else {
-				config = new File("text/config.json");
 				reader = new Scanner(config);
-				options = new JSONObject(reader.nextLine());
+				while(reader.hasNextLine())
+					jsonStr += reader.nextLine();
 				reader.close();
+				options = new JSONObject(jsonStr);
 			}
-		} catch (IOException | JSONException e) {
-			options = new JSONObject();
-		}
+		} catch (IOException | JSONException e) { }
 		
 		// Set variables to options
 		theme = options.has("theme") ? options.getString("theme") : "Blue (John)";
