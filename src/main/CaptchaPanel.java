@@ -1485,7 +1485,7 @@ public class CaptchaPanel extends JPanel {
 		options.put("alchemy_code_1", alcCode1);
 		options.put("alchemy_code_2", alcCode2);
 		options.put("oper", operation);
-		Files.write(Paths.get(filename), options.toString().getBytes());
+		Files.write(Paths.get(filename), options.toString(4).getBytes());
 	}
 
 	// Reset operation button colors (remove any highlights)
