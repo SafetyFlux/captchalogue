@@ -1326,8 +1326,8 @@ public class CaptchaPanel extends JPanel {
 		double symHeight = (double) symbol.getIconHeight();
 		double symWidth = (double) symbol.getIconWidth();
 		double hToWRatio = symHeight / symWidth;
-		int newHeight = (int) Math.round(90.0 * hToWRatio);
-		symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + tempTh + ".png"), newHeight, 90);
+		int newHeight = (int) Math.round(80.0 * hToWRatio);
+		symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + tempTh + ".png"), newHeight, 80);
 		
 		theme = th;
 		type = ty;
