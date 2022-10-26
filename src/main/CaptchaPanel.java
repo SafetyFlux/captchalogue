@@ -410,10 +410,7 @@ public class CaptchaPanel extends JPanel {
 				if (buttonAND.containsPoint(mouseX, mouseY)) {
 					fillBin();
 					binary = cv.functionAND(alcBin1, alcBin2);
-					if (operation.equals("AND"))
-						operation = "NONE";
-					else
-						operation = "AND";
+					operation = operation.equals("AND") ? "NONE" : "AND";
 					updateHole = true;
 					alchemize = true;
 				}
@@ -421,10 +418,7 @@ public class CaptchaPanel extends JPanel {
 				if (buttonOR.containsPoint(mouseX, mouseY)) {
 					fillBin();
 					binary = cv.functionOR(alcBin1, alcBin2);
-					if (operation.equals("OR"))
-						operation = "NONE";
-					else
-						operation = "OR";
+					operation = operation.equals("OR") ? "NONE" : "OR";
 					updateHole = true;
 					alchemize = true;
 				}
@@ -433,10 +427,7 @@ public class CaptchaPanel extends JPanel {
 					if (buttonXOR.containsPoint(mouseX, mouseY)) {
 						fillBin();
 						binary = cv.functionXOR(alcBin1, alcBin2);
-						if (operation.equals("XOR"))
-							operation = "NONE";
-						else
-							operation = "XOR";
+						operation = operation.equals("XOR") ? "NONE" : "XOR";
 						updateHole = true;
 						alchemize = true;
 					}
@@ -444,10 +435,7 @@ public class CaptchaPanel extends JPanel {
 					if (buttonNAND.containsPoint(mouseX, mouseY)) {
 						fillBin();
 						binary = cv.functionNAND(alcBin1, alcBin2);
-						if (operation.equals("NAND"))
-							operation = "NONE";
-						else
-							operation = "NAND";
+						operation = operation.equals("NAND") ? "NONE" : "NAND";
 						updateHole = true;
 						alchemize = true;
 					}
@@ -455,10 +443,7 @@ public class CaptchaPanel extends JPanel {
 					if (buttonNOR.containsPoint(mouseX, mouseY)) {
 						fillBin();
 						binary = cv.functionNOR(alcBin1, alcBin2);
-						if (operation.equals("NOR"))
-							operation = "NONE";
-						else
-							operation = "NOR";
+						operation = operation.equals("NOR") ? "NONE" : "NOR";
 						updateHole = true;
 						alchemize = true;
 					}
@@ -466,10 +451,7 @@ public class CaptchaPanel extends JPanel {
 					if (buttonXNOR.containsPoint(mouseX, mouseY)) {
 						fillBin();
 						binary = cv.functionXNOR(alcBin1, alcBin2);
-						if (operation.equals("XNOR"))
-							operation = "NONE";
-						else
-							operation = "XNOR";
+						operation = operation.equals("XNOR") ? "NONE" : "XNOR";
 						updateHole = true;
 						alchemize = true;
 					}
