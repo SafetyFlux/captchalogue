@@ -164,8 +164,8 @@ public class CaptchaPanel extends JPanel {
 		// Set up the font and font color
 		g.setFont(f);
 		g.setColor(Color.BLACK);
-		int symbolY = (captchaCard.getIconHeight() / 2) - (symbol.getIconHeight() / 2) + (symbol.getIconHeight() / 6);
-		int symbolYS = (card2.getIconHeight() / 2) - (card2.getIconHeight() / 2) + (card2.getIconHeight() / 6);
+		int symbolY = (captchaCard.getIconHeight() / 2) - (symbol.getIconHeight() / 2);
+		int symbolYS = (card2.getIconHeight() / 2) - (symbolS.getIconHeight() / 2);
 		if (showAlcCards) {
 			// Add code digits
 			for (int i = 0; i < digits.length; i++) {
@@ -206,14 +206,14 @@ public class CaptchaPanel extends JPanel {
 			card1.paintIcon(this, g, 100, 40);
 			card2.paintIcon(this, g, 100, 335);
 			if (showSymbol) {
-				symbol.paintIcon(this, g, 491, symbolY);
-				symbolS.paintIcon(this, g, 135, 370 + symbolYS);
+				symbol.paintIcon(this, g, 491, 40 + symbolY);
+				symbolS.paintIcon(this, g, 135, 335 + symbolYS);
 			}
 		}
 		else{
 			captchaCard.paintIcon(this, g, 39, 40);
 			if(showSymbol)
-				symbol.paintIcon(this, g, 109, symbolY);
+				symbol.paintIcon(this, g, 109, 40 + symbolY);
 		}
 		// Draw operation buttons
 		if (showAlcCards) {
@@ -1181,7 +1181,6 @@ public class CaptchaPanel extends JPanel {
 		FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("PNG & JPG Images", "png", "jpg");
 		fc.setFileFilter(imgFilter);
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fc.setCurrentDirectory(new File("images"));
 		fc.setDialogTitle("Choose Symbol");
 		int sel = fc.showOpenDialog(this);
 		if (sel == JFileChooser.APPROVE_OPTION) {
@@ -1198,11 +1197,10 @@ public class CaptchaPanel extends JPanel {
 		}
 		
 		// Set the symbol position, then paint the card and symbol
-		int symbolY = (captchaCard.getIconHeight() / 2) - 
-				(saveSymbol.getIconHeight() / 2) + (saveSymbol.getIconHeight() / 6);
+		int symbolY = (captchaCard.getIconHeight() / 2) - (saveSymbol.getIconHeight() / 2);
 		captchaCard.paintIcon(this, g, 0, 0);
 		if (paintSymbol)
-			saveSymbol.paintIcon(this, g, 70, symbolY - 40);
+			saveSymbol.paintIcon(this, g, 70, symbolY);
 		
 		// Determine hole positions and paint the filled ones
 		for (int i = 0; i < holes.length; i++) {
