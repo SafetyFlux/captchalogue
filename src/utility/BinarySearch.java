@@ -1,7 +1,7 @@
 package utility;
 
 public class BinarySearch {
-	
+
 	public static int intSearch(int[] a, int searchValue) {
 		int left = 0;
 		int right = a.length - 1;
@@ -16,7 +16,7 @@ public class BinarySearch {
 		}
 		return -1;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static int objectSearch(Object[] a, Object searchValue) {
 		int left = 0;
@@ -34,7 +34,7 @@ public class BinarySearch {
 		}
 		return -1;
 	}
-	
+
 	public static int charSearch(char[] a, char searchValue) {
 		int left = 0;
 		int right = a.length - 1;
@@ -50,8 +50,4 @@ public class BinarySearch {
 		return -1;
 	}
 
-	
-	
-	
-	
 }

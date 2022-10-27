@@ -15,7 +15,7 @@ public class Alchemize {
 		}
 		return c;
 	}
-	
+
 	public static int[][] functionOR(int[][] a, int[][] b) {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
@@ -28,7 +28,7 @@ public class Alchemize {
 		}
 		return c;
 	}
-	
+
 	public static int[][] functionXOR(int[][] a, int[][] b) {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
@@ -41,7 +41,7 @@ public class Alchemize {
 		}
 		return c;
 	}
-	
+
 	public static int[][] functionNAND(int[][] a, int[][] b) {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
@@ -54,7 +54,7 @@ public class Alchemize {
 		}
 		return c;
 	}
-	
+
 	public static int[][] functionNOR(int[][] a, int[][] b) {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
@@ -67,7 +67,7 @@ public class Alchemize {
 		}
 		return c;
 	}
-	
+
 	public static int[][] functionXNOR(int[][] a, int[][] b) {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
@@ -80,7 +80,7 @@ public class Alchemize {
 		}
 		return c;
 	}
-	
+
 	public static int[][] functionNOT(int[][] a) {
 		int[][] c = new int[8][6];
 		for (int i = 0; i < c.length; i++) {
@@ -93,5 +93,5 @@ public class Alchemize {
 		}
 		return c;
 	}
-	
+
 }
