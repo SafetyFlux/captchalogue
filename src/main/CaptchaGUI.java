@@ -44,7 +44,7 @@ public class CaptchaGUI extends JFrame {
 	// The font used for the toolbar
 	private Font f = new Font("Courier New", Font.BOLD, 14);
 	// Theme arrays
-	private String[] thListHuman =
+	private static String[] thListHuman =
 		{
 			"Blue (John)",
 			"Orchid (Rose)",
@@ -55,7 +55,7 @@ public class CaptchaGUI extends JFrame {
 			"Orange (Dirk)",
 			"Emerald (Jake)"
 		};
-	private String[] thListTroll =
+	private static String[] thListTroll =
 		{
 			"Rust (Aradia)",
 			"Bronze (Tavros)",
@@ -70,7 +70,7 @@ public class CaptchaGUI extends JFrame {
 			"Violet (Eridan)",
 			"Fuchsia (Feferi)"
 		};
-	private String[] thListAspect =
+	private static String[] thListAspect =
 		{
 			"Space",
 			"Time",
@@ -85,13 +85,27 @@ public class CaptchaGUI extends JFrame {
 			"Hope",
 			"Rage"
 		};
-	private String[] thListMisc =
+	private static String[] thListMisc =
 		{
 			"Prospit",
 			"Derse",
 			"Cherub (Caliborn)",
 			"Cherub (Calliope)"
 		};
+	
+	// Get theme lists
+	public static String[] getThemesHuman() {
+		return thListHuman;
+	}
+	public static String[] getThemesTroll() {
+		return thListTroll;
+	}
+	public static String[] getThemesAspect() {
+		return thListAspect;
+	}
+	public static String[] getThemesMisc() {
+		return thListMisc;
+	}
 	
 	public CaptchaGUI() throws FileNotFoundException {
 		
