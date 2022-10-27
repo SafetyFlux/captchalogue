@@ -42,6 +42,20 @@ import resources.ResourceLoader;
 
 public class CaptchaPanel extends JPanel {
 
+	// About page information
+	private static String author = "Safety";
+	private static String advisor = "DetectiveDyn";
+	private static String email = "dekuwither@gmail.com";
+	private static String link = "https://github.com/SafetyFlux/captchalogue";
+	private static String version = "1.4.1";
+	// Shortcut information
+	private static String[] shortcuts = new String[] {
+			"Ctrl + N  -  New", "Ctrl + Shift + N  -  New (No Prompt)", "Ctrl + S  -  Save Image", 
+			"Ctrl + R  -  Randomize All Codes", "Ctrl + A  -  Toggle Alchemy", "Ctrl + G  -  Toggle Grid", 
+			"Ctrl + O  -  Toggle Other Operations", "Ctrl + Y  -  Toggle Symbols", "Ctrl + T  -  About Page", 
+			"Escape  -  Exit Program"
+	};
+	
 	private static final long serialVersionUID = 1L;
 	private ImageIcon captchaCard, card1, card2, symbol, symbolS;		// Images for the assets
 	private ImageIcon record, mspa, gun, arrow, apple, weasel;			// Images for dialog box icons
@@ -76,19 +90,7 @@ public class CaptchaPanel extends JPanel {
 	private String codeUpdate1 = "";
 	private String codeUpdate2 = "";
 	private String operation = "";
-	// About page information
-	private String author = "Safety";
-	private String advisor = "DetectiveDyn";
-	private String email = "dekuwither@gmail.com";
-	private String link = "https://github.com/SafetyFlux/captchalogue";
-	private String version = "1.4.1";
-	// Shortcut information
-	private String[] shortcuts = new String[] {
-			"Ctrl + N  -  New", "Ctrl + Shift + N  -  New (No Prompt)", "Ctrl + S  -  Save Image", 
-			"Ctrl + R  -  Randomize All Codes", "Ctrl + A  -  Toggle Alchemy", "Ctrl + G  -  Toggle Grid", 
-			"Ctrl + O  -  Toggle Other Operations", "Ctrl + Y  -  Toggle Symbols", "Ctrl + T  -  About Page", 
-			"Escape  -  Exit Program"
-	};
+	
 	// Integer that tracks which code digit is being changed
 	private int entryNo = -1;
 	// Variables for Jade's wardrobifier
