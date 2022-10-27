@@ -19,7 +19,7 @@ public class BorderRect implements Shape {
 		borderColor = b;
 		filled = true;
 	}
-	
+
 	// Constructor with regular Rect fields
 	public BorderRect(int x, int y, int w, int h, Color c) {
 		cornerX = x;
@@ -60,7 +60,7 @@ public class BorderRect implements Shape {
 	public void setFilled(boolean b) {
 		filled = b;
 	}
-	
+
 	public boolean getFilled() {
 		return filled;
 	}
@@ -76,9 +76,9 @@ public class BorderRect implements Shape {
 	public void setBorderColor(Color b) {
 		borderColor = b;
 	}
-	
+
 	public Color getBorderColor() {
 		return borderColor;
 	}
-	
+
 }
