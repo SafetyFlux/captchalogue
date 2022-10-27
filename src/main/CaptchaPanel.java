@@ -979,14 +979,11 @@ public class CaptchaPanel extends JPanel {
 		for (int i = 0; i < entries.length; i++)
 			entries[i] = new Rect((32 + (47 * i)), 560, 32, 32, Color.BLACK);
 		// Load grids
-		mainGrid[0] = new Rect(79, 123, 59, 172, Color.BLACK);
-		mainGrid[1] = new Rect(79, 295, 59, 170, Color.BLACK);
-		mainGrid[2] = new Rect(138, 123, 58, 172, Color.BLACK);
-		mainGrid[3] = new Rect(138, 295, 58, 170, Color.BLACK);
-		mainGrid[4] = new Rect(196, 123, 58, 172, Color.BLACK);
-		mainGrid[5] = new Rect(196, 295, 58, 170, Color.BLACK);
-		mainGrid[6] = new Rect(254, 123, 58, 172, Color.BLACK);
-		mainGrid[7] = new Rect(254, 295, 58, 170, Color.BLACK);
+		int[] gridX = { 80, 138, 196, 254 };
+		int[] gridY = { 123, 294 };
+		for (int i = 0; i < 8; i++)
+			mainGrid[i] = new Rect(gridX[i / 2], gridY[i % 2], 58, 171, Color.BLACK);
+		
 		// Load hole rectangles and backgrounds
 		for (int i = 0; i < holes.length; i++) {
 			int x = 0;
