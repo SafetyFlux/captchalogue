@@ -200,11 +200,11 @@ public class CaptchaPanel extends JPanel {
 		colXNOR = operation.equals("XNOR") ? highlight : Color.CYAN;
 		// Add captcha card asset
 		if (showAlcCards) {
-			captchaCard.paintIcon(this, g, 421, 40);
+			captchaCard.paintIcon(this, g, 423, 40);
 			card1.paintIcon(this, g, 100, 40);
 			card2.paintIcon(this, g, 100, 335);
 			if (showSymbol) {
-				symbol.paintIcon(this, g, 491, 40 + symbolY);
+				symbol.paintIcon(this, g, 493, 40 + symbolY);
 				symbolS.paintIcon(this, g, 135, 335 + symbolYS);
 			}
 		}
@@ -290,7 +290,7 @@ public class CaptchaPanel extends JPanel {
 			g.setFont(ft);
 			for (int i = 0; i < 8; i++) {
 				if (showAlcCards)
-					g.drawString("" + (i + 1), gridNumX[i / 2] + 382, gridNumY[i % 2]);
+					g.drawString("" + (i + 1), gridNumX[i / 2] + 384, gridNumY[i % 2]);
 				else
 					g.drawString("" + (i + 1), gridNumX[i / 2], gridNumY[i % 2]);
 			}
@@ -1082,7 +1082,7 @@ public class CaptchaPanel extends JPanel {
 				alcEnt2[i] = new Rect(40 + (30 * i), 572, 20, 20, Color.BLACK);
 			// Load main grids
 			for (int i = 0; i < mainGrid.length; i++)
-				mainGrid[i].move(382, 0);
+				mainGrid[i].move(384, 0);
 			// Load main hole rectangles and backgrounds
 			for (int i = 0; i < holes.length; i++) {
 				holes[i].move(384, 0);
