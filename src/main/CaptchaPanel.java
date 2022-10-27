@@ -55,7 +55,7 @@ public class CaptchaPanel extends JPanel {
 			"Ctrl + O  -  Toggle Other Operations", "Ctrl + Y  -  Toggle Symbols", "Ctrl + T  -  About Page", 
 			"Escape  -  Exit Program"
 	};
-	
+
 	private static final long serialVersionUID = 1L;
 	private ImageIcon captchaCard, card1, card2, symbol, symbolS;		// Images for the assets
 	private ImageIcon record, mspa, gun, arrow, apple, weasel;			// Images for dialog box icons
@@ -90,7 +90,7 @@ public class CaptchaPanel extends JPanel {
 	private String codeUpdate1 = "";
 	private String codeUpdate2 = "";
 	private String operation = "";
-	
+
 	// Integer that tracks which code digit is being changed
 	private int entryNo = -1;
 	// Variables for Jade's wardrobifier
@@ -983,12 +983,12 @@ public class CaptchaPanel extends JPanel {
 		int[] gridY = { 123, 294 };
 		for (int i = 0; i < 8; i++)
 			mainGrid[i] = new Rect(gridX[i / 2], gridY[i % 2], 58, 171, Color.BLACK);
-		
+
 		// Load hole rectangles and backgrounds
 		for (int i = 0; i < holes.length; i++) {
 			int x = 0;
 			int y = 0;
-			
+
 			switch(i / 12) {
 			case 0:
 				x = 93;
@@ -1003,7 +1003,7 @@ public class CaptchaPanel extends JPanel {
 				x = 269;
 				break;
 			}
-			
+
 			switch(i % 12) {
 			case 0:
 				y = 136;
@@ -1170,7 +1170,7 @@ public class CaptchaPanel extends JPanel {
 		Graphics g = saveImg.getGraphics();
 		ImageIcon saveSymbol;
 		boolean paintSymbol;
-		
+
 		// Select symbol for the saved image
 		JFileChooser fc = new JFileChooser();
 		FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("PNG & JPG Images", "png", "jpg");
@@ -1190,18 +1190,18 @@ public class CaptchaPanel extends JPanel {
 			saveSymbol = symbol;
 			paintSymbol = false;
 		}
-		
+
 		// Set the symbol position, then paint the card and symbol
 		int symbolY = (captchaCard.getIconHeight() / 2) - (saveSymbol.getIconHeight() / 2);
 		captchaCard.paintIcon(this, g, 0, 0);
 		if (paintSymbol)
 			saveSymbol.paintIcon(this, g, 70, symbolY);
-		
+
 		// Determine hole positions and paint the filled ones
 		for (int i = 0; i < holes.length; i++) {
 			int x = 0;
 			int y = 0;
-			
+
 			switch(i / 12) {
 			case 0:
 				x = 55;
@@ -1216,7 +1216,7 @@ public class CaptchaPanel extends JPanel {
 				x = 230;
 				break;
 			}
-			
+
 			switch(i % 12) {
 			case 0:
 				y = 98;
@@ -1255,19 +1255,19 @@ public class CaptchaPanel extends JPanel {
 				y = 399;
 				break;
 			}
-			
+
 			if (holes[i].getColor() == Color.BLACK) {
 				g.setColor(Color.BLACK);
 				g.fillRect(x, y, 29, 11);
 			}
 		}
-		
+
 		// Set filename
 		String filename = (String) JOptionPane.showInputDialog(null, "Set Filename", "Save Card", 
 				JOptionPane.INFORMATION_MESSAGE, (Icon) record, null, "card");
 		if (filename == null)
 			filename = "card";
-		
+
 		// Show preview with option to cancel
 		JLabel lbl = new JLabel(new ImageIcon(saveImg));
 		String[] previewOptions = {"Save", "Cancel"};
@@ -1278,21 +1278,21 @@ public class CaptchaPanel extends JPanel {
 		else
 			JOptionPane.showMessageDialog(null, "Save canceled.", "Canceled", 
 					JOptionPane.INFORMATION_MESSAGE, (Icon) record);
-		
+
 	}
-	
+
 	// Save the main card as an image
 	private void saveImage(BufferedImage img, String fn) {
 		try {
 			File dir = new File("saves");
 			if (!dir.exists())
 				dir.mkdir();
-	        ImageIO.write(img, "png", new File("saves/" + fn + ".png"));
-	        JOptionPane.showMessageDialog(null, "The card has been saved! Check your saves folder.", "Saved",
-					  JOptionPane.INFORMATION_MESSAGE, (Icon) record);
-	    } catch (IOException ex) {
-	        
-	    }
+			ImageIO.write(img, "png", new File("saves/" + fn + ".png"));
+			JOptionPane.showMessageDialog(null, "The card has been saved! Check your saves folder.", "Saved",
+					JOptionPane.INFORMATION_MESSAGE, (Icon) record);
+		} catch (IOException ex) {
+
+		}
 	}
 
 	// Show an error message
@@ -1311,7 +1311,7 @@ public class CaptchaPanel extends JPanel {
 		captchaCard = new ImageIcon(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"));
 		card1 = ImageUtil.rescaleImage(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"), 226, 178);
 		card2 = ImageUtil.rescaleImage(ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png"), 226, 178);
-		
+
 		String tempTh = th;
 		if (th.equals("Green (Jade)"))
 			tempTh = th + " " + jadeSym;
@@ -1323,7 +1323,7 @@ public class CaptchaPanel extends JPanel {
 		double hToWRatio = symHeight / symWidth;
 		int newHeight = (int) Math.round(80.0 * hToWRatio);
 		symbolS = ImageUtil.rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + tempTh + ".png"), newHeight, 80);
-		
+
 		theme = th;
 		type = ty;
 		recolor = true;
@@ -1340,7 +1340,7 @@ public class CaptchaPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	// Load settings from json file
 	protected void loadSettings() throws JSONException {
 		// Set up scanner and JSONObject
@@ -1348,7 +1348,7 @@ public class CaptchaPanel extends JPanel {
 		JSONObject options = new JSONObject();
 		String jsonStr = "";
 		Scanner reader;
-		
+
 		try {
 			// Create new file if it doesn't exist
 			if (!config.exists()) {
@@ -1363,7 +1363,7 @@ public class CaptchaPanel extends JPanel {
 				options = new JSONObject(jsonStr);
 			}
 		} catch (IOException | JSONException e) { }
-		
+
 		// Set variables to options
 		theme = options.has("theme") ? options.getString("theme") : "Blue (John)";
 		type = options.has("type") ? options.getString("type") : "humans";
@@ -1377,7 +1377,7 @@ public class CaptchaPanel extends JPanel {
 		alcCode2 = options.has("alchemy_code_2") ? options.getString("alchemy_code_2") : "00000000";
 		operation = options.has("oper") ? options.getString("oper") : "NONE";
 	}
-	
+
 	// Change various settings
 	protected void changeSettings(String opt) {
 		switch(opt) {
@@ -1386,29 +1386,29 @@ public class CaptchaPanel extends JPanel {
 			showAlcCards = !showAlcCards;
 			changeCards();
 			break;
-		// For the Toggle Grids option
+			// For the Toggle Grids option
 		case "Toggle Grids":
 			showGrids = !showGrids;
 			recolor = true;
 			break;
-		// For the Toggle Other Operations button
+			// For the Toggle Other Operations button
 		case "Toggle Other Operations":
 			showOtherOps = !showOtherOps;
 			fixButtons();
 			recolor = true;
 			break;
-		// For the Toggle Symbol option
+			// For the Toggle Symbol option
 		case "Toggle Symbol":
 			showSymbol = !showSymbol;
 			recolor = true;
 			break;
-		// For the About menu
+			// For the About menu
 		case "About":
 			JOptionPane.showMessageDialog(null, "Programmer: " + author + "\nAdvisor: " + advisor +
 					"\nEmail: " + email + "\nGitHub Page: " + link + "\nVersion: " +
 					version, "About", JOptionPane.INFORMATION_MESSAGE, (Icon) mspa);
 			break;
-		// For the Shortcuts menu
+			// For the Shortcuts menu
 		case "Shortcuts":
 			String sc = "";
 			for(int i = 0; i < shortcuts.length; i += 2)

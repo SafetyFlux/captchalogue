@@ -14,7 +14,7 @@ import javax.swing.JMenuItem;
 import resources.ResourceLoader;
 
 public class CaptchaGUI extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
 	private static CaptchaPanel panel;
 	static {
@@ -26,7 +26,7 @@ public class CaptchaGUI extends JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// All the JMenu components
 	private JMenuBar bar = new JMenuBar();
 	private JMenuItem newMI = new JMenuItem("Reset Card");
@@ -46,53 +46,53 @@ public class CaptchaGUI extends JFrame {
 	// Theme arrays
 	private static String[] thListHuman =
 		{
-			"Blue (John)",
-			"Orchid (Rose)",
-			"Red (Dave)",
-			"Green (Jade)",
-			"Cyan (Jane)",
-			"Pink (Roxy)",
-			"Orange (Dirk)",
-			"Emerald (Jake)"
+				"Blue (John)",
+				"Orchid (Rose)",
+				"Red (Dave)",
+				"Green (Jade)",
+				"Cyan (Jane)",
+				"Pink (Roxy)",
+				"Orange (Dirk)",
+				"Emerald (Jake)"
 		};
 	private static String[] thListTroll =
 		{
-			"Rust (Aradia)",
-			"Bronze (Tavros)",
-			"Gold (Sollux)",
-			"Grey (Karkat)",
-			"Olive (Nepeta)",
-			"Jade (Kanaya)",
-			"Teal (Terezi)",
-			"Cobalt (Vriska)",
-			"Indigo (Equius)",
-			"Purple (Gamzee)",
-			"Violet (Eridan)",
-			"Fuchsia (Feferi)"
+				"Rust (Aradia)",
+				"Bronze (Tavros)",
+				"Gold (Sollux)",
+				"Grey (Karkat)",
+				"Olive (Nepeta)",
+				"Jade (Kanaya)",
+				"Teal (Terezi)",
+				"Cobalt (Vriska)",
+				"Indigo (Equius)",
+				"Purple (Gamzee)",
+				"Violet (Eridan)",
+				"Fuchsia (Feferi)"
 		};
 	private static String[] thListAspect =
 		{
-			"Space",
-			"Time",
-			"Breath",
-			"Blood",
-			"Mind",
-			"Heart",
-			"Light",
-			"Void",
-			"Life",
-			"Doom",
-			"Hope",
-			"Rage"
+				"Space",
+				"Time",
+				"Breath",
+				"Blood",
+				"Mind",
+				"Heart",
+				"Light",
+				"Void",
+				"Life",
+				"Doom",
+				"Hope",
+				"Rage"
 		};
 	private static String[] thListMisc =
 		{
-			"Prospit",
-			"Derse",
-			"Cherub (Caliborn)",
-			"Cherub (Calliope)"
+				"Prospit",
+				"Derse",
+				"Cherub (Caliborn)",
+				"Cherub (Calliope)"
 		};
-	
+
 	// Get theme lists
 	public static String[] getThemesHuman() {
 		return thListHuman;
@@ -106,9 +106,9 @@ public class CaptchaGUI extends JFrame {
 	public static String[] getThemesMisc() {
 		return thListMisc;
 	}
-	
+
 	public CaptchaGUI() throws FileNotFoundException {
-		
+
 		// Set up the JMenu toolbar
 		Container pane = getContentPane();
 		pane.add(panel);
@@ -193,7 +193,7 @@ public class CaptchaGUI extends JFrame {
 		bar.add(optMenu);
 		bar.add(helpMenu);
 		setJMenuBar(bar);
-		
+
 		// Add action listeners for each toolbar item
 		newMI.addActionListener(new NewListener());
 		saveMI.addActionListener(new SaveListener());
@@ -203,61 +203,61 @@ public class CaptchaGUI extends JFrame {
 		operationMI.addActionListener(new OperationListener());
 		aboutMI.addActionListener(new AboutListener());
 		shortcutMI.addActionListener(new ShortcutListener());
-		
+
 	}
-	
+
 	// Action listeners
 	private class NewListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.resetCode(true);
 		}
 	}
-	
+
 	private class SaveListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.savePrompt();
 		}
 	}
-	
+
 	private class SymbolListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.changeSettings("Toggle Symbol");
 		}
 	}
-	
+
 	private class AlchemyListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.changeSettings("Toggle Alchemy");
 		}
 	}
-	
+
 	private class GridListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.changeSettings("Toggle Grids");
 		}
 	}
-	
+
 	private class OperationListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.changeSettings("Toggle Other Operations");
 		}
 	}
-	
+
 	private class AboutListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.changeSettings("About");
 		}
 	}
-	
+
 	private class ShortcutListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			panel.changeSettings("Shortcuts");
 		}
 	}
-	
+
 	// Main component where the GUI is created
 	public static void main(String[] args) throws FileNotFoundException {
-		
+
 		boolean run = true;
 		CaptchaGUI theGUI = new CaptchaGUI();
 		Image icon = ResourceLoader.loadImage("icons/CardIcon.png");
@@ -272,7 +272,7 @@ public class CaptchaGUI extends JFrame {
 		theGUI.setAlwaysOnTop(false);
 		theGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theGUI.setVisible(true);
-		
+
 		// Change window size when alchemy is toggled
 		while (run) {
 			if (panel.getCards())
@@ -280,7 +280,7 @@ public class CaptchaGUI extends JFrame {
 			else
 				theGUI.setSize(493, 692);
 		}
-		
+
 	}
 
 }
