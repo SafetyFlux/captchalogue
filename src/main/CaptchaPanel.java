@@ -3,9 +3,6 @@ package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -39,6 +36,7 @@ import shape.Rect;
 import utility.Alchemize;
 import utility.Conversion;
 import utility.DigitValues;
+import utility.ImageUtil;
 import utility.Randomize;
 import resources.ResourceLoader;
 
@@ -1182,7 +1180,7 @@ public class CaptchaPanel extends JPanel {
 			File file = fc.getSelectedFile();
 			saveSymbol = new ImageIcon(file.toString());
 			int newHeight = saveSymbol.getIconHeight() * (saveSymbol.getIconWidth() / 200);
-			saveSymbol = rescaleImage(file, newHeight, 200);
+			saveSymbol = ImageUtil.rescaleImage(file, newHeight, 200);
 			paintSymbol = true;
 		}
 		// If "Cancel" is pressed, the symbol isn't included on the card
@@ -1309,8 +1307,8 @@ public class CaptchaPanel extends JPanel {
 	protected void changeTheme(String th, String ty) {
 		// Since image files are named after the themes, the Images can be changed with one line of code each
 		captchaCard = new ImageIcon(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"));
-		card1 = rescaleImage(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"), 226, 178);
-		card2 = rescaleImage(ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png"), 226, 178);
+		card1 = ImageUtil.rescaleImage(ResourceLoader.loadImage(ty + "/CaptchaCard" + th + ".png"), 226, 178);
+		card2 = ImageUtil.rescaleImage(ResourceLoader.loadImage("miscellaneous/CaptchaCardBlank.png"), 226, 178);
 		
 		String tempTh = th;
 		if (th.equals("Green (Jade)"))
@@ -1322,7 +1320,7 @@ public class CaptchaPanel extends JPanel {
 		double symWidth = (double) symbol.getIconWidth();
 		double hToWRatio = symHeight / symWidth;
 		int newHeight = (int) Math.round(80.0 * hToWRatio);
-		symbolS = rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + tempTh + ".png"), newHeight, 80);
+		symbolS = ImageUtil.rescaleImage(ResourceLoader.loadImage(ty + "/Symbol" + tempTh + ".png"), newHeight, 80);
 		
 		theme = th;
 		type = ty;
@@ -1445,89 +1443,5 @@ public class CaptchaPanel extends JPanel {
 	public boolean getCards() {
 		return showAlcCards;
 	}
-	
-	// Resize an image
-	public ImageIcon rescaleImage(Image original, int maxHeight, int maxWidth) {
-	    int newHeight = 0, newWidth = 0;        // Variables for the new height and width
-	    int priorHeight = 0, priorWidth = 0;
-	    ImageIcon sizeImage;
-
-	    sizeImage = new ImageIcon(original);
-
-	    if (sizeImage != null) {
-	        priorHeight = sizeImage.getIconHeight(); 
-	        priorWidth = sizeImage.getIconWidth();
-	    }
-
-	    // Calculate the correct new height and width
-	    if ((float)priorHeight/(float)priorWidth > (float)maxHeight/(float)maxWidth) {
-	        newHeight = maxHeight;
-	        newWidth = (int)(((float)priorWidth/(float)priorHeight)*(float)newHeight);
-	    }
-	    else {
-	        newWidth = maxWidth;
-	        newHeight = (int)(((float)priorHeight/(float)priorWidth)*(float)newWidth);
-	    }
-
-	    // Resize the image
-
-	    // 1. Create a new Buffered Image and Graphic2D object
-	    BufferedImage resizedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-	    Graphics2D g2 = resizedImg.createGraphics();
-
-	    // 2. Use the Graphic object to draw a new image to the image in the buffer
-	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g2.drawImage(original, 0, 0, newWidth, newHeight, null);
-	    g2.dispose();
-
-	    // 3. Convert the buffered image into an Image for return
-	    return (new ImageIcon(resizedImg));
-	}
-	
-	// Resize an image
-		public ImageIcon rescaleImage(File source, int maxHeight, int maxWidth) {
-		    int newHeight = 0, newWidth = 0;        // Variables for the new height and width
-		    int priorHeight = 0, priorWidth = 0;
-		    BufferedImage image = null;
-		    ImageIcon sizeImage;
-
-		    try {
-		    	image = ImageIO.read(source);		// Get the image
-		    } catch (Exception e) {
-		    	e.printStackTrace();
-	            System.out.println("Picture upload attempted & failed");
-		    }
-
-		    sizeImage = new ImageIcon(image);
-
-		    if (sizeImage != null) {
-		        priorHeight = sizeImage.getIconHeight(); 
-		        priorWidth = sizeImage.getIconWidth();
-		    }
-
-		    // Calculate the correct new height and width
-		    if ((float)priorHeight/(float)priorWidth > (float)maxHeight/(float)maxWidth) {
-		        newHeight = maxHeight;
-		        newWidth = (int)(((float)priorWidth/(float)priorHeight)*(float)newHeight);
-		    }
-		    else {
-		        newWidth = maxWidth;
-		        newHeight = (int)(((float)priorHeight/(float)priorWidth)*(float)newWidth);
-		    }
-
-		    // Resize the image
-
-		    // 1. Create a new Buffered Image and Graphic2D object
-		    BufferedImage resizedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-		    Graphics2D g2 = resizedImg.createGraphics();
-
-		    // 2. Use the Graphic object to draw a new image to the image in the buffer
-		    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		    g2.drawImage(image, 0, 0, newWidth, newHeight, null);
-		    g2.dispose();
-
-		    // 3. Convert the buffered image into an Image for return
-		    return (new ImageIcon(resizedImg));
-		}
 
 }
