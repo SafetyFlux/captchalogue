@@ -5,13 +5,10 @@ import java.util.Random;
 
 public class Randomize {
 
-	Random gen = new Random();
-	DigitValues dv = new DigitValues();
-	private char[] digits = dv.getDigitArray();
+	static Random gen = new Random();
+	private static char[] digits = DigitValues.getDigitArray();
 	
-	public Randomize() { }
-	
-	public char getChar() {
+	public static char getChar() {
 		
 		char ch = '0';
 		int num = gen.nextInt(64);

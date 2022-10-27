@@ -2,7 +2,7 @@ package utility;
 
 public class BinaryConverter {
 
-		public int[] intToBinary(int num) {
+		public static int[] intToBinary(int num) {
 			int[] bin = new int[6];
 			for (int i = 5; i >= 0; i--) {
 				if ((num - (Math.pow(2, i)) >= 0)) {
@@ -15,7 +15,7 @@ public class BinaryConverter {
 			return bin;
 		}
 
-		public int binaryToInt(int[] nums) {
+		public static int binaryToInt(int[] nums) {
 			int inty = 0;
 			for (int i = 5; i >= 0; i--) {
 				if(nums[5 - i] == 0)

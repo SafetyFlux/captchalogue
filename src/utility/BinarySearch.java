@@ -1,10 +1,8 @@
 package utility;
 
 public class BinarySearch {
-
-	public BinarySearch() {}
 	
-	public int intSearch(int[] a, int searchValue) {
+	public static int intSearch(int[] a, int searchValue) {
 		int left = 0;
 		int right = a.length - 1;
 		while (left <= right) {
@@ -20,7 +18,7 @@ public class BinarySearch {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public int objectSearch(Object[] a, Object searchValue) {
+	public static int objectSearch(Object[] a, Object searchValue) {
 		int left = 0;
 		int right = a.length - 1;
 		while (left <= right) {
@@ -37,7 +35,7 @@ public class BinarySearch {
 		return -1;
 	}
 	
-	public int charSearch(char[] a, char searchValue) {
+	public static int charSearch(char[] a, char searchValue) {
 		int left = 0;
 		int right = a.length - 1;
 		while (left <= right) {

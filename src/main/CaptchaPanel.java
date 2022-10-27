@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import shape.BorderRect;
 import shape.Rect;
+import utility.Alchemize;
 import utility.Conversion;
 import utility.DigitValues;
 import utility.Randomize;
@@ -46,9 +47,6 @@ public class CaptchaPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private ImageIcon captchaCard, card1, card2, symbol, symbolS;		// Images for the assets
 	private ImageIcon record, mspa, gun, arrow, apple, weasel;			// Images for dialog box icons
-	private Conversion cv = new Conversion();							// Class for conversion and operations
-	private DigitValues dv = new DigitValues();							// Class for valid digit values
-	private Randomize rand = new Randomize();							// Class for randomizing codes
 	private Random gen = new Random();									// Random for... generating random numbers
 	final JFileChooser fc = new JFileChooser();							// File chooser for loading codes
 	// Integer arrays for code binaries
@@ -398,7 +396,7 @@ public class CaptchaPanel extends JPanel {
 				// If the "&&" button is clicked, the AND operation is performed
 				if (buttonAND.containsPoint(mouseX, mouseY)) {
 					fillBin();
-					binary = cv.functionAND(alcBin1, alcBin2);
+					binary = Alchemize.functionAND(alcBin1, alcBin2);
 					operation = operation.equals("AND") ? "NONE" : "AND";
 					updateHole = true;
 					alchemize = true;
@@ -406,7 +404,7 @@ public class CaptchaPanel extends JPanel {
 				// If the "||" button is clicked, the OR operation is performed
 				if (buttonOR.containsPoint(mouseX, mouseY)) {
 					fillBin();
-					binary = cv.functionOR(alcBin1, alcBin2);
+					binary = Alchemize.functionOR(alcBin1, alcBin2);
 					operation = operation.equals("OR") ? "NONE" : "OR";
 					updateHole = true;
 					alchemize = true;
@@ -415,7 +413,7 @@ public class CaptchaPanel extends JPanel {
 					// If the "^^" button is clicked, the XOR operation is performed
 					if (buttonXOR.containsPoint(mouseX, mouseY)) {
 						fillBin();
-						binary = cv.functionXOR(alcBin1, alcBin2);
+						binary = Alchemize.functionXOR(alcBin1, alcBin2);
 						operation = operation.equals("XOR") ? "NONE" : "XOR";
 						updateHole = true;
 						alchemize = true;
@@ -423,7 +421,7 @@ public class CaptchaPanel extends JPanel {
 					// If the "~&" button is clicked, the NAND operation is performed
 					if (buttonNAND.containsPoint(mouseX, mouseY)) {
 						fillBin();
-						binary = cv.functionNAND(alcBin1, alcBin2);
+						binary = Alchemize.functionNAND(alcBin1, alcBin2);
 						operation = operation.equals("NAND") ? "NONE" : "NAND";
 						updateHole = true;
 						alchemize = true;
@@ -431,7 +429,7 @@ public class CaptchaPanel extends JPanel {
 					// If the "~|" button is clicked, the NOR operation is performed
 					if (buttonNOR.containsPoint(mouseX, mouseY)) {
 						fillBin();
-						binary = cv.functionNOR(alcBin1, alcBin2);
+						binary = Alchemize.functionNOR(alcBin1, alcBin2);
 						operation = operation.equals("NOR") ? "NONE" : "NOR";
 						updateHole = true;
 						alchemize = true;
@@ -439,7 +437,7 @@ public class CaptchaPanel extends JPanel {
 					// If the "~^" button is clicked, the XNOR operation is performed
 					if (buttonXNOR.containsPoint(mouseX, mouseY)) {
 						fillBin();
-						binary = cv.functionXNOR(alcBin1, alcBin2);
+						binary = Alchemize.functionXNOR(alcBin1, alcBin2);
 						operation = operation.equals("XNOR") ? "NONE" : "XNOR";
 						updateHole = true;
 						alchemize = true;
@@ -447,7 +445,7 @@ public class CaptchaPanel extends JPanel {
 					// If the "~~" button is clicked, the NOT operation is performed (on the top code)
 					if (buttonNOT1.containsPoint(mouseX, mouseY)) {
 						fillBin();
-						alcBin1 = cv.functionNOT(alcBin1);
+						alcBin1 = Alchemize.functionNOT(alcBin1);
 						resetHighlight();
 						updateAlcHole1 = true;
 						alchemize = true;
@@ -455,7 +453,7 @@ public class CaptchaPanel extends JPanel {
 					// If the "~~" button is clicked, the NOT operation is performed (on the bottom code)
 					if (buttonNOT2.containsPoint(mouseX, mouseY)) {
 						fillBin();
-						alcBin2 = cv.functionNOT(alcBin2);
+						alcBin2 = Alchemize.functionNOT(alcBin2);
 						resetHighlight();
 						updateAlcHole2 = true;
 						alchemize = true;
@@ -475,7 +473,7 @@ public class CaptchaPanel extends JPanel {
 								maintain = true;
 							}
 							else {
-								if (!cv.checkCode(codeUpdate1)) {
+								if (!Conversion.checkCode(codeUpdate1)) {
 									errorMessage("badDigit");
 									maintain = true;
 								}
@@ -504,7 +502,7 @@ public class CaptchaPanel extends JPanel {
 								maintain = true;
 							}
 							else {
-								if (!cv.checkCode(codeUpdate2)) {
+								if (!Conversion.checkCode(codeUpdate2)) {
 									errorMessage("badDigit");
 									maintain = true;
 								}
@@ -522,14 +520,14 @@ public class CaptchaPanel extends JPanel {
 				if (rand1.containsPoint(mouseX, mouseY)) {
 					codeUpdate1 = "";
 					for (int i = 0; i < 8; i++)
-						codeUpdate1 += rand.getChar();
+						codeUpdate1 += Randomize.getChar();
 					updateAlcCode1 = true;
 					resetHighlight();
 				}
 				if (rand2.containsPoint(mouseX, mouseY)) {
 					codeUpdate2 = "";
 					for (int i = 0; i < 8; i++)
-						codeUpdate2 += rand.getChar();
+						codeUpdate2 += Randomize.getChar();
 					updateAlcCode2 = true;
 					resetHighlight();
 				}
@@ -538,7 +536,7 @@ public class CaptchaPanel extends JPanel {
 			if (showOtherOps) {
 				if (buttonNOT.containsPoint(mouseX, mouseY)) {
 					fillBin();
-					binary = cv.functionNOT(binary);
+					binary = Alchemize.functionNOT(binary);
 					resetHighlight();
 					updateHole = true;
 					alchemize = true;
@@ -559,7 +557,7 @@ public class CaptchaPanel extends JPanel {
 							maintain = true;
 						}
 						else {
-							if (!cv.checkCode(codeUpdate)) {
+							if (!Conversion.checkCode(codeUpdate)) {
 								errorMessage("badDigit");
 								maintain = true;
 							}
@@ -578,7 +576,7 @@ public class CaptchaPanel extends JPanel {
 			if (randomize.containsPoint(mouseX, mouseY)) {
 				codeUpdate = "";
 				for (int i = 0; i < 8; i++)
-					codeUpdate += rand.getChar();
+					codeUpdate += Randomize.getChar();
 				updateCode = true;
 				resetHighlight();
 			}
@@ -648,32 +646,32 @@ public class CaptchaPanel extends JPanel {
 						}
 						// Continue to alchemize when holes are toggled
 						if (operation.equals("AND")) {
-							binary = cv.functionAND(alcBin1, alcBin2);
+							binary = Alchemize.functionAND(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("OR")) {
-							binary = cv.functionOR(alcBin1, alcBin2);
+							binary = Alchemize.functionOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("XOR")) {
-							binary = cv.functionXOR(alcBin1, alcBin2);
+							binary = Alchemize.functionXOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("NAND")) {
-							binary = cv.functionNAND(alcBin1, alcBin2);
+							binary = Alchemize.functionNAND(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("NOR")) {
-							binary = cv.functionNOR(alcBin1, alcBin2);
+							binary = Alchemize.functionNOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("XNOR")) {
-							binary = cv.functionXNOR(alcBin1, alcBin2);
+							binary = Alchemize.functionXNOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
@@ -693,32 +691,32 @@ public class CaptchaPanel extends JPanel {
 						}
 						// Continue to alchemize when holes are toggled
 						if (operation.equals("AND")) {
-							binary = cv.functionAND(alcBin1, alcBin2);
+							binary = Alchemize.functionAND(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("OR")) {
-							binary = cv.functionOR(alcBin1, alcBin2);
+							binary = Alchemize.functionOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("XOR")) {
-							binary = cv.functionXOR(alcBin1, alcBin2);
+							binary = Alchemize.functionXOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("NAND")) {
-							binary = cv.functionNAND(alcBin1, alcBin2);
+							binary = Alchemize.functionNAND(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("NOR")) {
-							binary = cv.functionNOR(alcBin1, alcBin2);
+							binary = Alchemize.functionNOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
 						if (operation.equals("XNOR")) {
-							binary = cv.functionXNOR(alcBin1, alcBin2);
+							binary = Alchemize.functionXNOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
@@ -733,7 +731,7 @@ public class CaptchaPanel extends JPanel {
 					int bin[] = new int[6];
 					for (int j = 0; j < 6; j++)
 						bin[j] = binary[i][j];
-					codeUpdate += cv.binaryToDigit(bin);
+					codeUpdate += Conversion.binaryToDigit(bin);
 				}
 			}
 			if (updateAlcHole1) {
@@ -741,7 +739,7 @@ public class CaptchaPanel extends JPanel {
 					int bin[] = new int[6];
 					for (int j = 0; j < 6; j++)
 						bin[j] = alcBin1[i][j];
-					codeUpdate1 += cv.binaryToDigit(bin);
+					codeUpdate1 += Conversion.binaryToDigit(bin);
 				}
 			}
 			if (updateAlcHole2) {
@@ -749,7 +747,7 @@ public class CaptchaPanel extends JPanel {
 					int bin[] = new int[6];
 					for (int j = 0; j < 6; j++)
 						bin[j] = alcBin2[i][j];
-					codeUpdate2 += cv.binaryToDigit(bin);
+					codeUpdate2 += Conversion.binaryToDigit(bin);
 				}
 			}
 
@@ -770,7 +768,7 @@ public class CaptchaPanel extends JPanel {
 				else
 					d = '0';
 				// The program runs through the code again, only changing the selected digit
-				if (dv.checkDigit(d)) {
+				if (DigitValues.checkDigit(d)) {
 					for (int i = 0; i < code.length(); i++) {
 						if (i == entryNo)
 							codeUpdate += d;
@@ -789,7 +787,7 @@ public class CaptchaPanel extends JPanel {
 					d = e.getKeyChar();
 				else
 					d = '0';
-				if (dv.checkDigit(d)) {
+				if (DigitValues.checkDigit(d)) {
 					for (int i = 0; i < alcCode1.length(); i++) {
 						if (i == entryNo)
 							codeUpdate1 += d;
@@ -807,7 +805,7 @@ public class CaptchaPanel extends JPanel {
 					d = e.getKeyChar();
 				else
 					d = '0';
-				if (dv.checkDigit(d)) {
+				if (DigitValues.checkDigit(d)) {
 					for (int i = 0; i < alcCode2.length(); i++) {
 						if (i == entryNo)
 							codeUpdate2 += d;
@@ -846,16 +844,16 @@ public class CaptchaPanel extends JPanel {
 				case KeyEvent.VK_R:
 					codeUpdate = "";
 					for (int i = 0; i < 8; i++)
-						codeUpdate += rand.getChar();
+						codeUpdate += Randomize.getChar();
 					updateCode = true;
 					codeUpdate1 = "";
 					if (showAlcCards) {
 						for (int i = 0; i < 8; i++)
-							codeUpdate1 += rand.getChar();
+							codeUpdate1 += Randomize.getChar();
 						updateAlcCode1 = true;
 						codeUpdate2 = "";
 						for (int i = 0; i < 8; i++)
-							codeUpdate2 += rand.getChar();
+							codeUpdate2 += Randomize.getChar();
 						updateAlcCode2 = true;
 					}
 					resetHighlight();
@@ -892,7 +890,7 @@ public class CaptchaPanel extends JPanel {
 	private void punchHole() {
 		// The holes are updated when the code is changed
 		for (int i = 0; i < binary.length; i++) {
-			int[] c = cv.digitToBinary(code.charAt(i));
+			int[] c = Conversion.digitToBinary(code.charAt(i));
 			for (int j = 0; j < binary[i].length; j++)
 				binary[i][j] = c[j];
 		}
@@ -915,7 +913,7 @@ public class CaptchaPanel extends JPanel {
 	private void punchAlcHole1() {
 		// The holes are updated when the code is changed
 		for (int i = 0; i < alcBin1.length; i++) {
-			int[] c = cv.digitToBinary(alcCode1.charAt(i));
+			int[] c = Conversion.digitToBinary(alcCode1.charAt(i));
 			for (int j = 0; j < alcBin1[i].length; j++)
 				alcBin1[i][j] = c[j];
 		}
@@ -938,7 +936,7 @@ public class CaptchaPanel extends JPanel {
 	private void punchAlcHole2() {
 		// The holes are updated when the code is changed
 		for (int i = 0; i < alcBin2.length; i++) {
-			int[] c = cv.digitToBinary(alcCode2.charAt(i));
+			int[] c = Conversion.digitToBinary(alcCode2.charAt(i));
 			for (int j = 0; j < alcBin2[i].length; j++)
 				alcBin2[i][j] = c[j];
 		}
@@ -961,12 +959,12 @@ public class CaptchaPanel extends JPanel {
 	private void fillBin() {
 		// The alchemy code binary arrays are updated when the codes are changed
 		for (int i = 0; i < alcBin1.length; i++) {
-			int[] c = cv.digitToBinary(alcCode1.charAt(i));
+			int[] c = Conversion.digitToBinary(alcCode1.charAt(i));
 			for (int j = 0; j < alcBin1[i].length; j++)
 				alcBin1[i][j] = c[j];
 		}
 		for (int i = 0; i < alcBin2.length; i++) {
-			int[] c = cv.digitToBinary(alcCode2.charAt(i));
+			int[] c = Conversion.digitToBinary(alcCode2.charAt(i));
 			for (int j = 0; j < alcBin2[i].length; j++)
 				alcBin2[i][j] = c[j];
 		}

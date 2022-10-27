@@ -12,9 +12,7 @@ public class BaseConcept {
 	public static void main(String[] args) throws FileNotFoundException {
 
 		Scanner reader = new Scanner(System.in);
-		DigitValues dv = new DigitValues();
-		BinaryConverter bc = new BinaryConverter();
-		char digits[] = new char[8];							// A string of digits (e.g. Ag5c?a)
+		char digits[] = new char[8];							// A string of digits (e.g. Ag5c?aF9)
 		int holes[] = new int[48];								// All holes - true = punched, false = not punched
 		int sixBin[] = new int[6];								// Six-bit binary value
 		int selection = 0;										// Menu selection
@@ -29,12 +27,12 @@ public class BaseConcept {
 			// Begins main selection menu
 			while (selection == 0) {
 				System.out.println();
-				System.out.println("1) Digit to Integer");				// Convert digit to integer (A to 10)
-				System.out.println("2) Integer to Digit");				// Convert integer to digit (11 to B)
-				System.out.println("3) Digit to Binary");				// Convert digit to binary (A to 001010)
-				System.out.println("4) Binary to Digit");				// Convert binary to digit (001011 to B)
-				System.out.println("5) Digit to Line");					// Convert digit to a line of holes (A to [ ][ ][X][ ][X][ ])
-				System.out.println("6) String to Card");				// Convert string of digits to entire card
+				System.out.println("1) Digit to Integer");		// Convert digit to integer (A to 10)
+				System.out.println("2) Integer to Digit");		// Convert integer to digit (11 to B)
+				System.out.println("3) Digit to Binary");		// Convert digit to binary (A to 001010)
+				System.out.println("4) Binary to Digit");		// Convert binary to digit (001011 to B)
+				System.out.println("5) Digit to Line");			// Convert digit to a line of holes (A to [ ][ ][X][ ][X][ ])
+				System.out.println("6) String to Card");		// Convert string of digits to entire card
 				System.out.println("7) Quit");
 				System.out.print("Select function: ");
 				selection = reader.nextInt();
@@ -51,7 +49,7 @@ public class BaseConcept {
 				else if (digInput == '!')
 					System.out.println(digInput + " ==> 63");
 				else
-					System.out.println(digInput + " ==> " + dv.getDigitValue(digInput));
+					System.out.println(digInput + " ==> " + DigitValues.getDigitValue(digInput));
 			}	// Ends selection 1 menu
 
 			// Begins selection 2 menu (integer to digit)
@@ -63,7 +61,7 @@ public class BaseConcept {
 				else if (intInput > 63)
 					System.out.println("Integer must be between 0 and 63.");
 				else
-					System.out.println(intInput + " ==> " + dv.getDigit(intInput));
+					System.out.println(intInput + " ==> " + DigitValues.getDigit(intInput));
 			}	// Ends selection 2 menu
 
 			// Begins selection 3 menu (digit to binary)
@@ -79,9 +77,9 @@ public class BaseConcept {
 					iVal = 63;
 				}
 				else {
-					iVal = dv.getDigitValue(digInput);
+					iVal = DigitValues.getDigitValue(digInput);
 				}
-				sixBin = bc.intToBinary(iVal);
+				sixBin = BinaryConverter.intToBinary(iVal);
 				System.out.print(digInput + " ==> ");
 				for (int i = 0; i < sixBin.length; i++)
 					System.out.print(sixBin[i]);
@@ -115,8 +113,8 @@ public class BaseConcept {
 						}
 					}
 					if (!err) {
-						iVal = bc.binaryToInt(sixBin);
-						System.out.println(binInput + " ==> " + dv.getDigit(iVal));
+						iVal = BinaryConverter.binaryToInt(sixBin);
+						System.out.println(binInput + " ==> " + DigitValues.getDigit(iVal));
 					}
 				}
 			}	// Ends selection 4 menu
@@ -134,9 +132,9 @@ public class BaseConcept {
 					iVal = 63;
 				}
 				else {
-					iVal = dv.getDigitValue(digInput);
+					iVal = DigitValues.getDigitValue(digInput);
 				}
-				sixBin = bc.intToBinary(iVal);
+				sixBin = BinaryConverter.intToBinary(iVal);
 				for (int i = 0; i < sixBin.length; i++) {
 					if (sixBin[i] == 0)
 						System.out.print("[ ]");
@@ -163,8 +161,8 @@ public class BaseConcept {
 						else if (digits[i / 6] == '!')
 							iVal = 63;
 						else
-							iVal = dv.getDigitValue(digits[i / 6]);
-						sixBin = bc.intToBinary(iVal);
+							iVal = DigitValues.getDigitValue(digits[i / 6]);
+						sixBin = BinaryConverter.intToBinary(iVal);
 						for (int j = 0; j < sixBin.length; j++) {
 							holes[i + j] = sixBin[j];
 						}
