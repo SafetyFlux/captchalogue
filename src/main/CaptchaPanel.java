@@ -1108,6 +1108,8 @@ public class CaptchaPanel extends JPanel {
 			else {
 				buttonAND = new BorderRect(353, 291, 48, 32, colAND);
 				buttonOR = new BorderRect(353, 323, 48, 32, colOR);
+				if (!operation.equals("AND") && !operation.equals("OR"))
+					operation = "NONE";
 			}
 			buttonXOR = new BorderRect(353, 291, 48, 32, colXOR);
 			buttonNAND = new BorderRect(353, 323, 48, 32, colNAND);
