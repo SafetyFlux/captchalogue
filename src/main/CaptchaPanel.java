@@ -645,33 +645,19 @@ public class CaptchaPanel extends JPanel {
 							alcBin1[i / 6][i % 6] = 1;
 						}
 						// Continue to alchemize when holes are toggled
-						if (operation.equals("AND")) {
-							binary = Alchemize.functionAND(alcBin1, alcBin2);
-							updateHole = true;
-							alchemize = true;
-						}
-						if (operation.equals("OR")) {
-							binary = Alchemize.functionOR(alcBin1, alcBin2);
-							updateHole = true;
-							alchemize = true;
-						}
-						if (operation.equals("XOR")) {
-							binary = Alchemize.functionXOR(alcBin1, alcBin2);
-							updateHole = true;
-							alchemize = true;
-						}
-						if (operation.equals("NAND")) {
-							binary = Alchemize.functionNAND(alcBin1, alcBin2);
-							updateHole = true;
-							alchemize = true;
-						}
-						if (operation.equals("NOR")) {
-							binary = Alchemize.functionNOR(alcBin1, alcBin2);
-							updateHole = true;
-							alchemize = true;
-						}
-						if (operation.equals("XNOR")) {
-							binary = Alchemize.functionXNOR(alcBin1, alcBin2);
+						if (!operation.equals("NONE")) {
+							if (operation.equals("AND"))
+								binary = Alchemize.functionAND(alcBin1, alcBin2);
+							if (operation.equals("OR"))
+								binary = Alchemize.functionOR(alcBin1, alcBin2);
+							if (operation.equals("XOR"))
+								binary = Alchemize.functionXOR(alcBin1, alcBin2);
+							if (operation.equals("NAND"))
+								binary = Alchemize.functionNAND(alcBin1, alcBin2);
+							if (operation.equals("NOR"))
+								binary = Alchemize.functionNOR(alcBin1, alcBin2);
+							if (operation.equals("XNOR"))
+								binary = Alchemize.functionXNOR(alcBin1, alcBin2);
 							updateHole = true;
 							alchemize = true;
 						}
